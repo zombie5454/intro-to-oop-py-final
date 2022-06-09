@@ -3,6 +3,8 @@ from PyQt5 import QtWidgets
 from typing import Union
 from UI.QtUI import Ui_Widget
 
+# from Control.Controller import Controller
+
 
 class Problem(object):  # Sample
     def __init__(self, type, text, answer):
@@ -37,8 +39,10 @@ class View(QtWidgets.QWidget):
         self.ui = Ui_Widget()
         self.ui.setupUi(self)
         self.__banks = {}
+        self.__input = []
         self.__test = []
         self.__testIndex = 0
+        self.__showAnswerNum = 0
         self.initBanks()
 
         # homePage
@@ -51,6 +55,7 @@ class View(QtWidgets.QWidget):
 
         # editBankPage
         self.ui.homeButton.clicked.connect(self.goHome)
+        self.ui.bankSaveButton.clicked.connect(self.saveBank)
         self.ui.deleteProblemButton.clicked.connect(self.deleteProblem)
         self.ui.addProblemButton.clicked.connect(self.addProblem)
         self.ui.editProblemButton.clicked.connect(self.editProblem)
@@ -67,7 +72,7 @@ class View(QtWidgets.QWidget):
         self.ui.homeButton_3.clicked.connect(self.goHome)
         self.ui.nextProblemButton.clicked.connect(self.nextProblem)
         self.ui.prevProblemButton.clicked.connect(self.prevProblem)
-        self.ui.lookAnswerButton.clicked.connect(self.lookAnswer)
+        self.ui.showAnswerButton.clicked.connect(self.showAnswer)
         self.ui.submitButton.clicked.connect(self.submit)
 
         # resultPage
@@ -106,6 +111,7 @@ class View(QtWidgets.QWidget):
         if reply == QtWidgets.QMessageBox.Yes:
             del self.__banks[self.ui.bankList.currentItem().text()]
             self.ui.bankList.takeItem(self.ui.bankList.currentRow())
+            # self.controller.deleteBank(self.ui.bankList.currentItem().text())
 
     def addBank(self):
         self.ui.bankName.setText("")
@@ -126,6 +132,12 @@ class View(QtWidgets.QWidget):
     def goHome(self):
         self.ui.stackedPages.setCurrentWidget(self.ui.homePage)
 
+    def saveBank(self):
+        if self.ui.bankName.text() == "":
+            QtWidgets.QMessageBox.critical(None, "錯誤訊息", "No bank name!")
+            return
+        # self.controller.saveBank(self.ui.bankName.text())
+
     def deleteProblem(self):
         if self.ui.problemList.currentItem() is None:
             QtWidgets.QMessageBox.critical(None, "錯誤訊息", "No problem selected!")
@@ -142,6 +154,7 @@ class View(QtWidgets.QWidget):
             problem = self.ui.problemList.currentRow()
             self.__banks[bank].remove(self.__banks[bank][problem])
             self.ui.problemList.takeItem(problem)
+            # self.controller.deleteProblem(bank, problem)
 
     def addProblem(self):
         if self.ui.bankName.text() == "":
@@ -166,15 +179,20 @@ class View(QtWidgets.QWidget):
         self.ui.stackedPages.setCurrentWidget(self.ui.editBankPage)
 
     def saveProblem(self):
-        pass
+        # self.controller.saveProblem(self.ui.bankName.text(), self.ui.problemType.currentText(), self.ui.problemText.toPlainText(), self.ui.problemAnswer.toPlainText())
+        ...
 
     def setProblem(self):
+        self.ui.testProblemType.setText(self.__test[self.__testIndex].type)
         self.ui.testProblemText.setText(self.__test[self.__testIndex].text)
+        self.ui.testProblemAnswer.setPlainText(self.__input[self.__testIndex])
         self.ui.currentNum.setText(str(self.__testIndex + 1))
 
     def startTest(self):
         self.ui.stackedPages.setCurrentWidget(self.ui.testPage)
+        self.ui.testProblemAnswer.setPlainText("")
         # TODO: add Test class
+        self.__input = [""] * self.ui.testNum.value()
         self.__test = random.sample(self.__banks[self.ui.bankName_2.text()], self.ui.testNum.value())
         self.__testIndex = 0
         self.ui.prevProblemButton.setEnabled(False)
@@ -199,18 +217,19 @@ class View(QtWidgets.QWidget):
             self.__testIndex = 0
         self.setProblem()
 
-    def lookAnswer(self):
-        pass
+    def showAnswer(self):
+        self.ui.testProblemAnswer.setPlainText(self.__test[self.__testIndex].answer)
+        self.__showAnswerNum += 1
 
     def saveAnswer(self):
-        pass
+        self.__input[self.__testIndex] = self.ui.testProblemAnswer.toPlainText()
 
     def submit(self):
         self.ui.stackedPages.setCurrentWidget(self.ui.resultPage)
-        # SHOW RESULT
+        # TODO: SHOW RESULT
         self.ui.problemRightNum.setText(str(0))
         self.ui.problemWrongNum.setText(str(0))
-        self.ui.problemLookNum.setText(str(0))
+        self.ui.problemShowNum.setText(str(self.__showAnswerNum))
 
     def testAgain(self):
         self.goToEnterTestPage()

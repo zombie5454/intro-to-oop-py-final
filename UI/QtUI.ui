@@ -534,7 +534,27 @@ QSpinBox {
         <layout class="QVBoxLayout" name="verticalLayout_6">
          <item>
           <layout class="QGridLayout" name="gridLayout_9">
-           <item row="2" column="1">
+           <item row="3" column="2">
+            <widget class="QPlainTextEdit" name="testProblemAnswer"/>
+           </item>
+           <item row="1" column="2">
+            <widget class="QLabel" name="testProblemText">
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="1">
+            <widget class="QLabel" name="label_9">
+             <property name="text">
+              <string>題目</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="1">
             <widget class="QLabel" name="label_10">
              <property name="text">
               <string>作答</string>
@@ -544,26 +564,17 @@ QSpinBox {
              </property>
             </widget>
            </item>
-           <item row="2" column="2">
-            <widget class="QPlainTextEdit" name="textProblemAnswer"/>
-           </item>
            <item row="0" column="2">
-            <widget class="QLabel" name="testProblemText">
+            <widget class="QLabel" name="testProblemType">
              <property name="text">
-              <string>1231134124312
-2341241234123
-12341341234123
-2412341234123</string>
+              <string/>
              </property>
             </widget>
            </item>
            <item row="0" column="1">
-            <widget class="QLabel" name="label_9">
+            <widget class="QLabel" name="label_11">
              <property name="text">
-              <string>題目</string>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+              <string>題型</string>
              </property>
             </widget>
            </item>
@@ -582,7 +593,7 @@ QSpinBox {
             </widget>
            </item>
            <item>
-            <widget class="QPushButton" name="lookAnswerButton">
+            <widget class="QPushButton" name="showAnswerButton">
              <property name="cursor">
               <cursorShape>PointingHandCursor</cursorShape>
              </property>
@@ -714,7 +725,7 @@ QSpinBox {
             </widget>
            </item>
            <item row="2" column="1">
-            <widget class="QLabel" name="problemLookNum">
+            <widget class="QLabel" name="problemShowNum">
              <property name="text">
               <string/>
              </property>
