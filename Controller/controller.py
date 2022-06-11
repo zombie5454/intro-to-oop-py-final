@@ -1,11 +1,9 @@
+from curses.ascii import isdigit
 from typing import Tuple
+from unicodedata import category
 from exam import Exam
 from question_bank import QuestionBank
-
-# Placeholders
-class Question:
-    def getCategory() -> str:
-        pass
+from question import Question
 
 class Controller:
     def __init__(self):
