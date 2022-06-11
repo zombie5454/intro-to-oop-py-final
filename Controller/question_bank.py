@@ -2,7 +2,7 @@ import os
 import pickle
 
 # Placeholder
-from Controller.controller import Question
+from question import Question
 
 class QuestionBank:
     def __init__(self) -> None:
