@@ -112,7 +112,7 @@ QSpinBox {
      <item row="1" column="0">
       <widget class="QStackedWidget" name="stackedPages">
        <property name="currentIndex">
-        <number>2</number>
+        <number>4</number>
        </property>
        <widget class="QWidget" name="homePage">
         <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -369,7 +369,7 @@ QSpinBox {
            <item row="3" column="1">
             <widget class="QStackedWidget" name="stackedAnswer">
              <property name="currentIndex">
-              <number>1</number>
+              <number>0</number>
              </property>
              <widget class="QWidget" name="choice">
               <layout class="QVBoxLayout" name="verticalLayout_8">
@@ -656,12 +656,15 @@ QSpinBox {
        <widget class="QWidget" name="examPage">
         <layout class="QVBoxLayout" name="verticalLayout_6">
          <item>
-          <layout class="QGridLayout" name="gridLayout_9">
-           <item row="3" column="2">
-            <widget class="QPlainTextEdit" name="examQuestionAnswer"/>
-           </item>
+          <layout class="QGridLayout" name="gridLayout_9" rowstretch="0,1,0,1">
            <item row="1" column="2">
             <widget class="QLabel" name="examQuestionText">
+             <property name="baseSize">
+              <size>
+               <width>0</width>
+               <height>0</height>
+              </size>
+             </property>
              <property name="text">
               <string/>
              </property>
@@ -687,11 +690,130 @@ QSpinBox {
              </property>
             </widget>
            </item>
-           <item row="0" column="2">
-            <widget class="QLabel" name="examQuestionType">
-             <property name="text">
-              <string/>
+           <item row="3" column="2">
+            <widget class="QStackedWidget" name="stackedExamAnswer">
+             <property name="currentIndex">
+              <number>2</number>
              </property>
+             <widget class="QWidget" name="exam_shortAnswer">
+              <layout class="QVBoxLayout" name="verticalLayout_19">
+               <property name="leftMargin">
+                <number>0</number>
+               </property>
+               <property name="topMargin">
+                <number>0</number>
+               </property>
+               <property name="rightMargin">
+                <number>0</number>
+               </property>
+               <property name="bottomMargin">
+                <number>0</number>
+               </property>
+               <item>
+                <widget class="QPlainTextEdit" name="plainTextEdit"/>
+               </item>
+              </layout>
+             </widget>
+             <widget class="QWidget" name="exam_choice">
+              <layout class="QVBoxLayout" name="verticalLayout_16">
+               <property name="leftMargin">
+                <number>0</number>
+               </property>
+               <property name="topMargin">
+                <number>0</number>
+               </property>
+               <property name="rightMargin">
+                <number>0</number>
+               </property>
+               <property name="bottomMargin">
+                <number>0</number>
+               </property>
+               <item>
+                <widget class="QRadioButton" name="exam_choice_1">
+                 <property name="text">
+                  <string>RadioButton</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QRadioButton" name="exam_choice_2">
+                 <property name="text">
+                  <string>RadioButton</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QRadioButton" name="exam_choice_3">
+                 <property name="text">
+                  <string>RadioButton</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QRadioButton" name="exam_choice_4">
+                 <property name="text">
+                  <string>RadioButton</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+             <widget class="QWidget" name="exam_multipleChoice">
+              <layout class="QVBoxLayout" name="verticalLayout_17">
+               <property name="leftMargin">
+                <number>0</number>
+               </property>
+               <property name="topMargin">
+                <number>0</number>
+               </property>
+               <property name="rightMargin">
+                <number>0</number>
+               </property>
+               <property name="bottomMargin">
+                <number>0</number>
+               </property>
+               <item>
+                <widget class="QRadioButton" name="exam_multipleChoice_1">
+                 <property name="text">
+                  <string>RadioButton</string>
+                 </property>
+                 <property name="autoExclusive">
+                  <bool>false</bool>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QRadioButton" name="exam_multipleChoice_2">
+                 <property name="text">
+                  <string>RadioButton</string>
+                 </property>
+                 <property name="autoExclusive">
+                  <bool>false</bool>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QRadioButton" name="exam_multipleChoice_3">
+                 <property name="text">
+                  <string>RadioButton</string>
+                 </property>
+                 <property name="autoExclusive">
+                  <bool>false</bool>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QRadioButton" name="exam_multipleChoice_4">
+                 <property name="text">
+                  <string>RadioButton</string>
+                 </property>
+                 <property name="autoExclusive">
+                  <bool>false</bool>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
             </widget>
            </item>
            <item row="0" column="1">
@@ -699,6 +821,28 @@ QSpinBox {
              <property name="text">
               <string>題型</string>
              </property>
+            </widget>
+           </item>
+           <item row="0" column="2">
+            <widget class="QComboBox" name="comboBox">
+             <property name="currentText">
+              <string>單選</string>
+             </property>
+             <item>
+              <property name="text">
+               <string>單選</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>多選</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>填充</string>
+              </property>
+             </item>
             </widget>
            </item>
           </layout>
