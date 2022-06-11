@@ -112,7 +112,7 @@ QSpinBox {
      <item row="1" column="0">
       <widget class="QStackedWidget" name="stackedPages">
        <property name="currentIndex">
-        <number>5</number>
+        <number>3</number>
        </property>
        <widget class="QWidget" name="homePage">
         <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -142,7 +142,7 @@ QSpinBox {
             <number>0</number>
            </property>
            <item>
-            <widget class="QPushButton" name="enterTestButton">
+            <widget class="QPushButton" name="enterExamButton">
              <property name="cursor">
               <cursorShape>PointingHandCursor</cursorShape>
              </property>
@@ -231,7 +231,7 @@ QSpinBox {
           </layout>
          </item>
          <item>
-          <widget class="QListWidget" name="problemList">
+          <widget class="QListWidget" name="questionList">
            <property name="font">
             <font>
              <pointsize>14</pointsize>
@@ -268,7 +268,7 @@ QSpinBox {
             </spacer>
            </item>
            <item>
-            <widget class="QPushButton" name="deleteProblemButton">
+            <widget class="QPushButton" name="deleteQuestionButton">
              <property name="cursor">
               <cursorShape>PointingHandCursor</cursorShape>
              </property>
@@ -281,7 +281,7 @@ QSpinBox {
             </widget>
            </item>
            <item>
-            <widget class="QPushButton" name="editProblemButton">
+            <widget class="QPushButton" name="editQuestionButton">
              <property name="cursor">
               <cursorShape>PointingHandCursor</cursorShape>
              </property>
@@ -291,7 +291,7 @@ QSpinBox {
             </widget>
            </item>
            <item>
-            <widget class="QPushButton" name="addProblemButton">
+            <widget class="QPushButton" name="addQuestionButton">
              <property name="cursor">
               <cursorShape>PointingHandCursor</cursorShape>
              </property>
@@ -304,7 +304,7 @@ QSpinBox {
          </item>
         </layout>
        </widget>
-       <widget class="QWidget" name="editProblemPage">
+       <widget class="QWidget" name="editQuestionPage">
         <layout class="QVBoxLayout" name="verticalLayout_5" stretch="1,0">
          <item>
           <layout class="QGridLayout" name="gridLayout_6" columnstretch="0,1">
@@ -314,18 +314,8 @@ QSpinBox {
            <property name="spacing">
             <number>-1</number>
            </property>
-           <item row="1" column="0">
-            <widget class="QLabel" name="label_6">
-             <property name="text">
-              <string>題目敘述：</string>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
-             </property>
-            </widget>
-           </item>
            <item row="0" column="1">
-            <widget class="QComboBox" name="problemType">
+            <widget class="QComboBox" name="questionType">
              <property name="cursor">
               <cursorShape>PointingHandCursor</cursorShape>
              </property>
@@ -353,7 +343,7 @@ QSpinBox {
              </property>
             </widget>
            </item>
-           <item row="2" column="0">
+           <item row="3" column="0">
             <widget class="QLabel" name="label_7">
              <property name="text">
               <string>題目答案：</string>
@@ -363,15 +353,38 @@ QSpinBox {
              </property>
             </widget>
            </item>
-           <item row="2" column="1">
-            <widget class="QPlainTextEdit" name="problemAnswer">
-             <property name="placeholderText">
-              <string extracomment="hi"/>
+           <item row="1" column="0">
+            <widget class="QLabel" name="label_6">
+             <property name="text">
+              <string>題目敘述：</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
              </property>
             </widget>
            </item>
            <item row="1" column="1">
-            <widget class="QPlainTextEdit" name="problemText"/>
+            <widget class="QPlainTextEdit" name="questionText"/>
+           </item>
+           <item row="3" column="1">
+            <widget class="QStackedWidget" name="stackedWidget">
+             <widget class="QWidget" name="page">
+              <widget class="QPlainTextEdit" name="questionAnswer">
+               <property name="geometry">
+                <rect>
+                 <x>30</x>
+                 <y>-30</y>
+                 <width>670</width>
+                 <height>192</height>
+                </rect>
+               </property>
+               <property name="placeholderText">
+                <string extracomment="hi"/>
+               </property>
+              </widget>
+             </widget>
+             <widget class="QWidget" name="page_2"/>
+            </widget>
            </item>
           </layout>
          </item>
@@ -401,7 +414,7 @@ QSpinBox {
             </spacer>
            </item>
            <item>
-            <widget class="QPushButton" name="saveProblemButton">
+            <widget class="QPushButton" name="saveQuestionButton">
              <property name="cursor">
               <cursorShape>PointingHandCursor</cursorShape>
              </property>
@@ -414,7 +427,7 @@ QSpinBox {
          </item>
         </layout>
        </widget>
-       <widget class="QWidget" name="enterTestPage">
+       <widget class="QWidget" name="enterExamPage">
         <layout class="QVBoxLayout" name="verticalLayout_4">
          <item>
           <spacer name="verticalSpacer_2">
@@ -449,7 +462,7 @@ QSpinBox {
             </widget>
            </item>
            <item row="2" column="1">
-            <widget class="QSpinBox" name="testNum">
+            <widget class="QSpinBox" name="examNum">
              <property name="value">
               <number>10</number>
              </property>
@@ -463,7 +476,7 @@ QSpinBox {
             </widget>
            </item>
            <item row="1" column="1">
-            <widget class="QLabel" name="problemNum">
+            <widget class="QLabel" name="questionNum">
              <property name="text">
               <string/>
              </property>
@@ -517,7 +530,7 @@ QSpinBox {
             </spacer>
            </item>
            <item>
-            <widget class="QPushButton" name="startTestButton">
+            <widget class="QPushButton" name="beginExamButton">
              <property name="cursor">
               <cursorShape>PointingHandCursor</cursorShape>
              </property>
@@ -530,15 +543,15 @@ QSpinBox {
          </item>
         </layout>
        </widget>
-       <widget class="QWidget" name="testPage">
+       <widget class="QWidget" name="examPage">
         <layout class="QVBoxLayout" name="verticalLayout_6">
          <item>
           <layout class="QGridLayout" name="gridLayout_9">
            <item row="3" column="2">
-            <widget class="QPlainTextEdit" name="testProblemAnswer"/>
+            <widget class="QPlainTextEdit" name="examQuestionAnswer"/>
            </item>
            <item row="1" column="2">
-            <widget class="QLabel" name="testProblemText">
+            <widget class="QLabel" name="examQuestionText">
              <property name="text">
               <string/>
              </property>
@@ -565,7 +578,7 @@ QSpinBox {
             </widget>
            </item>
            <item row="0" column="2">
-            <widget class="QLabel" name="testProblemType">
+            <widget class="QLabel" name="examQuestionType">
              <property name="text">
               <string/>
              </property>
@@ -588,7 +601,7 @@ QSpinBox {
               <cursorShape>PointingHandCursor</cursorShape>
              </property>
              <property name="text">
-              <string>終止測驗</string>
+              <string>離開</string>
              </property>
             </widget>
            </item>
@@ -598,7 +611,7 @@ QSpinBox {
               <cursorShape>PointingHandCursor</cursorShape>
              </property>
              <property name="text">
-              <string>查看答案</string>
+              <string>偷看答案</string>
              </property>
             </widget>
            </item>
@@ -636,32 +649,22 @@ QSpinBox {
             </spacer>
            </item>
            <item>
-            <widget class="QPushButton" name="prevProblemButton">
+            <widget class="QPushButton" name="checkAnswerButton">
              <property name="cursor">
               <cursorShape>PointingHandCursor</cursorShape>
              </property>
              <property name="text">
-              <string>上一題</string>
+              <string>提交</string>
              </property>
             </widget>
            </item>
            <item>
-            <widget class="QPushButton" name="nextProblemButton">
+            <widget class="QPushButton" name="nextQuestionButton">
              <property name="cursor">
               <cursorShape>PointingHandCursor</cursorShape>
              </property>
              <property name="text">
               <string>下一題</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QPushButton" name="submitButton">
-             <property name="cursor">
-              <cursorShape>PointingHandCursor</cursorShape>
-             </property>
-             <property name="text">
-              <string>作答完畢</string>
              </property>
             </widget>
            </item>
@@ -690,7 +693,7 @@ QSpinBox {
             <number>25</number>
            </property>
            <item row="1" column="1">
-            <widget class="QLabel" name="problemWrongNum">
+            <widget class="QLabel" name="questionWrongNum">
              <property name="text">
               <string/>
              </property>
@@ -711,7 +714,7 @@ QSpinBox {
             </widget>
            </item>
            <item row="0" column="1">
-            <widget class="QLabel" name="problemRightNum">
+            <widget class="QLabel" name="questionRightNum">
              <property name="text">
               <string/>
              </property>
@@ -725,7 +728,7 @@ QSpinBox {
             </widget>
            </item>
            <item row="2" column="1">
-            <widget class="QLabel" name="problemShowNum">
+            <widget class="QLabel" name="questionShowNum">
              <property name="text">
               <string/>
              </property>
