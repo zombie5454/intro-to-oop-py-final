@@ -1,4 +1,5 @@
 # TODO: import anything that needed
+from typing import List
 
 class Question:
     def __init__(self, type:str, question: str, ans) -> None:
@@ -21,20 +22,6 @@ class Question:
     # multiple choice: is i in answer (ans[i].is_true == true)? is ans[answer[i]].is_true == true?
         return True
 
-
-class ShortAnswer(Question):
-    def __init__(self, question: str, ans: str) -> None:
-        super().__init__("short_answer", question,ans)
-    
-class MultipleChoice(Question):
-    def __init__(self, question: str, choice: list) -> None:
-        super().__init__("multiple_choice", question, choice)
-
-class Choice(Question):
-    def __init__(self, question: str, choice: list) -> None: 
-        super().__init__("choice", question, choice)
-
-
 class ChoiceOption:
     def __init__(self, text="", is_true=False) -> None:
         self.__text = text
@@ -42,3 +29,28 @@ class ChoiceOption:
         pass
 
     # TODO: getter and setter
+    @property
+    def text(self) -> str:
+        return self.__text
+    @text.setter
+    def text(self, newText: str) -> str:
+        self.__text = newText
+    @property
+    def is_true(self) -> str:
+        return self.__is_true
+    @is_true.setter
+    def is_true(self, isAns: bool) -> str:
+        self.__is_true = isAns
+    
+
+class ShortAnswer(Question):
+    def __init__(self, question: str, ans: str) -> None:
+        super().__init__("short_answer", question,ans)
+    
+class MultipleChoice(Question):
+    def __init__(self, question: str, choice: List[ChoiceOption]) -> None:
+        super().__init__("multiple_choice", question, choice)
+
+class Choice(Question):
+    def __init__(self, question: str, choice: List[ChoiceOption]) -> None: 
+        super().__init__("choice", question, choice)

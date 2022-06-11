@@ -1,4 +1,5 @@
-from typing import List
+from typing import List, Dict
+from Model.question_factory import QuestionFactory
 from exam import Exam, Result
 
 # Placeholder
@@ -20,32 +21,32 @@ class Model:
         pass
 
 class Controller:
-    def __init__(self, model: Model):
-        self._curExam: Exam = None
-        self._qBank: QuestionBank = None
-        self._model: Model = model
+    def __init__(self, model: Model, qFactoryListDict: Dict[str, QuestionFactory]):
+        self.__model: Model = model
+        self.__qFactoryList: Dict[str, QuestionFactory] = qFactoryListDict
+        self.__curExam: Exam = None
+        self.__qBank: QuestionBank = None
     
-    # TODO: may need to return object list instead
-    def getBanks(self) -> List[str]:
-        return self._model.getBanks()
+    def getBanks(self) -> List[QuestionBank]:
+        return self.__model.getBanks()
     
     def addBank(self, name: str) -> bool:
-        bankList = self._model.getBanks()
+        bankList = self.__model.getBanks()
         for bank in bankList:
             if bank.name == name:
                 return False
-        self._model.addNewBank(name)
+        self.__model.addNewBank(name)
         return True
     
     def addNewQuestion(self, bankName: str, qType: str, qDes: str, qAns: str) -> bool:
-        tarBank: QuestionBank = self._model.getBank(bankName)
+        tarBank: QuestionBank = self.__model.getBank(bankName)
         if tarBank is None:
             return False
-        # TODO: pass in clean question
-        tarBank.addQuestion(...)
+        q = self.__qFactoryList[qType].createQuestion(qDes, qAns)
+        tarBank.addQuestion(q)
     
     def getQuestionList(self, bankName: str) -> List[Question]:
-        tarBank = self._model.getBank(bankName)
+        tarBank = self.__model.getBank(bankName)
         if tarBank is None:
             return None
         return tarBank.getQuestionList()
@@ -53,20 +54,26 @@ class Controller:
     # Assumes target bank is valid (since we're selecting from dropdown menu)
     def getQuestionCap(self, name: str) -> int:
         # TODO: is it too slow?
-        tarBank = self._model.getBank(name)
+        tarBank = self.__model.getBank(name)
         return len(tarBank.getQuestionList())
 
     # Assumes target bank is valid (since we're selecting from dropdown menu)
     def beginExam(self, bank: str, qNum: int) -> List[Question]:
-        qBank = self._model.getBank(bank)
-        self._curExam = Exam(qNum, qBank)
-        return self._curExam.qList
+        qBank = self.__model.getBank(bank)
+        self.__curExam = Exam(qNum, qBank)
+        return self.__curExam.qList
     
     # TODO: somehow there are two methods on fetching questions from exam...?
     def getNextExamQuestion(self) -> Question:
-        return self._curExam.getNextQuestion()
+        return self.__curExam.getNextQuestion()
     
     def endExam(self) -> Result:
-        r =  self._curExam.getResult()
-        del self._curExam
+        r =  self.__curExam.getResult()
+        del self.__curExam
         return r
+    
+    def sigOnUsrAct(self, correct: bool, peek: bool) -> None:
+        if correct:
+            self.__curExam.correct += 1
+        if peek:
+            self.__curExam.peekAnsCount += 1

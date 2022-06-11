@@ -8,48 +8,58 @@ from controller import QuestionBank, Question
 # - pCount: number of questions where user peeked at answer
 class Result:
     def __init__(self, qCount: int, cCount: int, pCount: int) -> None:
-        self._numOfQ = qCount
-        self._numOfCorrect = cCount
-        self._numOfPeek = pCount
+        self.__numOfQ = qCount
+        self.__numOfCorrect = cCount
+        self.__numOfPeek = pCount
     @property
     def numOfQ(self) -> int:
-        return self._numOfQ
+        return self.__numOfQ
     @property
     def numOfCorrect(self) -> int:
-        return self._numOfCorrect
+        return self.__numOfCorrect
     @property
     def numOfPeek(self) -> int:
-        return self._numOfPeek
+        return self.__numOfPeek
     
 
 class Exam:
     def __init__(self, total: int, qB: QuestionBank) -> None:
-        self._total = total
-        self._correct = 0
-        self._curQNum = 0
-        self._peekAnsCount = 0
-        self._qList: List[Question] = qB.getQuestionList(total)
+        self.__total = total
+        self.__correct = 0
+        self.__curQNum = 0
+        self.__peekAnsCount = 0
+        self.__qList: List[Question] = qB.getQuestionList(total)
 
-    @property
-    def qList(self) -> List[Question]:
-        return self._qList
-    
     # Returns None if index out of range
     def getNextQuestion(self) -> Question:
         try:
-            q = self._qList.pop(0)
-            self._curQNum += 1
+            q = self.__qList.pop(0)
+            self.__curQNum += 1
             return q
         except IndexError:
             return None
     
     def getResult(self) -> Result:
         return Result(
-            self._total,
-            self._correct,
-            self._peekAnsCount
+            self.__total,
+            self.__correct,
+            self.__peekAnsCount
         )
     
-    # TODO: exam needs to be notified when the user
-    # a) answered correctly,
-    # b) peeked at an answer
+    @property
+    def qList(self) -> List[Question]:
+        return self.__qList
+    
+    @property
+    def correct(self) -> int:
+        return self.__correct
+    @correct.setter
+    def correct(self, newValue: int) -> None:
+        self.__correct = newValue
+
+    @property
+    def peekAnsCount(self) -> int:
+        return self.__peekAnsCount
+    @peekAnsCount.setter
+    def peekAnsCount(self, newValue: int) -> None:
+        self.__peekAnsCount = newValue
