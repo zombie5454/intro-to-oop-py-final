@@ -1,49 +1,44 @@
-class ChoiceOption:
-    text = 'None'
-    is_true = None
+# TODO: import anything that needed
 
-# Placeholders
 class Question:
-    type = 'None'
-    question = 'None'
-    answer = 'None'
-    choices = []       #ChoiceOption[]
-    num_of_currect_choices = -1
-    category = 'None'
+    def __init__(self, type:str, question: str, ans) -> None:
+        self.__type = type
+        self.__question = question
+        # for short answer, ans is str
+        # for multiple choice and choice, ans is list of choice options
+        self.__ans = ans
+        return
+    
+    
+    # TODO: getter and setter 
 
-    def getCategory(self) -> str:
-        return self.category
 
-    def displayQuestion(self) -> str:   
-        ans = 'Q: ' + self.question
-        if self.type == 'MultipleChoice' or self.type == 'Choice':
-            for i in range(len(self.choices)):
-                ans = ans + '\n' + str(i) + '. ' + self.choices[i].text
-        
-        return ans
+    def checkAnswer(answer: str) -> bool:
+    # multiple choice -> one wrong, all wrong
+    # TODO: for multiple choice, split answer to get choice list
+    # short answer -> answer == ans?
+    # choice: is ans[answer[i]].is_true == true?
+    # multiple choice: is i in answer (ans[i].is_true == true)? is ans[answer[i]].is_true == true?
+        return True
 
-    def getAnswer(self) -> str:
-        return self.answer
-        
-    def checkAnswer(self, answer: str) -> bool:
-        if self.type == 'ShortAnswer':                  #找到關鍵字就算對
-            if answer.find(self.answer) == -1:
-                return False
-            else:
-                return True
 
-        elif self.type == 'MultipleChoice' or self.type == 'Choice':   #如果答對的選項數 = 總共對的選項數
-            chosen_dict = {}
-            num_correct = 0
-            for s in answer:
-                if s.isdigit() == True and int(s) <= len(self.choices)-1:
-                    if self.choices[int(s)].is_true == True and chosen_dict.get(s) != True:  #確保重複答對選項不算
-                        num_correct += 1
-                        chosen_dict[s] = True
-                    elif self.choices[int(s)].is_true == False:
-                        return False
-            #print(num_correct)
-            if num_correct == self.num_of_currect_choices:
-                return True
-            else:
-                return False
+class ShortAnswer(Question):
+    def __init__(self, question: str, ans: str) -> None:
+        super().__init__("short_answer", question,ans)
+    
+class MultipleChoice(Question):
+    def __init__(self, question: str, choice: list) -> None:
+        super().__init__("multiple_choice", question, choice)
+
+class Choice(Question):
+    def __init__(self, question: str, choice: list) -> None: 
+        super().__init__("choice", question, choice)
+
+
+class ChoiceOption:
+    def __init__(self, text="", is_true=False) -> None:
+        self.__text = text
+        self.__is_true = is_true
+        pass
+
+    # TODO: getter and setter
