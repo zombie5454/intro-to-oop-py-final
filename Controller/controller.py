@@ -1,29 +1,72 @@
-from curses.ascii import isdigit
-from typing import Tuple
-from unicodedata import category
-from exam import Exam
-from question_bank import QuestionBank
-from question import Question
+from typing import List
+from exam import Exam, Result
+
+# Placeholder
+class Question:
+    pass
+class QuestionBank:
+    def getName() -> str:
+        pass
+    def addQuestion(q: Question) -> bool:
+        pass
+    def getQuestionList() -> List[Question]:
+        pass
+class Model:
+    def getBank(self, name: str) -> QuestionBank:
+        pass
+    def getBanks(self) -> List[QuestionBank]:
+        pass
+    def addNewBank(self, name: str) -> bool:
+        pass
 
 class Controller:
-    def __init__(self):
-        self._exam: Exam = Exam()
-        self._qBank: QuestionBank = QuestionBank()
-
-    def addNewCategory(self, name: str) -> bool:
-        return self._qBank.addNewCategory(name)
+    def __init__(self, model: Model):
+        self._curExam: Exam = None
+        self._qBank: QuestionBank = None
+        self._model: Model = model
     
-    def addNewQuestion(self, q: Question) -> bool:
-        if self._qBank.categoryIsExist(q.getCategory()):
+    # TODO: may need to return object list instead
+    def getBanks(self) -> List[str]:
+        return self._model.getBanks()
+    
+    def addBank(self, name: str) -> bool:
+        bankList = self._model.getBanks()
+        for bank in bankList:
+            if bank.name == name:
+                return False
+        self._model.addNewBank(name)
+        return True
+    
+    def addNewQuestion(self, bankName: str, qType: str, qDes: str, qAns: str) -> bool:
+        tarBank: QuestionBank = self._model.getBank(bankName)
+        if tarBank is None:
             return False
-        # Add the question
-        return self._qBank.addNewQuestion(q)
+        # TODO: pass in clean question
+        tarBank.addQuestion(...)
+    
+    def getQuestionList(self, bankName: str) -> List[Question]:
+        tarBank = self._model.getBank(bankName)
+        if tarBank is None:
+            return None
+        return tarBank.getQuestionList()
+    
+    # Assumes target bank is valid (since we're selecting from dropdown menu)
+    def getQuestionCap(self, name: str) -> int:
+        # TODO: is it too slow?
+        tarBank = self._model.getBank(name)
+        return len(tarBank.getQuestionList())
 
-    def beginExam(self, cat: str, qNum: int) -> Tuple[bool, int]:
-        # Validate input
-        if not self._qBank.categoryIsExist(cat):
-            return False, -1
-        if self._qBank.categoryQCount < qNum:
-            return False, -1
-        # Fetch the questions (shuffled-order)
-        # TODO:
+    # Assumes target bank is valid (since we're selecting from dropdown menu)
+    def beginExam(self, bank: str, qNum: int) -> List[Question]:
+        qBank = self._model.getBank(bank)
+        self._curExam = Exam(qNum, qBank)
+        return self._curExam.qList
+    
+    # TODO: somehow there are two methods on fetching questions from exam...?
+    def getNextExamQuestion(self) -> Question:
+        return self._curExam.getNextQuestion()
+    
+    def endExam(self) -> Result:
+        r =  self._curExam.getResult()
+        del self._curExam
+        return r
