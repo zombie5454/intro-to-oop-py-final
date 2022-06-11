@@ -112,7 +112,7 @@ QSpinBox {
      <item row="1" column="0">
       <widget class="QStackedWidget" name="stackedPages">
        <property name="currentIndex">
-        <number>3</number>
+        <number>2</number>
        </property>
        <widget class="QWidget" name="homePage">
         <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -307,13 +307,20 @@ QSpinBox {
        <widget class="QWidget" name="editQuestionPage">
         <layout class="QVBoxLayout" name="verticalLayout_5" stretch="1,0">
          <item>
-          <layout class="QGridLayout" name="gridLayout_6" columnstretch="0,1">
+          <layout class="QGridLayout" name="gridLayout_6" columnstretch="0,0">
            <property name="rightMargin">
             <number>0</number>
            </property>
            <property name="spacing">
             <number>-1</number>
            </property>
+           <item row="0" column="0">
+            <widget class="QLabel" name="label_5">
+             <property name="text">
+              <string>題目類型：</string>
+             </property>
+            </widget>
+           </item>
            <item row="0" column="1">
             <widget class="QComboBox" name="questionType">
              <property name="cursor">
@@ -336,12 +343,8 @@ QSpinBox {
              </item>
             </widget>
            </item>
-           <item row="0" column="0">
-            <widget class="QLabel" name="label_5">
-             <property name="text">
-              <string>題目類型：</string>
-             </property>
-            </widget>
+           <item row="1" column="1">
+            <widget class="QPlainTextEdit" name="questionText"/>
            </item>
            <item row="3" column="0">
             <widget class="QLabel" name="label_7">
@@ -363,27 +366,50 @@ QSpinBox {
              </property>
             </widget>
            </item>
-           <item row="1" column="1">
-            <widget class="QPlainTextEdit" name="questionText"/>
-           </item>
            <item row="3" column="1">
-            <widget class="QStackedWidget" name="stackedWidget">
-             <widget class="QWidget" name="page">
-              <widget class="QPlainTextEdit" name="questionAnswer">
-               <property name="geometry">
-                <rect>
-                 <x>30</x>
-                 <y>-30</y>
-                 <width>670</width>
-                 <height>192</height>
-                </rect>
+            <widget class="QStackedWidget" name="stackedAnswer">
+             <widget class="QWidget" name="choice">
+              <layout class="QVBoxLayout" name="verticalLayout_8">
+               <property name="leftMargin">
+                <number>0</number>
                </property>
-               <property name="placeholderText">
-                <string extracomment="hi"/>
+               <property name="topMargin">
+                <number>0</number>
                </property>
-              </widget>
+               <property name="rightMargin">
+                <number>0</number>
+               </property>
+               <property name="bottomMargin">
+                <number>0</number>
+               </property>
+              </layout>
              </widget>
-             <widget class="QWidget" name="page_2"/>
+             <widget class="QWidget" name="multipleChoice">
+              <layout class="QVBoxLayout" name="verticalLayout_10"/>
+             </widget>
+             <widget class="QWidget" name="shortAnswer">
+              <layout class="QVBoxLayout" name="verticalLayout_9">
+               <property name="leftMargin">
+                <number>0</number>
+               </property>
+               <property name="topMargin">
+                <number>0</number>
+               </property>
+               <property name="rightMargin">
+                <number>0</number>
+               </property>
+               <property name="bottomMargin">
+                <number>0</number>
+               </property>
+               <item>
+                <widget class="QPlainTextEdit" name="questionAnswer">
+                 <property name="placeholderText">
+                  <string extracomment="hi"/>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
             </widget>
            </item>
           </layout>
