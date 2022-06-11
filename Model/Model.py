@@ -1,5 +1,7 @@
+from Controller.controller import Question
 from question_bank import QuestionBank
 import pickle
+from typing import List
 # TODO: import anything that needed
 
 
@@ -18,7 +20,7 @@ class Model:
         # pickle name is same as name
         return True
 
-    def getBanks(self)-> list :
+    def getBanks(self)-> List[QuestionBank] :
         # TODO: read all subdirectory in self.__directory, and load banks' pickle, append them to list
         # return a list of qBanks objects
         return []

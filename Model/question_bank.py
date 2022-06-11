@@ -1,5 +1,6 @@
 import os
 import pickle
+from typing import List
 
 # Placeholder
 from question import Question
@@ -17,7 +18,7 @@ class QuestionBank:
         # TODO: use pickle to dump q in self.directory
         return True
     
-    def getQuestionList(num=-1)-> list:
+    def getQuestionList(num=-1)-> List[Question]:
         if num == -1:
             # TODO: append all question in self.directory
             pass
