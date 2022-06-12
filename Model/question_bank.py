@@ -15,6 +15,7 @@ class QuestionBank:
         self.__issuedID = -1
 
     #TODO: getter and setter of __directory, __name, __issuedID
+    # Corrected. NO need for directory setter
 
     def addQuestion(self, q: Question) -> bool:
         # change the q's ID to issuedID + 1
@@ -24,7 +25,7 @@ class QuestionBank:
         return True
     
     def getQuestionList(num=-1)-> List[Question]:
-        if num == -1:
+        if num < 0:
             # TODO: append all question in self.directory
             pass
         else:
