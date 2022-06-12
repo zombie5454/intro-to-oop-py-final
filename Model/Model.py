@@ -13,10 +13,9 @@ class Model:
     #TODO: getter and setter of __directory
         
     def addNewBank(self, name: str) -> bool:
-        if name in self.__qBanks:
-            return False
-        # TODO: build a bank instance (see question_bank.py)
-        # and make a directory called name, and use pickle to dump that bank instance
+        # TODO: make a directory called name, if the directory already exists, return false
+        # build a bank instance (see question_bank.py)
+        # and use pickle to dump that bank instance in that directory
         # pickle name is same as name
         return True
 
