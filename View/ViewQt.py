@@ -1,14 +1,18 @@
-from PyQt5 import QtWidgets
+from PyQt5 import QtWidgets, QtCore, QtGui
 from UI.QtUI import Ui_Widget
-from typing import Callable
-from Controller.controller import Controller
+from typing import Callable, List
+
+# from Controller.controller import Controller
+
+
+from .Module import Bank, Controller, QuestionType
 
 
 def unused(func: Callable) -> Callable:
     return func
 
 
-class CustomListWidgetItem(QtWidgets.QListWidgetItem):
+class MyListWidgetItem(QtWidgets.QListWidgetItem):
     def __init__(self, id: int, text: str, parent: QtWidgets.QListWidget):
         super().__init__(text, parent)
         self.id = id
@@ -21,7 +25,9 @@ class View(QtWidgets.QWidget):
         # attributes
         self.ui = Ui_Widget()
         self.ui.setupUi(self)
+        self.radioButtons: List[QtWidgets.QRadioButton] = []
         self.controller = None
+        self.controller = Controller(self)
 
         # homePage
         self.ui.enterExamButton.clicked.connect(self.enterExam)
@@ -41,6 +47,8 @@ class View(QtWidgets.QWidget):
         self.ui.backButton.clicked.connect(self.goToEditBankPage)
         self.ui.saveQuestionButton.clicked.connect(self.saveQuestion)
         self.ui.questionType.currentIndexChanged.connect(self.changeQuestionType)
+        self.ui.addOptionButton.clicked.connect(self.addOption)
+        self.ui.newOption.returnPressed.connect(self.addOption)
 
         # enterExamPage
         self.ui.homeButton_2.clicked.connect(self.goHome)
@@ -61,13 +69,18 @@ class View(QtWidgets.QWidget):
         self.ui.deleteQuestionButton.setVisible(False)
         self.ui.editQuestionButton.setVisible(False)
 
+        # init MyComboBax
+        self.ui.questionType.addItem("單選", QuestionType.CHOICE)
+        self.ui.questionType.addItem("多選", QuestionType.MULTIPLECHOICE)
+        self.ui.questionType.addItem("填空", QuestionType.FILL)
+
         # initialize
         self.goHome()
 
     def goHome(self):
         self.ui.bankList.clear()
         for bank in self.controller.getBanks():
-            self.ui.bankList.addItem(CustomListWidgetItem(bank.name, bank.name, self.ui.bankList))
+            self.ui.bankList.addItem(MyListWidgetItem(bank.name, bank.name, self.ui.bankList))
         # self.ui.bankList.setCurrentItem(self.ui.bankList.item(0))
         self.ui.stackedPages.setCurrentWidget(self.ui.homePage)
 
@@ -77,13 +90,13 @@ class View(QtWidgets.QWidget):
             bankName = self.ui.bankList.currentItem().text()
             self.ui.bankName.setText(bankName)
             for q in self.controller.getQuestionList(bankName, 10):
-                self.ui.questionList.addItem(CustomListWidgetItem(q.id, q.text.split("\n")[0], self.ui.questionList))
+                self.ui.questionList.addItem(MyListWidgetItem(q.id, q.text.split("\n")[0], self.ui.questionList))
         # self.ui.questionList.setCurrentItem(self.ui.questionList.item(0))
         self.ui.stackedPages.setCurrentWidget(self.ui.editBankPage)
 
     def goToEditQuestionPage(self):
         self.ui.questionType.setCurrentIndex(0)
-        self.ui.stackedAnswer.setCurrentWidget(self.ui.choice)
+        self.ui.stackedAnswer.setCurrentIndex(0)
         if self.ui.questionList.currentItem() is not None:
             questionText = self.ui.questionList.currentItem().text()
             id = self.ui.questionList.currentItem().id
@@ -171,24 +184,62 @@ class View(QtWidgets.QWidget):
         self.goToEditQuestionPage()
 
     def addQuestion(self):
+        if self.ui.bankList.currentItem() is None:
+            QtWidgets.QMessageBox.critical(None, "錯誤訊息", "No bank selected!")
+            return
         self.ui.questionText.setPlainText("")
         self.ui.questionList.setCurrentItem(None)
         self.goToEditQuestionPage()
 
     def saveQuestion(self):
         bankName = self.ui.bankList.currentItem().text()
-        questionType = self.ui.questionType.currentText()
-        questionText = self.ui.questionText.toPlainText()
-        shortAnswer_1 = self.ui.shortAnswer_1.toPlainText()
+        type = self.ui.questionType.currentData()
+        question = self.ui.questionText.toPlainText()
+        answer = None
+        if not question.strip():
+            QtWidgets.QMessageBox.critical(None, "錯誤訊息", "題目不能為空白!")
+            return
+        if type == QuestionType.CHOICE or type == QuestionType.MULTIPLECHOICE:
+            answer = []
+            options = []
+            for i in self.radioButtons:
+                options.append(i.text())
+                answer.append(i.isChecked())
+            if answer.count(True) == 0:
+                QtWidgets.QMessageBox.critical(None, "錯誤訊息", "請選擇答案")
+                return
+            question = {"question": question, "options": options}
+        elif type == QuestionType.FILL:
+            answer = self.ui.shortAnswer_1.toPlainText()
         try:
-            self.controller.addQuestion(bankName, questionType, questionText, shortAnswer_1)
+            self.controller.addQuestion(bankName, type, str(question), str(answer))
         except Exception as e:
             QtWidgets.QMessageBox.critical(None, "錯誤訊息", str(e))
         self.goToEditBankPage()
 
     def changeQuestionType(self):
-        index = self.ui.questionType.currentIndex()
-        self.ui.stackedAnswer.setCurrentIndex(index)
+        type = self.ui.questionType.currentData()
+        if type == QuestionType.CHOICE:
+            self.ui.stackedAnswer.setCurrentWidget(self.ui.choice)
+            for radio in self.radioButtons:
+                radio.setChecked(False)
+                radio.setAutoExclusive(True)
+        elif type == QuestionType.MULTIPLECHOICE:
+            self.ui.stackedAnswer.setCurrentWidget(self.ui.choice)
+            for radio in self.radioButtons:
+                radio.setAutoExclusive(False)
+        elif type == QuestionType.FILL:
+            self.ui.stackedAnswer.setCurrentWidget(self.ui.shortAnswer)
+
+    def addOption(self):
+        text = self.ui.newOption.text()
+        if text == "":
+            QtWidgets.QMessageBox.critical(None, "錯誤訊息", "請輸入選項")
+            return
+        button = QtWidgets.QRadioButton(text)
+        self.radioButtons.append(button)
+        self.ui.choice.layout().insertWidget(self.ui.choice.layout().count() - 1, button)
+        self.ui.newOption.setText("")
 
     def enterExam(self):
         if self.ui.bankList.currentItem() is None:
@@ -196,9 +247,14 @@ class View(QtWidgets.QWidget):
             return
         bankName = self.ui.bankList.currentItem().text()
         questionNum = self.controller.enterExam(bankName)
+        if questionNum == 0:
+            QtWidgets.QMessageBox.critical(None, "錯誤訊息", "題庫中沒有題目!")
+            return
         self.ui.bankName_2.setText(bankName)
         self.ui.questionNum.setText(str(questionNum))
         self.ui.examNum.setMaximum(questionNum)
+        self.ui.examNum.setMinimum(1)
+        self.ui.examNum.setValue(10)
         self.goToEnterExamPage()
 
     def beginExam(self):
@@ -210,7 +266,7 @@ class View(QtWidgets.QWidget):
 
     def nextQuestion(self):
         question, idx = self.controller.getNextQuestion()
-        if idx == int(self.ui.examNum.text()):
+        if idx == int(self.ui.examNum.text()) - 1:
             self.ui.nextQuestionButton.setText("結束測驗")
         if idx == -1:
             self.goToResultPage()
@@ -220,7 +276,7 @@ class View(QtWidgets.QWidget):
         self.ui.examQuestionText.setText(question.text)
         self.ui.examShortAnswer_1.setPlainText("")
         self.ui.examShortAnswer_1.setStyleSheet("color: white")
-        self.ui.currentNum.setText(str(idx))
+        self.ui.currentNum.setText(str(idx + 1))
         self.ui.examShortAnswer_1.setFocus()
         self.ui.examShortAnswer_1.setEnabled(True)
         self.ui.checkAnswerButton.setEnabled(True)
