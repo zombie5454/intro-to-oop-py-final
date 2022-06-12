@@ -58,6 +58,7 @@
 * type: short answer, multiple choice , or choice
 * question: question description, **DOES NOT** includes choices
 * ans: correct ans, including choices objects
+* ID: Id given by qBank
 
 ### method
 1. to init a question, please refer to question_factory :D
@@ -74,7 +75,9 @@
     * ``q.ans``
     * ``q.type``
     * ``q.quesetion``
-    * ps, if we support editQuestion, user call ``editQuestion`` to change those attributes.
+    * ps, if we support editQuestion, user call ``editQuestion`` to change above attributes
+    * only getter for ID, change ID during runtime **is not allowed**
+    * ``q.ID``
 
 ### NOTE
 subclass usage, question factory usage and choice usage are omitted here
