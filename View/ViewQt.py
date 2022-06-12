@@ -1,11 +1,7 @@
 from PyQt5 import QtWidgets, QtCore, QtGui
 from UI.QtUI import Ui_Widget
 from typing import Callable, List, Union
-
-# from Controller.controller import Controller
-
-
-from .Module import Bank, Controller, QuestionType
+from Controller.controller import Controller
 
 
 def unused(func: Callable) -> Callable:
@@ -27,7 +23,6 @@ class View(QtWidgets.QWidget):
         self.ui.setupUi(self)
         self.radioButtons: List[QtWidgets.QRadioButton] = []
         self.controller = None
-        self.controller = Controller(self)
 
         # homePage
         self.ui.enterExamButton.clicked.connect(self.enterExam)
