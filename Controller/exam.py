@@ -1,6 +1,7 @@
-from typing import List
-# Placeholders
-from controller import QuestionBank, Question
+from typing import List, Tuple
+import random
+from Model.question import Question
+from Model.question_bank import QuestionBank
 
 # Takes in:
 # - qCount number of questions in this exam
@@ -29,15 +30,24 @@ class Exam:
         self.__curQNum = 0
         self.__peekAnsCount = 0
         self.__qList: List[Question] = qB.getQuestionList(total)
+        self.shuffleQuestionList()
+    
+    def shuffleQuestionList(self) -> None:
+        random.shuffle(self.__qList)
+        # Shuffles the answer
+        # - short answer: no effect
+        # - choice & multiple choice: ChoiceOption list is shuffled
+        for q in self.__qList:
+            random.shuffle(q.ans)
 
     # Returns None if index out of range
-    def getNextQuestion(self) -> Question:
+    def getNextQuestion(self) -> Tuple[Question, int]:
         try:
             q = self.__qList.pop(0)
             self.__curQNum += 1
-            return q
+            return q, self.__curQNum - 1
         except IndexError:
-            return None
+            return None, -1
     
     def getResult(self) -> Result:
         return Result(

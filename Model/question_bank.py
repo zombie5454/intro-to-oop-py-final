@@ -24,7 +24,7 @@ class QuestionBank:
         # if file already exists, return false
         return True
     
-    def getQuestionList(num=-1)-> List[Question]:
+    def getQuestionList(self, num=-1)-> List[Question]:
         if num < 0:
             # TODO: append all question in self.directory
             pass
@@ -35,13 +35,13 @@ class QuestionBank:
         # shuffle the list, and return it
         return []
 
-    def editQuestion(changed_question: Question)->bool:
+    def editQuestion(self, changed_question: Question)->bool:
         # TODO: use question object's ID to open that pickle in w/wb mode
         # DNE -> return false
         # overwrite the pickle with that objects
         return False
 
-    def deleteQuestion(ID: int)->bool:
+    def deleteQuestion(self, ID: int)->bool:
         # TODO: use ID to delete that pickle
         # DNE -> return false
         return False
