@@ -1,4 +1,9 @@
 # MODEL
+## NOTE
+* subclass usage and choice usage are omitted here
+* It is caller's responsibility to **refresh the qBanks list, or the question list**
+    * especially after editing, deleting, adding qBanks or question list
+    * to get latest qBanklist, please call ``qBanks = model.getBanks()``
 ## Model class
 ### attribute
 * directory: path where all the question banks locate
@@ -17,10 +22,15 @@
     * example: ``qBank = model.getBank("dsa")``
     * if the bank does not exist, return None
     * else, return qBank object
-5. to get directory, simply call ``model.directory``
+5. to get directory, simply use ``model.directory``
     * we will implement a getter 
     * change directory during runtime **is not allowed**
-
+6. to edit bank's name
+    * example: ``model.editBankName(oldname,newname)``
+    * if oldname DNE or newname already exists, return false
+7. to delete bank(and all questions in the bank)
+    * example: ``model.deleteBank(name)``
+    * if name DNE, return false
 ## QuestionBank class
 ### attribute
 * name: qBank's name
@@ -104,5 +114,4 @@
 3. Usage: simply call ``createQuestion(qDes, qAns)`` to obtain the appropriate ``Question`` object
     * see src code for impl details
 
-## NOTE
-subclass usage and choice usage are omitted here
+
