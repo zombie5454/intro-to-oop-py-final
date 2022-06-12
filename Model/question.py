@@ -26,7 +26,7 @@ class Question:
     @property
     def question(self):
         return self.__question
-    @type.setter
+    @question.setter
     def question(self, newquestion: str):
         self.__question = newquestion
     
