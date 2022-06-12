@@ -1,24 +1,9 @@
 from typing import List, Dict
+from Model.Model import Model
+from Model.question import Question
+from Model.question_bank import QuestionBank
 from Model.question_factory import QuestionFactory
 from exam import Exam, Result
-
-# Placeholder
-class Question:
-    pass
-class QuestionBank:
-    def getName() -> str:
-        pass
-    def addQuestion(q: Question) -> bool:
-        pass
-    def getQuestionList() -> List[Question]:
-        pass
-class Model:
-    def getBank(self, name: str) -> QuestionBank:
-        pass
-    def getBanks(self) -> List[QuestionBank]:
-        pass
-    def addNewBank(self, name: str) -> bool:
-        pass
 
 class Controller:
     def __init__(self, model: Model, qFactoryListDict: Dict[str, QuestionFactory]):
@@ -31,19 +16,16 @@ class Controller:
         return self.__model.getBanks()
     
     def addBank(self, name: str) -> bool:
-        bankList = self.__model.getBanks()
-        for bank in bankList:
-            if bank.name == name:
-                return False
-        self.__model.addNewBank(name)
-        return True
+        return self.__model.addNewBank(name)
     
     def addNewQuestion(self, bankName: str, qType: str, qDes: str, qAns: str) -> bool:
         tarBank: QuestionBank = self.__model.getBank(bankName)
         if tarBank is None:
             return False
         q = self.__qFactoryList[qType].createQuestion(qDes, qAns)
+        # TOOD: Model's README.md says addNewQuestion, but the code is currently addQuestion
         tarBank.addQuestion(q)
+        return True
     
     def getQuestionList(self, bankName: str) -> List[Question]:
         tarBank = self.__model.getBank(bankName)
@@ -72,7 +54,10 @@ class Controller:
         del self.__curExam
         return r
     
+    # TODO: no-op if there's no currently ongoing exam
     def sigOnUsrAct(self, correct: bool, peek: bool) -> None:
+        if self.__curExam is None:
+            pass
         if correct:
             self.__curExam.correct += 1
         if peek:

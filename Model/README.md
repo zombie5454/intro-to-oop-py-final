@@ -79,5 +79,30 @@
     * only getter for ID, change ID during runtime **is not allowed**
     * ``q.ID``
 
-### NOTE
-subclass usage, question factory usage and choice usage are omitted here
+## QuestionFactory
+1. Instantiated in main, injected into the controller class
+    * Model will not need to be aware of it
+2. Abstract class for question creation
+
+### attribute
+* qType: str representing the question type
+
+### methods
+1. Pass in question description string (qDes) and question answer string (qAns) from View into it
+2. Format of the strings differs from type-to-type, the following negoatied format are as thus:
+    * ShortAnswer:
+        * ``qDes``: simply a string
+        * ``qAns``: the answer string to match the whole user-input for in checking their answer
+    * Choice:
+        * ``qDes``: string representation of dict
+            * ``"question"`` key: contains the question string
+            * ``"options"`` key: contains the option description strings
+        * ``qAns``: string representation of list of bool
+            * Index matches with the order of option strings (index 0 represents the first option string)
+            * ``True``: is this option is the answer
+            * ``False``: otherwise
+3. Usage: simply call ``createQuestion(qDes, qAns)`` to obtain the appropriate ``Question`` object
+    * see src code for impl details
+
+## NOTE
+subclass usage and choice usage are omitted here

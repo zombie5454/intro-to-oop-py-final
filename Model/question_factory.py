@@ -1,5 +1,6 @@
+from ast import literal_eval
 from Model.question import Choice, ChoiceOption, Question, ShortAnswer
-from typing import List
+from typing import List, Dict
 
 
 # TODO: validating & cleaning user input
@@ -18,34 +19,28 @@ class ShortAnswerFactory(QuestionFactory):
 
 class ChoiceFactory(QuestionFactory):
     # Expected input format:
-    # qDes: 'question_des???option1,option2,option3'
-    # qAns: '0' (index of option)
+    # qDes: str evaluated w/ ast into dict{"question": ..., "options": ["option1", "option2", "option3"]}
+    # qAns: str evaluated w/ ast into List[bool], only 1 True
     def createQuestion(self, qDes: str, qAns: str) -> Question:
-        components = qDes.split("???")
-        qStr = components[0]
-        ansIdx = int(qAns)
-        # Parse and create ChoiceOption
-        optList = components[1].split(",")
+        # Parsing inputs
+        qDict = literal_eval(qDes)
+        qAnsStat = literal_eval(qAns)
+        # Creating ChoiceOption
         qOptList: List[ChoiceOption] = []
-        for i in range(len(optList)):
-            qOptList.append(ChoiceOption(optList[i]))
-        qOptList[ansIdx].is_true = True
-        return Choice(qStr, qOptList)
+        for optStr, isAns in zip(qDict["options"], qAnsStat):
+            qOptList.append(ChoiceOption(optStr, isAns))
+        return Choice(qDict["question"], qOptList)
 
 class MultipleChoiceFactory(QuestionFactory):
     # Expected input format:
-    # qDes: 'question_des???option1,option2,option3'
-    # qAns: '1,2' (indices of options)
+    # qDes: str evaluated w/ ast into dict{"question": ..., "options": ["option1", "option2", "option3"]}
+    # qAns: str evaluated w/ ast into List[bool], may contain multiple True
     def createQuestion(self, qDes: str, qAns: str) -> Question:
-        components = qDes.split("???")
-        qStr = components[0]
-        # Parse expected answer index
-        qAnsList = sorted([int(ans) for ans in qAns.split(",")])
-        # Parse and create ChoiceOption
-        optList = components[1].split(",")
+        # Parsing inputs
+        qDict = literal_eval(qDes)
+        qAnsStat = literal_eval(qAns)
+        # Creating ChoiceOption
         qOptList: List[ChoiceOption] = []
-        for i in range(len(optList)):
-            qOptList.append(ChoiceOption(optList[i]))
-        for i in qAnsList:
-            qOptList[i].is_true = True
-        return Choice(qStr, qOptList)
+        for optStr, isAns in zip(qDict["options"], qAnsStat):
+            qOptList.append(ChoiceOption(optStr, isAns))
+        return Choice(qDict["question"], qOptList)
