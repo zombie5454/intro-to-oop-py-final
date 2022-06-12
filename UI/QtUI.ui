@@ -364,7 +364,7 @@ QMessageBox {
            <item row="2" column="1">
             <widget class="QStackedWidget" name="stackedAnswer">
              <property name="currentIndex">
-              <number>1</number>
+              <number>0</number>
              </property>
              <widget class="QWidget" name="choice">
               <layout class="QVBoxLayout" name="verticalLayout_8">
@@ -447,7 +447,7 @@ QMessageBox {
               <cursorShape>PointingHandCursor</cursorShape>
              </property>
              <property name="text">
-              <string>返回</string>
+              <string>取消</string>
              </property>
             </widget>
            </item>

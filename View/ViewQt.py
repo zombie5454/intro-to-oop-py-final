@@ -1,7 +1,11 @@
 from PyQt5 import QtWidgets, QtCore, QtGui
 from UI.QtUI import Ui_Widget
 from typing import Callable, List, Union
-from Controller.controller import Controller
+
+# from Controller.controller import Controller
+
+
+from .Module import Bank, Controller, QuestionType
 
 
 def unused(func: Callable) -> Callable:
@@ -23,6 +27,7 @@ class View(QtWidgets.QWidget):
         self.ui.setupUi(self)
         self.radioButtons: List[QtWidgets.QRadioButton] = []
         self.controller = None
+        self.controller = Controller(self)
 
         # homePage
         self.ui.enterExamButton.clicked.connect(self.enterExam)
@@ -89,13 +94,20 @@ class View(QtWidgets.QWidget):
             bankName = self.ui.bankList.currentItem().text()
             self.ui.bankName.setText(bankName)
             for q in self.controller.getQuestionList(bankName, 10):
-                self.ui.questionList.addItem(MyListWidgetItem(q.id, q.text.split("\n")[0], self.ui.questionList))
+                self.ui.questionList.addItem(MyListWidgetItem(q.id, q.question, self.ui.questionList))
         # self.ui.questionList.setCurrentItem(self.ui.questionList.item(0))
         self.ui.stackedPages.setCurrentWidget(self.ui.editBankPage)
 
     def goToEditQuestionPage(self):
         self.ui.questionType.setCurrentIndex(0)
         self.ui.stackedAnswer.setCurrentIndex(0)
+        for radio in reversed(self.radioButtons):
+            self.ui.stackedAnswer.removeWidget(radio)
+            radio.deleteLater()
+        self.radioButtons = []
+        self.ui.questionText.setPlainText("")
+        self.ui.newOption.setText("")
+        self.ui.shortAnswerSheet.setPlainText("")
         if self.ui.questionList.currentItem() is not None:
             questionText = self.ui.questionList.currentItem().text()
             id = self.ui.questionList.currentItem().id
@@ -123,7 +135,6 @@ class View(QtWidgets.QWidget):
     @unused
     def deleteBank(self):
         if self.ui.bankList.currentItem() is None:
-            # QtWidgets.QMessageBox.critical(None, "錯誤訊息", "No bank selected!")
             messageBox = QtWidgets.QMessageBox()
             messageBox.setWindowTitle("錯誤訊息")
             messageBox.setText("No bank selected!")
@@ -234,9 +245,13 @@ class View(QtWidgets.QWidget):
         type = self.ui.questionType.currentData()
         if type == QuestionType.CHOICE:
             self.ui.stackedAnswer.setCurrentWidget(self.ui.choice)
+            hasChecked = False
             for radio in self.radioButtons:
-                radio.setChecked(False)
                 radio.setAutoExclusive(True)
+                if hasChecked:
+                    radio.setChecked(False)
+                if radio.isChecked():
+                    hasChecked = True
         elif type == QuestionType.MULTIPLECHOICE:
             self.ui.stackedAnswer.setCurrentWidget(self.ui.choice)
             for radio in self.radioButtons:
@@ -253,6 +268,7 @@ class View(QtWidgets.QWidget):
         self.radioButtons.append(button)
         self.ui.choice.layout().insertWidget(self.ui.choice.layout().count() - 1, button)
         self.ui.newOption.setText("")
+        self.changeQuestionType()
 
     def enterExam(self):
         if self.ui.bankList.currentItem() is None:
