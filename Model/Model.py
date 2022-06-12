@@ -25,7 +25,7 @@ class Model:
         return []
     
     def getBank(self, name:str)->QuestionBank:
-        # we assume that bank exists
-        # TODO: open that subdirectory, and load bank's pickle
+        # TODO: open that subdirectory, if the open operation failed (ex: dir does not exist), return None
+        # and load bank's pickle
         # and return that object
         return None
