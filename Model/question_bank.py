@@ -11,11 +11,16 @@ class QuestionBank:
         self.__name = name
         # directory name  == name 
         self.__directory = directory
+        # TODO: find the maximum ID in the directory (ex: 1.pickle, 0.pickle, 3.pickle --> maxi ID is 3)
+        self.__issuedID = -1
 
-    #TODO: getter and setter of __directory, __name
+    #TODO: getter and setter of __directory, __name, __issuedID
 
     def addQuestion(self, q: Question) -> bool:
+        # change the q's ID to issuedID + 1
         # TODO: use pickle to dump q in self.directory
+        # pickle name = q's ID
+        # if file already exists, return false
         return True
     
     def getQuestionList(num=-1)-> List[Question]:
@@ -32,4 +37,3 @@ class QuestionBank:
 
 if __name__ == "__main__":
     qBank = QuestionBank()
-    qBank.addNewCategory("hey")
