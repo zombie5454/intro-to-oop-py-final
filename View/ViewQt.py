@@ -17,6 +17,10 @@ class MyListWidgetItem(QtWidgets.QListWidgetItem):
         super().__init__(text, parent)
         self.id = id
 
+class MyRadioButton(QtWidgets.QRadioButton):
+    def __init__(self, is_true: bool, text: str):
+        super().__init__(text)
+        self.is_true = is_true
 
 class View(QtWidgets.QWidget):
     def __init__(self):
@@ -26,8 +30,10 @@ class View(QtWidgets.QWidget):
         self.ui = Ui_Widget()
         self.ui.setupUi(self)
         self.radioButtons: List[QtWidgets.QRadioButton] = []
+        self.question = None 
         self.controller = None
         self.controller = Controller(self)
+
 
         # homePage
         self.ui.enterExamButton.clicked.connect(self.enterExam)
@@ -72,6 +78,7 @@ class View(QtWidgets.QWidget):
         self.ui.deleteBankButton.setVisible(False)
         self.ui.deleteQuestionButton.setVisible(False)
         self.ui.editQuestionButton.setVisible(False)
+        self.ui.showAnswerButton.setVisible(False)
 
         # init MyComboBax
         self.ui.questionType.addItem("單選", QuestionType.CHOICE)
@@ -98,13 +105,16 @@ class View(QtWidgets.QWidget):
         # self.ui.questionList.setCurrentItem(self.ui.questionList.item(0))
         self.ui.stackedPages.setCurrentWidget(self.ui.editBankPage)
 
-    def goToEditQuestionPage(self):
-        self.ui.questionType.setCurrentIndex(0)
-        self.ui.stackedAnswer.setCurrentIndex(0)
-        for radio in reversed(self.radioButtons):
-            self.ui.stackedAnswer.removeWidget(radio)
+    def clearRadioButtons(self):
+        for radio in self.radioButtons:
+            radio.parentWidget().layout().removeWidget(radio)
             radio.deleteLater()
         self.radioButtons = []
+
+    def goToEditQuestionPage(self):
+        self.clearRadioButtons()
+        self.ui.questionType.setCurrentIndex(0)
+        self.ui.stackedAnswer.setCurrentIndex(0)
         self.ui.questionText.setPlainText("")
         self.ui.newOption.setText("")
         self.ui.shortAnswerSheet.setPlainText("")
@@ -120,7 +130,6 @@ class View(QtWidgets.QWidget):
 
     def goToExamPage(self):
         self.ui.stackedPages.setCurrentWidget(self.ui.examPage)
-        self.ui.stackedExamAnswer.setCurrentWidget(self.ui.examChoice)  ##
 
     def goToResultPage(self):
         result = self.controller.endExam()
@@ -294,12 +303,13 @@ class View(QtWidgets.QWidget):
         self.nextQuestion()
 
     def nextQuestion(self):
-        question, idx = self.controller.getNextQuestion()
+        self.clearRadioButtons()
+        self.ui.nextQuestionButton.setText("下一題")
+        self.question, idx = self.controller.getNextQuestion()
         if idx == int(self.ui.examNum.text()) - 1:
             self.ui.nextQuestionButton.setText("結束測驗")
         if idx == -1:
             self.goToResultPage()
-            self.ui.nextQuestionButton.setText("下一題")
             return
         self.ui.currentNum.setText(str(idx + 1))
         self.ui.examShortAnswerSheet.setPlainText("")
@@ -308,21 +318,39 @@ class View(QtWidgets.QWidget):
         self.ui.examShortAnswerSheet.setEnabled(True)
         self.ui.checkAnswerButton.setEnabled(True)
         # TODO: SETUP QUESTION!
-
+        self.ui.examQuestionType.setText(self.question.type.value)
+        self.ui.examQuestionText.setText(self.question.question)
+        if self.question.type == QuestionType.CHOICE or self.question.type == QuestionType.MULTIPLECHOICE:
+            self.ui.stackedExamAnswer.setCurrentWidget(self.ui.examChoice)
+            for choice in question.choices:
+                button = MyRadioButton(choice.is_true, choice.text)
+                self.radioButtons.append(button)
+                self.ui.examRadioButtonGroup.addWidget(button)
+                button.setAutoExclusive(self.question.type == QuestionType.CHOICE)
+        elif self.question.type == QuestionType.FILL:
+            self.ui.stackedExamAnswer.setCurrentWidget(self.ui.examShortAnswer)
+    
+    @unused
     def showAnswer(self):
-        answer = self.controller.showAnswer()
-        self.ui.examShortAnswerSheet.setPlainText(answer)
+        ...
 
     def checkAnswer(self):
-        answer = self.ui.examShortAnswerSheet.toPlainText()
-        self.ui.examShortAnswerSheet.setEnabled(False)
-        self.ui.checkAnswerButton.setEnabled(False)
-        correct = self.controller.checkAnswer(answer)
-        if correct:
-            self.ui.examShortAnswerSheet.setStyleSheet("color: green")
-        else:
-            self.ui.examShortAnswerSheet.setStyleSheet("color: red")
-            self.ui.examShortAnswerSheet.setPlainText(self.ui.examShortAnswerSheet.toPlainText() + "\n\n錯誤答案\n")
+        if self.question.type == QuestionType.CHOICE or self.question.type == QuestionType.MULTIPLECHOICE:
+            for radio in self.radioButtons:
+                if radio.isChecked() and radio.is_true:
+                    radio.setStyleSheet("color: green")
+                else:   
+                    radio.setStyleSheet("color: red")
+        elif self.question.type == QuestionType.FILL:
+            answer = self.ui.examShortAnswerSheet.toPlainText()
+            self.ui.examShortAnswerSheet.setEnabled(False)
+            self.ui.checkAnswerButton.setEnabled(False)
+            if self.question.ans == answer:
+                self.ui.examShortAnswerSheet.setStyleSheet("color: green")
+            else:
+                self.ui.examShortAnswerSheet.setStyleSheet("color: red")
+                self.ui.examShortAnswerSheet.setPlainText(answer + "\n\n正確答案:\n" + question.ans)
+        
 
     def testAgain(self):
         self.goToEnterExamPage()
