@@ -11,11 +11,11 @@ class QuestionBank:
         self.__name = name
         # directory name  == name 
         self.__directory = directory
-        # TODO: find the maximum ID in the directory (ex: 1.pickle, 0.pickle, 3.pickle --> maxi ID is 3)
         self.__issuedID = -1
-
+        # TODO: find the maximum ID in the directory (ex: 1.pickle, 0.pickle, 3.pickle --> maxi ID is 3)
+        
     #TODO: getter of __directory, __name, __issuedID
-    # NO need for setter
+    #need setter for __name
 
     def addQuestion(self, q: Question) -> bool:
         # change the q's ID to issuedID + 1
@@ -35,6 +35,16 @@ class QuestionBank:
         # shuffle the list, and return it
         return []
 
+    def editQuestion(changed_question: Question)->bool:
+        # TODO: use question object's ID to open that pickle in w/wb mode
+        # DNE -> return false
+        # overwrite the pickle with that objects
+        return False
+
+    def deleteQuestion(ID: int)->bool:
+        # TODO: use ID to delete that pickle
+        # DNE -> return false
+        return False
 
 if __name__ == "__main__":
     qBank = QuestionBank()
