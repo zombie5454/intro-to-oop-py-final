@@ -1,4 +1,4 @@
-from typing import List, Dict
+from typing import List, Dict, Tuple
 from Model.Model import Model
 from Model.question import Question
 from Model.question_bank import QuestionBank
@@ -77,7 +77,7 @@ class Controller:
         self.__curExam = Exam(qNum, qBank)
         return self.__curExam.qList
     
-    def getNextExamQuestion(self) -> Question:
+    def getNextExamQuestion(self) -> Tuple[Question, int]:
         return self.__curExam.getNextQuestion()
     
     def endExam(self) -> Result:
