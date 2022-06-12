@@ -14,8 +14,8 @@ class QuestionBank:
         # TODO: find the maximum ID in the directory (ex: 1.pickle, 0.pickle, 3.pickle --> maxi ID is 3)
         self.__issuedID = -1
 
-    #TODO: getter and setter of __directory, __name, __issuedID
-    # Corrected. NO need for directory setter
+    #TODO: getter of __directory, __name, __issuedID
+    # NO need for setter
 
     def addQuestion(self, q: Question) -> bool:
         # change the q's ID to issuedID + 1
