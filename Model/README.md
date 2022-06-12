@@ -57,12 +57,18 @@
     * change directory during runtime **is not allowed**
 5. to get name, simply call ``qBank.name``
     * we will implement a getter 
-    * change name directly outside QuestionBank **is not allowed**
-    * if we support editBank, call ``editBank`` to change the name of bank
+    * change name directly might **cause fatal error**
+    * call ``editBankName`` to change the name of bank
 6. to get issuedID, simply call: ``qBank.issuedID``
     * we will implement a getter 
     * change name directly outside QuestionBank **is not allowed**
-
+7. to edit question, pass the **changed question object**
+    * example: ``qBank.editQuestion(changed_q)``
+    * if changed_q's ID is not in qBank -> return false
+    * controller has to build a question instance before calling
+7. to delete question, pass question ID
+    * example: ``qBank.deleteQuestion(ID)``
+    * if ID is not in qBank -> return false
 ## Question class
 ### attribute
 * type: short answer, multiple choice , or choice
