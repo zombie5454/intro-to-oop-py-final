@@ -30,3 +30,17 @@ class Model:
         # and load bank's pickle
         # and return that object
         return None
+
+    def editBankName(self,oldname:str, newname:str)->bool:
+        # TODO: open the directory called oldname, if failed (ex: dir does not exist), return false
+        # also, try to open the directory called newname, if success (new dir already exist), return false
+        # load qBanks object from the pickle called oldname
+        # modify the objects name, and its directory (ex: ./a/dsa_old -> ./a/dsa_new)
+        # delete old pickle, dump a new pickle named newname
+        # change directory's name
+        return False
+    
+    def deleteBank(self, name:str)->bool:
+        # TODO: delete the directory called name (also delete all files in the directory)
+        # if failed -> return false
+        return False
