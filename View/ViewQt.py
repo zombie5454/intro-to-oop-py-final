@@ -1,7 +1,7 @@
 from PyQt5 import QtWidgets
 from UI.QtUI import Ui_Widget
 from typing import Callable
-from Control.Controller import Controller
+from Controller.controller import Controller
 
 
 def unused(func: Callable) -> Callable:
