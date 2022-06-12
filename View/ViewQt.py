@@ -1,26 +1,15 @@
-from PyQt5 import QtWidgets, QtCore, QtGui
+from PyQt5 import QtWidgets, QtCore
 from UI.QtUI import Ui_Widget
-from typing import Callable, List, Union
+from Model.question_type import QuestionType
+from typing import Callable, List
+from .MyWidgets import MyListWidgetItem, MyRadioButton
 
-# from Controller.controller import Controller
-
-
-from .Module import Bank, Controller, QuestionType
+from Controller.controller import Controller
 
 
 def unused(func: Callable) -> Callable:
     return func
 
-
-class MyListWidgetItem(QtWidgets.QListWidgetItem):
-    def __init__(self, id: int, text: str, parent: QtWidgets.QListWidget):
-        super().__init__(text, parent)
-        self.id = id
-
-class MyRadioButton(QtWidgets.QRadioButton):
-    def __init__(self, is_true: bool, text: str):
-        super().__init__(text)
-        self.is_true = is_true
 
 class View(QtWidgets.QWidget):
     def __init__(self):
@@ -29,14 +18,15 @@ class View(QtWidgets.QWidget):
         # attributes
         self.ui = Ui_Widget()
         self.ui.setupUi(self)
+        self.darkMode = False
+        self.toggleStylesheet()
         self.radioButtons: List[QtWidgets.QRadioButton] = []
-        self.question = None 
+        self.question = None
         self.controller = None
-        self.controller = Controller(self)
-
 
         # homePage
         self.ui.enterExamButton.clicked.connect(self.enterExam)
+        self.ui.toggleModeButton.clicked.connect(self.toggleStylesheet)
         self.ui.bankList.itemDoubleClicked.connect(self.enterExam)
         self.ui.deleteBankButton.clicked.connect(self.deleteBank)
         self.ui.editBankButton.clicked.connect(self.editBank)
@@ -48,7 +38,7 @@ class View(QtWidgets.QWidget):
         self.ui.deleteQuestionButton.clicked.connect(self.deleteQuestion)
         self.ui.editQuestionButton.clicked.connect(self.editQuestion)
         self.ui.addQuestionButton.clicked.connect(self.addQuestion)
-        self.ui.bankName.textChanged.connect(lambda: self.ui.bankName.setStyleSheet("color: white"))
+        self.ui.bankName.textChanged.connect(lambda: self.ui.bankName.setStyleSheet(self.defaultColor))
 
         # editQuestionPage
         self.ui.backButton.clicked.connect(self.goToEditBankPage)
@@ -56,9 +46,9 @@ class View(QtWidgets.QWidget):
         self.ui.questionType.currentIndexChanged.connect(self.changeQuestionType)
         self.ui.addOptionButton.clicked.connect(self.addOption)
         self.ui.newOption.returnPressed.connect(self.addOption)
-        self.ui.questionText.textChanged.connect(lambda: self.ui.questionText.setStyleSheet("color: white"))
-        self.ui.newOption.textChanged.connect(lambda: self.ui.newOption.setStyleSheet("color: white"))
-        self.ui.shortAnswerSheet.textChanged.connect(lambda: self.ui.shortAnswerSheet.setStyleSheet("color: white"))
+        self.ui.questionText.textChanged.connect(lambda: self.ui.questionText.setStyleSheet(self.defaultColor))
+        self.ui.newOption.textChanged.connect(lambda: self.ui.newOption.setStyleSheet(self.defaultColor))
+        self.ui.shortAnswerSheet.textChanged.connect(lambda: self.ui.shortAnswerSheet.setStyleSheet(self.defaultColor))
 
         # enterExamPage
         self.ui.homeButton_2.clicked.connect(self.goHome)
@@ -87,6 +77,21 @@ class View(QtWidgets.QWidget):
 
         # initialize
         self.goHome()
+
+    def setController(self, controller):
+        self.controller = controller
+
+    def toggleStylesheet(self):
+        if self.darkMode:
+            file = QtCore.QFile("./UI/light.qss")
+            self.defaultColor = "color: black"
+        else:
+            file = QtCore.QFile("./UI/dark.qss")
+            self.defaultColor = "color: white"
+        self.darkMode = not self.darkMode
+        file.open(QtCore.QFile.ReadOnly | QtCore.QFile.Text)
+        stream = QtCore.QTextStream(file)
+        self.setStyleSheet(stream.readAll())
 
     def goHome(self):
         self.ui.bankList.clear()
@@ -138,9 +143,6 @@ class View(QtWidgets.QWidget):
         self.ui.questionShowNum.setText(str(result.numOfPeek))
         self.ui.stackedPages.setCurrentWidget(self.ui.resultPage)
 
-    def setController(self, controller):
-        self.controller = controller
-
     @unused
     def deleteBank(self):
         if self.ui.bankList.currentItem() is None:
@@ -177,7 +179,7 @@ class View(QtWidgets.QWidget):
     def saveBank(self):
         bankName = self.ui.bankName.text()
         try:
-            self.controller.addBank(Bank(bankName))
+            self.controller.addBank(bankName)
         except Exception as e:
             QtWidgets.QMessageBox.critical(None, "錯誤訊息", str(e))
         self.goHome()
@@ -313,23 +315,22 @@ class View(QtWidgets.QWidget):
             return
         self.ui.currentNum.setText(str(idx + 1))
         self.ui.examShortAnswerSheet.setPlainText("")
-        self.ui.examShortAnswerSheet.setStyleSheet("color: white")
+        self.ui.examShortAnswerSheet.setStyleSheet(self.defaultColor)
         self.ui.examShortAnswerSheet.setFocus()
         self.ui.examShortAnswerSheet.setEnabled(True)
         self.ui.checkAnswerButton.setEnabled(True)
-        # TODO: SETUP QUESTION!
         self.ui.examQuestionType.setText(self.question.type.value)
         self.ui.examQuestionText.setText(self.question.question)
         if self.question.type == QuestionType.CHOICE or self.question.type == QuestionType.MULTIPLECHOICE:
             self.ui.stackedExamAnswer.setCurrentWidget(self.ui.examChoice)
-            for choice in question.choices:
+            for choice in self.question.choices:
                 button = MyRadioButton(choice.is_true, choice.text)
                 self.radioButtons.append(button)
                 self.ui.examRadioButtonGroup.addWidget(button)
                 button.setAutoExclusive(self.question.type == QuestionType.CHOICE)
         elif self.question.type == QuestionType.FILL:
             self.ui.stackedExamAnswer.setCurrentWidget(self.ui.examShortAnswer)
-    
+
     @unused
     def showAnswer(self):
         ...
@@ -339,7 +340,9 @@ class View(QtWidgets.QWidget):
             for radio in self.radioButtons:
                 if radio.isChecked() and radio.is_true:
                     radio.setStyleSheet("color: green")
-                else:   
+                elif not radio.isChecked() and not radio.is_true:
+                    ...
+                else:
                     radio.setStyleSheet("color: red")
         elif self.question.type == QuestionType.FILL:
             answer = self.ui.examShortAnswerSheet.toPlainText()
@@ -349,8 +352,7 @@ class View(QtWidgets.QWidget):
                 self.ui.examShortAnswerSheet.setStyleSheet("color: green")
             else:
                 self.ui.examShortAnswerSheet.setStyleSheet("color: red")
-                self.ui.examShortAnswerSheet.setPlainText(answer + "\n\n正確答案:\n" + question.ans)
-        
+                self.ui.examShortAnswerSheet.setPlainText(answer + "\n\n正確答案:\n" + self.question.ans)
 
     def testAgain(self):
         self.goToEnterExamPage()

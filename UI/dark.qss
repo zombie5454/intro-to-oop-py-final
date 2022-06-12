@@ -1,0 +1,84 @@
+* {
+	color: white;
+	background: transparent;
+	font-size: 14pt;
+	opacity: 0.1;
+}
+#appTitle {
+	font-size: 30px;
+	margin-bottom: 10px;
+	font-weight: bold;
+}
+#Widget {
+	background: #17181e;
+}
+QPushButton {
+	color: gainsboro;
+	position: relative;
+	height: 36px;
+	padding: 0 20px;
+	margin: 6px;
+	font-weight: 500;
+	text-transform: uppercase;
+	letter-spacing: 0.15em;
+	border: none;
+	background: #2d313c;
+	border-radius: 3px;
+}
+QPushButton::hover {
+	background: #535865;
+}
+QPushButton:disabled {
+	color: #8a8d9f;
+	background: #1d2029;
+}
+QListWidget {
+	background: #2d313c;
+	border-radius: 3px;
+}
+QListWidget::item {
+	letter-spacing: normal;
+	min-height: 48px;
+	outline: none;
+	position: relative;
+}
+QListWidget::item::hover {
+	background: #3a3e49;
+}
+QListWidget::item:selected {
+	background: #535865;
+}
+QPlainTextEdit {
+	background: #2d313c;
+	border-radius: 3px;
+	padding: 10px;
+	line-height: 40px;
+}
+QLineEdit {
+	background: #2d313c;
+	height: 36px;
+	border: 0;
+	border-radius: 3px;
+	padding-left: 5px;
+}
+QComboBox {
+	background: #2d313c;
+	color: white;
+	height: 36px;
+	border: 0;
+	border-radius: 3px;
+}
+QSpinBox {
+	background: #2d313c;
+	color: white;
+	height: 36px;
+	border: 0;
+	border-radius: 3px;
+	padding-left: 5px;
+}
+QRadioButton {
+	min-height: 32px;
+}
+QMessageBox {
+	background-color: #17181e;
+}

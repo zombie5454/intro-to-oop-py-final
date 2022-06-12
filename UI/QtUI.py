@@ -15,91 +15,7 @@ class Ui_Widget(object):
     def setupUi(self, Widget):
         Widget.setObjectName("Widget")
         Widget.resize(792, 572)
-        Widget.setStyleSheet("* {\n"
-"    color: white;\n"
-"    background: transparent;\n"
-"    font-size: 14pt;\n"
-"    opacity: 0.1;\n"
-"}\n"
-"#appTitle {\n"
-"    font-size: 30px;\n"
-"    margin-bottom: 10px;\n"
-"    font-weight: bold;\n"
-"}\n"
-"#Widget {\n"
-"    background: qlineargradient(spread:pad, x1:0, y1:1, x2:1, y2:0, stop:0 rgba(0, 0, 0, 255), stop:1 rgba(255, 255, 255, 255));\n"
-"    background: #17181e;\n"
-"}\n"
-"QPushButton {\n"
-"    color: gainsboro;\n"
-"    position: relative;\n"
-"    height: 36px;\n"
-"    padding: 0 20px;\n"
-"    margin: 6px;\n"
-"    font-weight: 500;\n"
-"    text-transform: uppercase;\n"
-"    letter-spacing: 0.15em;\n"
-"    border: none;\n"
-"    background: #2d313c;\n"
-"    border-radius: 3px;\n"
-"}\n"
-"QPushButton::hover {\n"
-"    background: #535865;\n"
-"}\n"
-"QPushButton:disabled {\n"
-"    color: #8a8d9f;\n"
-"    background: #1d2029;\n"
-"}\n"
-"QListWidget {\n"
-"    background: #2d313c;\n"
-"    border-radius: 3px;\n"
-"}\n"
-"QListWidget::item {\n"
-"    letter-spacing: normal;\n"
-"    min-height: 48px;\n"
-"    outline: none;\n"
-"    position: relative;\n"
-"}\n"
-"QListWidget::item::hover {\n"
-"    background: #3a3e49;\n"
-"}\n"
-"QListWidget::item:selected {\n"
-"    background: #535865;\n"
-"}\n"
-"QPlainTextEdit {\n"
-"    background: #2d313c;\n"
-"    border-radius: 3px;\n"
-"    padding: 10px;\n"
-"    line-height: 40px;\n"
-"}\n"
-"QLineEdit {\n"
-"    background: #2d313c;\n"
-"    height: 36px;\n"
-"    border: 0;\n"
-"    border-radius: 3px;\n"
-"    padding-left: 5px;\n"
-"}\n"
-"QComboBox {\n"
-"    background: #2d313c;\n"
-"    color: white;\n"
-"    height: 36px;\n"
-"    border: 0;\n"
-"    border-radius: 3px;\n"
-"}\n"
-"QSpinBox {\n"
-"    background: #2d313c;\n"
-"    color: white;\n"
-"    height: 36px;\n"
-"    border: 0;\n"
-"    border-radius: 3px;\n"
-"    padding-left: 5px;\n"
-"}\n"
-"QRadioButton {\n"
-"    min-height: 32px;\n"
-"}\n"
-"QMessageBox {\n"
-"    background-color: #17181e;\n"
-"}")
+        Widget.setStyleSheet("")
         self.verticalLayout = QtWidgets.QVBoxLayout(Widget)
         self.verticalLayout.setContentsMargins(6, 6, 6, 6)
         self.verticalLayout.setObjectName("verticalLayout")
@@ -127,6 +43,10 @@ class Ui_Widget(object):
         self.enterExamButton.setStyleSheet("")
         self.enterExamButton.setObjectName("enterExamButton")
         self.horizontalLayout_8.addWidget(self.enterExamButton)
+        self.toggleModeButton = QtWidgets.QPushButton(self.homePage)
+        self.toggleModeButton.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        self.toggleModeButton.setObjectName("toggleModeButton")
+        self.horizontalLayout_8.addWidget(self.toggleModeButton)
         spacerItem = QtWidgets.QSpacerItem(475, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout_8.addItem(spacerItem)
         self.deleteBankButton = QtWidgets.QPushButton(self.homePage)
@@ -448,7 +368,7 @@ class Ui_Widget(object):
         self.verticalLayout.addLayout(self.gridLayout)
 
         self.retranslateUi(Widget)
-        self.stackedPages.setCurrentIndex(4)
+        self.stackedPages.setCurrentIndex(0)
         self.stackedAnswer.setCurrentIndex(0)
         self.stackedExamAnswer.setCurrentIndex(1)
         QtCore.QMetaObject.connectSlotsByName(Widget)
@@ -456,8 +376,9 @@ class Ui_Widget(object):
     def retranslateUi(self, Widget):
         _translate = QtCore.QCoreApplication.translate
         Widget.setWindowTitle(_translate("Widget", "Widget"))
-        self.appTitle.setText(_translate("Widget", "Title"))
+        self.appTitle.setText(_translate("Widget", "題庫"))
         self.enterExamButton.setText(_translate("Widget", "進入測驗"))
+        self.toggleModeButton.setText(_translate("Widget", "深色模式"))
         self.deleteBankButton.setText(_translate("Widget", "刪除題庫"))
         self.editBankButton.setText(_translate("Widget", "編輯題庫"))
         self.addBankButton.setText(_translate("Widget", "新增題庫"))
