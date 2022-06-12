@@ -10,7 +10,8 @@ class Model:
         self.__directory = directory
         return
 
-    #TODO: getter and setter of __directory
+    #TODO: getter of __directory
+    # NO need for setter, we don't want to change directory during runtime
         
     def addNewBank(self, name: str) -> bool:
         # TODO: make a directory called name, if the directory already exists, return false
