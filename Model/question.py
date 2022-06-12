@@ -8,10 +8,12 @@ class Question:
         # for short answer, ans is str
         # for multiple choice and choice, ans is list of choice options
         self.__ans = ans
+        self.__ID = -1
         return
     
     
     # TODO: getter and setter 
+    # NO setter for ID
 
 
     def checkAnswer(answer: str) -> bool:
