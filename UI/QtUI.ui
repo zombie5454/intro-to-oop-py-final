@@ -118,7 +118,7 @@ QMessageBox {
      <item row="1" column="0">
       <widget class="QStackedWidget" name="stackedPages">
        <property name="currentIndex">
-        <number>2</number>
+        <number>4</number>
        </property>
        <widget class="QWidget" name="homePage">
         <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -657,7 +657,7 @@ QMessageBox {
            <item row="2" column="1">
             <widget class="QStackedWidget" name="stackedExamAnswer">
              <property name="currentIndex">
-              <number>0</number>
+              <number>1</number>
              </property>
              <widget class="QWidget" name="examShortAnswer">
               <layout class="QVBoxLayout" name="verticalLayout_19">
@@ -692,6 +692,22 @@ QMessageBox {
                <property name="bottomMargin">
                 <number>0</number>
                </property>
+               <item>
+                <layout class="QVBoxLayout" name="examRadioButtonGroup"/>
+               </item>
+               <item>
+                <spacer name="verticalSpacer_6">
+                 <property name="orientation">
+                  <enum>Qt::Vertical</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>20</width>
+                   <height>40</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
               </layout>
              </widget>
             </widget>
