@@ -368,6 +368,9 @@ QMessageBox {
              </property>
              <widget class="QWidget" name="choice">
               <layout class="QVBoxLayout" name="verticalLayout_8">
+               <property name="spacing">
+                <number>0</number>
+               </property>
                <property name="leftMargin">
                 <number>0</number>
                </property>
@@ -381,7 +384,7 @@ QMessageBox {
                 <number>0</number>
                </property>
                <item>
-                <layout class="QHBoxLayout" name="radioButtonGroup">
+                <layout class="QHBoxLayout" name="horizontalLayout_10">
                  <item>
                   <widget class="QLineEdit" name="newOption"/>
                  </item>
@@ -396,6 +399,9 @@ QMessageBox {
                   </widget>
                  </item>
                 </layout>
+               </item>
+               <item>
+                <layout class="QVBoxLayout" name="radioButtonGroup"/>
                </item>
                <item>
                 <spacer name="verticalSpacer_5">
