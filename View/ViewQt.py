@@ -52,7 +52,7 @@ class View(QtWidgets.QWidget):
         self.ui.newOption.returnPressed.connect(self.addOption)
         self.ui.questionText.textChanged.connect(lambda: self.ui.questionText.setStyleSheet("color: white"))
         self.ui.newOption.textChanged.connect(lambda: self.ui.newOption.setStyleSheet("color: white"))
-        self.ui.shortAnswer_1.textChanged.connect(lambda: self.ui.shortAnswer_1.setStyleSheet("color: white"))
+        self.ui.shortAnswerSheet.textChanged.connect(lambda: self.ui.shortAnswerSheet.setStyleSheet("color: white"))
 
         # enterExamPage
         self.ui.homeButton_2.clicked.connect(self.goHome)
@@ -105,7 +105,7 @@ class View(QtWidgets.QWidget):
             questionText = self.ui.questionList.currentItem().text()
             id = self.ui.questionList.currentItem().id
             self.ui.questionText.setPlainText(questionText)
-            self.ui.shortAnswer_1.setPlainText(self.controller.getQuestion(self.ui.bankName.text(), id).answer)
+            self.ui.shortAnswerSheet.setPlainText(self.controller.getQuestion(self.ui.bankName.text(), id).answer)
         self.ui.stackedPages.setCurrentWidget(self.ui.editQuestionPage)
 
     def goToEnterExamPage(self):
@@ -223,11 +223,11 @@ class View(QtWidgets.QWidget):
                 return
             question = {"question": question, "options": options}
         elif type == QuestionType.FILL:
-            answer = self.ui.shortAnswer_1.toPlainText()
+            answer = self.ui.shortAnswerSheet.toPlainText()
             if not answer.strip():
-                self.ui.shortAnswer_1.setPlainText("答案不能為空白!")
-                self.ui.shortAnswer_1.setFocus()
-                self.ui.shortAnswer_1.setStyleSheet("color: red")
+                self.ui.shortAnswerSheet.setPlainText("答案不能為空白!")
+                self.ui.shortAnswerSheet.setFocus()
+                self.ui.shortAnswerSheet.setStyleSheet("color: red")
                 return
         try:
             self.controller.addQuestion(bankName, type, str(question), str(answer))
@@ -291,27 +291,27 @@ class View(QtWidgets.QWidget):
             self.ui.nextQuestionButton.setText("下一題")
             return
         self.ui.currentNum.setText(str(idx + 1))
-        self.ui.examShortAnswer_1.setPlainText("")
-        self.ui.examShortAnswer_1.setStyleSheet("color: white")
-        self.ui.examShortAnswer_1.setFocus()
-        self.ui.examShortAnswer_1.setEnabled(True)
+        self.ui.examShortAnswerSheet.setPlainText("")
+        self.ui.examShortAnswerSheet.setStyleSheet("color: white")
+        self.ui.examShortAnswerSheet.setFocus()
+        self.ui.examShortAnswerSheet.setEnabled(True)
         self.ui.checkAnswerButton.setEnabled(True)
         # TODO: SETUP QUESTION!
 
     def showAnswer(self):
         answer = self.controller.showAnswer()
-        self.ui.examShortAnswer_1.setPlainText(answer)
+        self.ui.examShortAnswerSheet.setPlainText(answer)
 
     def checkAnswer(self):
-        answer = self.ui.examShortAnswer_1.toPlainText()
-        self.ui.examShortAnswer_1.setEnabled(False)
+        answer = self.ui.examShortAnswerSheet.toPlainText()
+        self.ui.examShortAnswerSheet.setEnabled(False)
         self.ui.checkAnswerButton.setEnabled(False)
         correct = self.controller.checkAnswer(answer)
         if correct:
-            self.ui.examShortAnswer_1.setStyleSheet("color: green")
+            self.ui.examShortAnswerSheet.setStyleSheet("color: green")
         else:
-            self.ui.examShortAnswer_1.setStyleSheet("color: red")
-            self.ui.examShortAnswer_1.setPlainText(self.ui.examShortAnswer_1.toPlainText() + "\n\n錯誤答案\n")
+            self.ui.examShortAnswerSheet.setStyleSheet("color: red")
+            self.ui.examShortAnswerSheet.setPlainText(self.ui.examShortAnswerSheet.toPlainText() + "\n\n錯誤答案\n")
 
     def testAgain(self):
         self.goToEnterExamPage()

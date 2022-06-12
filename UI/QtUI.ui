@@ -118,7 +118,7 @@ QMessageBox {
      <item row="1" column="0">
       <widget class="QStackedWidget" name="stackedPages">
        <property name="currentIndex">
-        <number>4</number>
+        <number>2</number>
        </property>
        <widget class="QWidget" name="homePage">
         <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -364,7 +364,7 @@ QMessageBox {
            <item row="2" column="1">
             <widget class="QStackedWidget" name="stackedAnswer">
              <property name="currentIndex">
-              <number>0</number>
+              <number>1</number>
              </property>
              <widget class="QWidget" name="choice">
               <layout class="QVBoxLayout" name="verticalLayout_8">
@@ -427,7 +427,7 @@ QMessageBox {
                 <number>0</number>
                </property>
                <item>
-                <widget class="QPlainTextEdit" name="shortAnswer_1">
+                <widget class="QPlainTextEdit" name="shortAnswerSheet">
                  <property name="placeholderText">
                   <string extracomment="hi"/>
                  </property>
@@ -668,7 +668,7 @@ QMessageBox {
                 <number>0</number>
                </property>
                <item>
-                <widget class="QPlainTextEdit" name="examShortAnswer_1"/>
+                <widget class="QPlainTextEdit" name="examShortAnswerSheet"/>
                </item>
               </layout>
              </widget>
@@ -686,34 +686,6 @@ QMessageBox {
                <property name="bottomMargin">
                 <number>0</number>
                </property>
-               <item>
-                <widget class="QRadioButton" name="examChoice_1">
-                 <property name="text">
-                  <string/>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QRadioButton" name="examChoice_2">
-                 <property name="text">
-                  <string/>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QRadioButton" name="examChoice_3">
-                 <property name="text">
-                  <string/>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QRadioButton" name="examChoice_4">
-                 <property name="text">
-                  <string/>
-                 </property>
-                </widget>
-               </item>
               </layout>
              </widget>
             </widget>
