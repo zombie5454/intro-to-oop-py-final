@@ -1,127 +1,13 @@
-import random
 from PyQt5 import QtWidgets
 from UI.QtUI import Ui_Widget
+from typing import Callable
+from Control.Controller import Controller
 
-# from Control.Controller import Controller
 
-def unused(func: "function") -> "function":
+def unused(func: Callable) -> Callable:
     return func
-# 以下都刪掉
 
 
-class Question(object):  # Sample
-    def __init__(self, type, text, answer):
-        self.id = None
-        self.type = type
-        self.text = text
-        self.answer = str(answer)
-
-
-class Bank(object):  # Sample
-    def __init__(self, name: str, questions):
-        self.name = name
-        self.questions = {}
-        for question in questions:
-            self.addQuestion(question)
-
-    def addQuestion(self, question: Question):
-        while question.id is None or question.id in self.questions:
-            question.id = random.randint(1, 100)
-        self.questions[question.id] = question
-
-    def getRandomQuestions(self, num: int):
-        return random.sample(list(self.questions.values()), num)
-
-
-q1 = Question("單選", "1 + 1 = ?\n(A) 2\n(B) 3\n(C) 4\n(D) 5", "B")
-q2 = Question("填充", "1 + 1 = ?", "2")
-q3 = Question("多選", "1 + 1 < ?\n(A) 2\n(B) 3\n(C) 4\n(D) 5", "AB")
-
-
-class Controller(object):
-    def __init__(self, view: "View"):
-        self.view = view
-        self.exam = None
-        self.banks: dict[int, Bank] = {}
-        self.addBank(Bank("題庫一", [q1, q2, q3]))
-        self.addBank(Bank("題庫二", []))
-        self.addBank(Bank("題庫三", []))
-
-    def addBank(self, bank: Bank):
-        if bank in self.banks:
-            raise Exception("Bank name already exists")
-        if bank.name.strip() == "":
-            raise Exception("Bank name cannot be empty")
-        self.banks[bank.name] = bank
-
-    @unused
-    def deleteBank(self, name: str):
-        del self.banks[name]
-
-    def getBanks(self):
-        return list(self.banks.values())
-
-    def getQuestionList(self, name: str, num: int):
-        bank = self.banks[name]
-        return list(bank.questions.values())[:num]
-
-    def getQuestion(self, name: str, id: int) -> Question:
-        bank = self.banks[name]
-        return bank.questions[id]
-
-    def addQuestion(self, name: str, type: str, text: str, answer: str):
-        bank = self.banks[name]
-        bank.addQuestion(Question(type, text, answer))
-
-    def enterExam(self, name: str) -> int:
-        bank = self.banks[name]
-        return len(bank.questions)
-
-    def beginExam(self, name: str, num: int):
-        bank = self.banks[name]
-        self.exam = Exam(bank, num)
-
-    def endExam(self):
-        return 0, 0, 0
-
-    def getNextQuestion(self):
-        if not self.exam:
-            return None
-        return self.exam.getNextQuestion()
-
-    def showAnswer(self) -> str:
-        if not self.exam:
-            return None
-        return self.exam.showAnswer()
-
-    def checkAnswer(self, answer: str) -> bool:
-        if not self.exam:
-            return False
-        return self.exam.checkAnswer(answer)
-
-
-class Exam(object):
-    def __init__(self, bank: Bank, num: int):
-        self.bank = bank
-        self.num = num
-        self.idx = 0
-        self.questions = self.bank.getRandomQuestions(self.num)
-
-    def getNextQuestion(self):
-        if len(self.questions) == 0:
-            return None
-        if self.idx >= len(self.questions):
-            return None, -1
-        self.idx += 1
-        return self.questions[self.idx - 1], self.idx
-
-    def showAnswer(self):
-        return self.questions[self.idx - 1].answer
-
-    def checkAnswer(self, answer: str):
-        return self.questions[self.idx - 1].answer == answer
-
-#以上都刪掉
 class CustomListWidgetItem(QtWidgets.QListWidgetItem):
     def __init__(self, id: int, text: str, parent: QtWidgets.QListWidget):
         super().__init__(text, parent)
@@ -135,8 +21,7 @@ class View(QtWidgets.QWidget):
         # attributes
         self.ui = Ui_Widget()
         self.ui.setupUi(self)
-        # self.controller = None #拿掉
-        self.controller: Controller = Controller(self) #刪掉
+        self.controller = None
 
         # homePage
         self.ui.enterExamButton.clicked.connect(self.enterExam)
@@ -211,7 +96,7 @@ class View(QtWidgets.QWidget):
 
     def goToExamPage(self):
         self.ui.stackedPages.setCurrentWidget(self.ui.examPage)
-        self.ui.stackedExamAnswer.setCurrentWidget(self.ui.examChoice)##
+        self.ui.stackedExamAnswer.setCurrentWidget(self.ui.examChoice)  ##
 
     def goToResultPage(self):
         rightNum, totalNum, showNum = self.controller.endExam()
@@ -300,7 +185,7 @@ class View(QtWidgets.QWidget):
         except Exception as e:
             QtWidgets.QMessageBox.critical(None, "錯誤訊息", str(e))
         self.goToEditBankPage()
-    
+
     def changeQuestionType(self):
         index = self.ui.questionType.currentIndex()
         self.ui.stackedAnswer.setCurrentIndex(index)
@@ -354,7 +239,6 @@ class View(QtWidgets.QWidget):
         else:
             self.ui.examShortAnswer_1.setStyleSheet("color: red")
             self.ui.examShortAnswer_1.setPlainText(self.ui.examShortAnswer_1.toPlainText() + "\n\n錯誤答案\n")
-
 
     def testAgain(self):
         self.goToEnterExamPage()

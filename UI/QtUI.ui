@@ -112,7 +112,7 @@ QSpinBox {
      <item row="1" column="0">
       <widget class="QStackedWidget" name="stackedPages">
        <property name="currentIndex">
-        <number>4</number>
+        <number>0</number>
        </property>
        <widget class="QWidget" name="homePage">
         <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -369,7 +369,7 @@ QSpinBox {
            <item row="3" column="1">
             <widget class="QStackedWidget" name="stackedAnswer">
              <property name="currentIndex">
-              <number>1</number>
+              <number>0</number>
              </property>
              <widget class="QWidget" name="choice">
               <layout class="QVBoxLayout" name="verticalLayout_8">
@@ -388,28 +388,28 @@ QSpinBox {
                <item>
                 <widget class="QRadioButton" name="choice_1">
                  <property name="text">
-                  <string>RadioButton</string>
+                  <string/>
                  </property>
                 </widget>
                </item>
                <item>
                 <widget class="QRadioButton" name="choice_2">
                  <property name="text">
-                  <string>RadioButton</string>
+                  <string/>
                  </property>
                 </widget>
                </item>
                <item>
                 <widget class="QRadioButton" name="choice_3">
                  <property name="text">
-                  <string>RadioButton</string>
+                  <string/>
                  </property>
                 </widget>
                </item>
                <item>
                 <widget class="QRadioButton" name="choice_4">
                  <property name="text">
-                  <string>RadioButton</string>
+                  <string/>
                  </property>
                 </widget>
                </item>
@@ -432,7 +432,7 @@ QSpinBox {
                <item>
                 <widget class="QRadioButton" name="multipleChoice_1">
                  <property name="text">
-                  <string>RadioButton</string>
+                  <string/>
                  </property>
                  <property name="autoExclusive">
                   <bool>false</bool>
@@ -442,7 +442,7 @@ QSpinBox {
                <item>
                 <widget class="QRadioButton" name="multipleChoice_2">
                  <property name="text">
-                  <string>RadioButton</string>
+                  <string/>
                  </property>
                  <property name="autoExclusive">
                   <bool>false</bool>
@@ -452,7 +452,7 @@ QSpinBox {
                <item>
                 <widget class="QRadioButton" name="multipleChoice_3">
                  <property name="text">
-                  <string>RadioButton</string>
+                  <string/>
                  </property>
                  <property name="autoExclusive">
                   <bool>false</bool>
@@ -462,7 +462,7 @@ QSpinBox {
                <item>
                 <widget class="QRadioButton" name="multipleChoice_4">
                  <property name="text">
-                  <string>RadioButton</string>
+                  <string/>
                  </property>
                  <property name="autoExclusive">
                   <bool>false</bool>
@@ -673,7 +673,7 @@ QSpinBox {
            <item row="1" column="1">
             <widget class="QLabel" name="label_9">
              <property name="text">
-              <string>題目</string>
+              <string>題目敘述：</string>
              </property>
              <property name="alignment">
               <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
@@ -683,7 +683,7 @@ QSpinBox {
            <item row="3" column="1">
             <widget class="QLabel" name="label_10">
              <property name="text">
-              <string>作答</string>
+              <string>作答：</string>
              </property>
              <property name="alignment">
               <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
@@ -693,7 +693,7 @@ QSpinBox {
            <item row="3" column="2">
             <widget class="QStackedWidget" name="stackedExamAnswer">
              <property name="currentIndex">
-              <number>0</number>
+              <number>1</number>
              </property>
              <widget class="QWidget" name="examShortAnswer">
               <layout class="QVBoxLayout" name="verticalLayout_19">
@@ -731,28 +731,28 @@ QSpinBox {
                <item>
                 <widget class="QRadioButton" name="examChoice_1">
                  <property name="text">
-                  <string>RadioButton</string>
+                  <string/>
                  </property>
                 </widget>
                </item>
                <item>
                 <widget class="QRadioButton" name="examChoice_2">
                  <property name="text">
-                  <string>RadioButton</string>
+                  <string/>
                  </property>
                 </widget>
                </item>
                <item>
                 <widget class="QRadioButton" name="examChoice_3">
                  <property name="text">
-                  <string>RadioButton</string>
+                  <string/>
                  </property>
                 </widget>
                </item>
                <item>
                 <widget class="QRadioButton" name="examChoice_4">
                  <property name="text">
-                  <string>RadioButton</string>
+                  <string/>
                  </property>
                 </widget>
                </item>
@@ -775,7 +775,7 @@ QSpinBox {
                <item>
                 <widget class="QRadioButton" name="examMultipleChoice_1">
                  <property name="text">
-                  <string>RadioButton</string>
+                  <string/>
                  </property>
                  <property name="autoExclusive">
                   <bool>false</bool>
@@ -785,7 +785,7 @@ QSpinBox {
                <item>
                 <widget class="QRadioButton" name="examMultipleChoice_2">
                  <property name="text">
-                  <string>RadioButton</string>
+                  <string/>
                  </property>
                  <property name="autoExclusive">
                   <bool>false</bool>
@@ -795,7 +795,7 @@ QSpinBox {
                <item>
                 <widget class="QRadioButton" name="examMultipleChoice_3">
                  <property name="text">
-                  <string>RadioButton</string>
+                  <string/>
                  </property>
                  <property name="autoExclusive">
                   <bool>false</bool>
@@ -805,7 +805,7 @@ QSpinBox {
                <item>
                 <widget class="QRadioButton" name="examMultipleChoice_4">
                  <property name="text">
-                  <string>RadioButton</string>
+                  <string/>
                  </property>
                  <property name="autoExclusive">
                   <bool>false</bool>
@@ -819,7 +819,7 @@ QSpinBox {
            <item row="0" column="1">
             <widget class="QLabel" name="label_11">
              <property name="text">
-              <string>題型</string>
+              <string>題目類型：</string>
              </property>
             </widget>
            </item>
