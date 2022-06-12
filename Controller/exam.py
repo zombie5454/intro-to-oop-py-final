@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Tuple
 import random
 from Model.question import Question
 from Model.question_bank import QuestionBank
@@ -41,13 +41,13 @@ class Exam:
             random.shuffle(q.ans)
 
     # Returns None if index out of range
-    def getNextQuestion(self) -> Question:
+    def getNextQuestion(self) -> Tuple[Question, int]:
         try:
             q = self.__qList.pop(0)
             self.__curQNum += 1
-            return q
+            return q, self.__curQNum - 1
         except IndexError:
-            return None
+            return None, -1
     
     def getResult(self) -> Result:
         return Result(
