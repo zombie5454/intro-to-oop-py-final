@@ -1,6 +1,6 @@
 from PyQt5 import QtWidgets, QtCore, QtGui
 from UI.QtUI import Ui_Widget
-from typing import Callable, List
+from typing import Callable, List, Union
 
 # from Controller.controller import Controller
 
@@ -42,6 +42,7 @@ class View(QtWidgets.QWidget):
         self.ui.deleteQuestionButton.clicked.connect(self.deleteQuestion)
         self.ui.editQuestionButton.clicked.connect(self.editQuestion)
         self.ui.addQuestionButton.clicked.connect(self.addQuestion)
+        self.ui.bankName.textChanged.connect(lambda: self.ui.bankName.setStyleSheet("color: white"))
 
         # editQuestionPage
         self.ui.backButton.clicked.connect(self.goToEditBankPage)
@@ -49,6 +50,9 @@ class View(QtWidgets.QWidget):
         self.ui.questionType.currentIndexChanged.connect(self.changeQuestionType)
         self.ui.addOptionButton.clicked.connect(self.addOption)
         self.ui.newOption.returnPressed.connect(self.addOption)
+        self.ui.questionText.textChanged.connect(lambda: self.ui.questionText.setStyleSheet("color: white"))
+        self.ui.newOption.textChanged.connect(lambda: self.ui.newOption.setStyleSheet("color: white"))
+        self.ui.shortAnswer_1.textChanged.connect(lambda: self.ui.shortAnswer_1.setStyleSheet("color: white"))
 
         # enterExamPage
         self.ui.homeButton_2.clicked.connect(self.goHome)
@@ -112,10 +116,10 @@ class View(QtWidgets.QWidget):
         self.ui.stackedExamAnswer.setCurrentWidget(self.ui.examChoice)  ##
 
     def goToResultPage(self):
-        rightNum, totalNum, showNum = self.controller.endExam()
-        self.ui.questionRightNum.setText(str(rightNum))
-        self.ui.questionWrongNum.setText(str(totalNum - rightNum))
-        self.ui.questionShowNum.setText(str(showNum))
+        result = self.controller.endExam()
+        self.ui.questionRightNum.setText(str(result.numOfCorrect))
+        self.ui.questionWrongNum.setText(str(result.numOfQ - result.numOfCorrect))
+        self.ui.questionShowNum.setText(str(result.numOfPeek))
         self.ui.stackedPages.setCurrentWidget(self.ui.resultPage)
 
     def setController(self, controller):
@@ -124,7 +128,11 @@ class View(QtWidgets.QWidget):
     @unused
     def deleteBank(self):
         if self.ui.bankList.currentItem() is None:
-            QtWidgets.QMessageBox.critical(None, "錯誤訊息", "No bank selected!")
+            # QtWidgets.QMessageBox.critical(None, "錯誤訊息", "No bank selected!")
+            messageBox = QtWidgets.QMessageBox()
+            messageBox.setWindowTitle("錯誤訊息")
+            messageBox.setText("No bank selected!")
+            messageBox.exec_()
             return
         bankName = self.ui.bankList.currentItem().text()
         reply = QtWidgets.QMessageBox.question(
@@ -185,7 +193,9 @@ class View(QtWidgets.QWidget):
 
     def addQuestion(self):
         if self.ui.bankList.currentItem() is None:
-            QtWidgets.QMessageBox.critical(None, "錯誤訊息", "No bank selected!")
+            self.ui.bankName.setText("請輸入題庫名稱")
+            self.ui.bankName.setFocus()
+            self.ui.bankName.setStyleSheet("color: red")
             return
         self.ui.questionText.setPlainText("")
         self.ui.questionList.setCurrentItem(None)
@@ -197,7 +207,9 @@ class View(QtWidgets.QWidget):
         question = self.ui.questionText.toPlainText()
         answer = None
         if not question.strip():
-            QtWidgets.QMessageBox.critical(None, "錯誤訊息", "題目不能為空白!")
+            self.ui.questionText.setPlainText("題目不能為空白!")
+            self.ui.questionText.setFocus()
+            self.ui.questionText.setStyleSheet("color: red")
             return
         if type == QuestionType.CHOICE or type == QuestionType.MULTIPLECHOICE:
             answer = []
@@ -206,11 +218,17 @@ class View(QtWidgets.QWidget):
                 options.append(i.text())
                 answer.append(i.isChecked())
             if answer.count(True) == 0:
-                QtWidgets.QMessageBox.critical(None, "錯誤訊息", "請選擇答案")
+                self.ui.newOption.setText("請選擇答案!")
+                self.ui.newOption.setStyleSheet("color: red")
                 return
             question = {"question": question, "options": options}
         elif type == QuestionType.FILL:
             answer = self.ui.shortAnswer_1.toPlainText()
+            if not answer.strip():
+                self.ui.shortAnswer_1.setPlainText("答案不能為空白!")
+                self.ui.shortAnswer_1.setFocus()
+                self.ui.shortAnswer_1.setStyleSheet("color: red")
+                return
         try:
             self.controller.addQuestion(bankName, type, str(question), str(answer))
         except Exception as e:
@@ -272,14 +290,13 @@ class View(QtWidgets.QWidget):
             self.goToResultPage()
             self.ui.nextQuestionButton.setText("下一題")
             return
-        self.ui.examQuestionType.setText(question.type)
-        self.ui.examQuestionText.setText(question.text)
+        self.ui.currentNum.setText(str(idx + 1))
         self.ui.examShortAnswer_1.setPlainText("")
         self.ui.examShortAnswer_1.setStyleSheet("color: white")
-        self.ui.currentNum.setText(str(idx + 1))
         self.ui.examShortAnswer_1.setFocus()
         self.ui.examShortAnswer_1.setEnabled(True)
         self.ui.checkAnswerButton.setEnabled(True)
+        # TODO: SETUP QUESTION!
 
     def showAnswer(self):
         answer = self.controller.showAnswer()

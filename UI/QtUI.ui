@@ -94,7 +94,10 @@ QSpinBox {
 	padding-left: 5px;
 }
 QRadioButton {
-	min-height: 36px;
+	min-height: 32px;
+}
+QMessageBox {
+	background-color: #17181e;
 }</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
@@ -115,7 +118,7 @@ QRadioButton {
      <item row="1" column="0">
       <widget class="QStackedWidget" name="stackedPages">
        <property name="currentIndex">
-        <number>2</number>
+        <number>4</number>
        </property>
        <widget class="QWidget" name="homePage">
         <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -332,7 +335,11 @@ QRadioButton {
             </widget>
            </item>
            <item row="1" column="1">
-            <widget class="QPlainTextEdit" name="questionText"/>
+            <widget class="QPlainTextEdit" name="questionText">
+             <property name="styleSheet">
+              <string notr="true"/>
+             </property>
+            </widget>
            </item>
            <item row="0" column="0">
             <widget class="QLabel" name="label_5">
@@ -590,8 +597,32 @@ QRadioButton {
        <widget class="QWidget" name="examPage">
         <layout class="QVBoxLayout" name="verticalLayout_6">
          <item>
-          <layout class="QGridLayout" name="gridLayout_9" rowstretch="0,1,0,1">
-           <item row="1" column="2">
+          <layout class="QGridLayout" name="gridLayout_6" rowstretch="0,1,0">
+           <item row="0" column="1">
+            <widget class="QLabel" name="examQuestionType">
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="0">
+            <widget class="QLabel" name="label_11">
+             <property name="text">
+              <string>題目類型：</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QLabel" name="label_9">
+             <property name="text">
+              <string>題目敘述：</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="1">
             <widget class="QLabel" name="examQuestionText">
              <property name="baseSize">
               <size>
@@ -602,19 +633,12 @@ QRadioButton {
              <property name="text">
               <string/>
              </property>
-            </widget>
-           </item>
-           <item row="1" column="1">
-            <widget class="QLabel" name="label_9">
-             <property name="text">
-              <string>題目敘述：</string>
-             </property>
              <property name="alignment">
               <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
              </property>
             </widget>
            </item>
-           <item row="3" column="1">
+           <item row="2" column="0">
             <widget class="QLabel" name="label_10">
              <property name="text">
               <string>作答：</string>
@@ -624,7 +648,7 @@ QRadioButton {
              </property>
             </widget>
            </item>
-           <item row="3" column="2">
+           <item row="2" column="1">
             <widget class="QStackedWidget" name="stackedExamAnswer">
              <property name="currentIndex">
               <number>1</number>
@@ -748,20 +772,6 @@ QRadioButton {
                </item>
               </layout>
              </widget>
-            </widget>
-           </item>
-           <item row="0" column="1">
-            <widget class="QLabel" name="label_11">
-             <property name="text">
-              <string>題目類型：</string>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="2">
-            <widget class="QLabel" name="examQuestionType">
-             <property name="text">
-              <string/>
-             </property>
             </widget>
            </item>
           </layout>
