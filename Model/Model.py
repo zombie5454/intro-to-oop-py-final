@@ -1,4 +1,3 @@
-from Controller.controller import Question
 from question_bank import QuestionBank
 import pickle
 from typing import List
