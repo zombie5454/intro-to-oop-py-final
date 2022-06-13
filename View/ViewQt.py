@@ -1,5 +1,4 @@
 from PyQt5 import QtWidgets, QtCore
-from click import style
 from UI.QtUI import Ui_Widget
 from Model.question_type import QuestionType
 from Model.question import ChoiceOption, Question
