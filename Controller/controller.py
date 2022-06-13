@@ -56,10 +56,8 @@ class Controller:
             return False
         tarQ = self.__getQFromBank(tarBank, id)
         newQ = self.__qFactoryList[qType].createQuestion(qDes, qAns)
-        tarQ.type = newQ.type
-        tarQ.question = newQ.question
-        tarQ.ans = newQ.ans
-        return tarBank.editQuestion(tarQ)
+        newQ.ID = tarQ.ID
+        return tarBank.editQuestion(newQ)
     
     def deleteQuestion(self, bankName: str, id: int) -> bool:
         tarBank: QuestionBank = self.__model.getBank(bankName)
