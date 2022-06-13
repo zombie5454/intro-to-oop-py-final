@@ -26,8 +26,8 @@ class Theme(SimpleNamespace):
         button_disabled="#fafafa",
         list_hover="#e0e0e0",
         list_selected="#e0e0e0",
-        correct_color="#00bb00",
-        wrong_color="#ea0000",
+        success_color="#00bb00",
+        error_color="#ea0000",
     )
 
 

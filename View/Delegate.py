@@ -1,5 +1,5 @@
 from typing import List, Tuple
-from Model.question import Question
+from Model.question import Question, QuestionType
 from Model.question_bank import QuestionBank
 from Controller.controller import Controller
 from Controller.exam import Result
@@ -25,10 +25,10 @@ class Delegate(object):
     def deleteBank(self, name: str) -> bool:
         return self.controller.deleteBank(name)
 
-    def addQuestion(self, name: str, type: str, text: str, ans: str) -> bool:
+    def addQuestion(self, name: str, type: QuestionType, text: str, ans: str) -> bool:
         return self.controller.addNewQuestion(name, type, text, ans)
 
-    def editQuestion(self, name: str, id: int, type: str, text: str, ans: str) -> bool:
+    def editQuestion(self, name: str, id: int, type: QuestionType, text: str, ans: str) -> bool:
         return self.controller.editQuestion(name, id, type, text, ans)
 
     def getQuestions(self, name: str) -> List[Question]:
