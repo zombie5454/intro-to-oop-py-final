@@ -38,9 +38,11 @@ class Exam:
         # - short answer: no effect
         # - choice & multiple choice: ChoiceOption list is shuffled
         for q in self.__qList:
-            random.shuffle(q.ans)
+            # Non-shufflable objects should not be shuffled --> TypeError otherwise :P
+            if isinstance(q, list):
+                random.shuffle(q.ans)
 
-    # Returns None if index out of range
+    # Returns: {Question obj, or, None if out of bound}, {int for current question index, -1 if out of bound}
     def getNextQuestion(self) -> Tuple[Question, int]:
         try:
             q = self.__qList.pop(0)
