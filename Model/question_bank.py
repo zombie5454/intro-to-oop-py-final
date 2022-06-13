@@ -39,11 +39,12 @@ class QuestionBank:
 
     def addQuestion(self, q: Question) -> bool:
         # change the q's ID to issuedID + 1
-        q_id=self.__issuedID+1
-        q.ID=q_id
         # if file already exists, return false
-        if "{}.pickle".format(q_id) in os.listdir(self.__directory):
+        if "{}.pickle".format(self.__issuedID+1) in os.listdir(self.__directory):
             return False
+        self.__issuedID=self.__issuedID+1
+        q_id=self.__issuedID
+        q.ID=q_id
 
         # TODO: use pickle to dump q in self.directory
         # pickle name = q's ID
