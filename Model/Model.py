@@ -24,7 +24,7 @@ class Model:
         # build a bank instance (see question_bank.py)
         # and use pickle to dump that bank instance in that directory
         # pickle name is same as name
-        path = self.directory +'/' + name
+        path =  os.path.join(self.directory,name) 
         if not os.path.isdir(path):
             os.mkdir(path)
             NewBank = QuestionBank(name,path)
@@ -41,7 +41,7 @@ class Model:
         files = [file for file in files if os.path.isdir(file)]
         QuestionBanks = []
         for name in files:
-            path = self.directory + '/' + name
+            path =  os.path.join(self.directory,name) 
             with open(f'{path}.pickle', 'rb') as f:
                 Target_Bank = pickle.load(f)
                 QuestionBanks.append(Target_Bank)
@@ -51,7 +51,7 @@ class Model:
         # TODO: open that subdirectory, if the open operation failed (ex: dir does not exist), return None
         # and load bank's pickle
         # and return that object
-        path = self.directory +'/' + name
+        path =  os.path.join(self.directory,name) 
         if not os.path.isdir(path):
             return None
         else:
@@ -66,8 +66,8 @@ class Model:
         # modify the objects name, and its directory (ex: ./a/dsa_old -> ./a/dsa_new)
         # delete old pickle, dump a new pickle named newname
         # change directory's name
-        old_path = self.directory + '/' + oldname
-        new_path = self.directory + '/' + newname
+        old_path = os.path.join(self.directory,oldname) 
+        new_path = os.path.join(self.directory,newname) 
         if not os.path.isdir(old_path):
             return False
         elif os.path.isdir(new_path):
@@ -83,7 +83,7 @@ class Model:
     def deleteBank(self, name:str)->bool:
         # TODO: delete the directory called name (also delete all files in the directory)
         # if failed -> return false
-        path = self.directory + '/' + name
+        path = os.path.join(self.directory,name) 
         if not os.path.isdir(path):
             return False
         else:

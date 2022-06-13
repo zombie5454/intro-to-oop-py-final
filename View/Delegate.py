@@ -14,37 +14,47 @@ class Delegate(object):
         self.controller = controller
 
     def addBank(self, name: str) -> bool:
-        return self.controller.addBank(name)
+        if(self.controller != None):
+            return self.controller.addBank(name)
 
     def getBanks(self) -> List[QuestionBank]:
-        return self.controller.getBanks()
+        if(self.controller != None):
+            return self.controller.getBanks()
 
     def deleteBank(self, name: str) -> bool:
-        return self.controller.deleteBank(name)
+        if(self.controller != None):
+            return self.controller.deleteBank(name)
 
     def addQuestion(self, name: str, type: str, text: str, ans: str) -> bool:
-        return self.controller.addNewQuestion(name, type, text, ans)
+        if(self.controller != None):
+            return self.controller.addNewQuestion(name, type, text, ans)
 
     def getQuestions(self, name: str) -> List[Question]:
-        self.questionList = {}
-        for question in self.controller.getQuestionList(name):
-            self.questionList[question.ID] = question
-        return list(self.questionList.values())
+        if(self.controller != None):
+            self.questionList = {}
+            for question in self.controller.getQuestionList(name):
+                self.questionList[question.ID] = question
+            return list(self.questionList.values())
 
     def getQuestion(self, id: int) -> Question:
         return self.questionList[id]
 
     def deleteQuestion(self, name: str, id: int) -> bool:
-        return self.controller.deleteQuestion(name, id)
+        if(self.controller != None):
+            return self.controller.deleteQuestion(name, id)
 
     def enterExam(self, name: str) -> int:
-        return self.controller.getQuestionCap(name)
+        if(self.controller != None):
+            return self.controller.getQuestionCap(name)
 
     def beginExam(self, name: str, num: int) -> None:
-        self.controller.beginExam(name, num)
+        if(self.controller != None):
+            self.controller.beginExam(name, num)
 
     def getNextQuestion(self) -> Tuple[Question, int]:
-        return self.controller.getNextExamQuestion()
+        if(self.controller != None):
+            return self.controller.getNextExamQuestion()
 
     def endExam(self) -> Result:
-        return self.controller.endExam()
+        if(self.controller != None):
+            return self.controller.endExam()
