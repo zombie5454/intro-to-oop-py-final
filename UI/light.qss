@@ -46,6 +46,7 @@ QListWidget::item::hover {
 	background: #ffffff;
 }
 QListWidget::item:selected {
+	color: black;
 	background: #ffffff;
 }
 QPlainTextEdit {

@@ -19,14 +19,17 @@ class Delegate(object):
     def getBanks(self) -> List[QuestionBank]:
         return self.controller.getBanks()
 
-    def getQuestionList(self, name: str) -> List[Question]:
+    def deleteBank(self, name: str) -> bool:
+        return self.controller.deleteBank(name)
+
+    def addQuestion(self, name: str, type: str, text: str, ans: str) -> bool:
+        return self.controller.addNewQuestion(name, type, text, ans)
+
+    def getQuestions(self, name: str) -> List[Question]:
         self.questionList = {}
         for question in self.controller.getQuestionList(name):
             self.questionList[question.ID] = question
         return list(self.questionList.values())
-
-    def addQuestion(self, name: str, type: str, text: str, ans: str) -> bool:
-        return self.controller.addNewQuestion(name, type, text, ans)
 
     def getQuestion(self, id: int) -> Question:
         return self.questionList[id]

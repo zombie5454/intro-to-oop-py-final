@@ -106,7 +106,7 @@ class View(QtWidgets.QWidget):
         if self.ui.bankList.currentItem() is not None:
             bankName = self.ui.bankList.currentItem().text()
             self.ui.bankName.setText(bankName)
-            for q in self.delegate.getQuestionList(bankName):
+            for q in self.delegate.getQuestions(bankName):
                 self.ui.questionList.addItem(MyListWidgetItem(q.ID, q.question, self.ui.questionList))
         # self.ui.questionList.setCurrentItem(self.ui.questionList.item(0))
         self.ui.stackedPages.setCurrentWidget(self.ui.editBankPage)
@@ -121,7 +121,7 @@ class View(QtWidgets.QWidget):
         if self.ui.questionList.currentItem() is not None:
             question: MyListWidgetItem = self.ui.questionList.currentItem()
             self.ui.questionText.setPlainText(question.text())
-            # self.ui.shortAnswerSheet.setPlainText(self.delegate.getQuestion(question.id))
+            self.ui.shortAnswerSheet.setPlainText(self.delegate.getQuestion(question.id))
         self.ui.stackedPages.setCurrentWidget(self.ui.editQuestionPage)
 
     def goToEnterExamPage(self):
@@ -160,7 +160,7 @@ class View(QtWidgets.QWidget):
             QtWidgets.QMessageBox.No,
         )
         if reply == QtWidgets.QMessageBox.Yes:
-            self.controller.deleteBank(bankName)
+            self.delegate.deleteBank(bankName)
             self.goHome()
 
     def editBank(self):
@@ -172,8 +172,8 @@ class View(QtWidgets.QWidget):
 
     def addBank(self):
         self.ui.bankName.setEnabled(True)
-        self.ui.bankList.setCurrentItem(None)
         self.ui.bankName.setText("")
+        self.ui.bankList.setCurrentItem(None)
         self.goToEditBankPage()
 
     def saveBank(self):
