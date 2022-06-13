@@ -1,6 +1,6 @@
 # TODO: import anything that needed
 from typing import List
-from question_type import QuestionType
+from Model.question_type import QuestionType
 
 class Question:
     def __init__(self, type:QuestionType, question: str) -> None:
@@ -59,7 +59,7 @@ class ChoiceOption:
     def text(self) -> str:
         return self.__text
     @property
-    def is_true(self) -> str:
+    def is_true(self) -> bool:
         return self.__is_true
     
 
