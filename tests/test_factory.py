@@ -10,9 +10,7 @@ class TestShortAnswerFactory(unittest.TestCase):
         self.qShortAns = ShortAnswer(self.qDes, self.qAns)
     
     def test_create_success(self):
-        qDesDict = {"question": self.qDes}
-        qAnsDict = self.qAns
-        qObj: ShortAnswer = self.qFactory.createQuestion(str(qDesDict), str(qAnsDict))
+        qObj: ShortAnswer = self.qFactory.createQuestion(self.qDes, self.qAns)
         self.assertEqual(qObj.question, self.qDes)
         self.assertEqual(qObj.ans, self.qAns)
 
