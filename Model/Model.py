@@ -38,7 +38,7 @@ class Model:
         # TODO: read all subdirectory in self.__directory, and load banks' pickle, append them to list
         # return a list of qBanks objects
         files = listdir(self.directory)
-        files = [file for file in files if os.path.isdir(file)]
+        files = [file for file in files if os.path.isdir(os.path.join(self.directory,file))]
         QuestionBanks = []
         for name in files:
             path =  os.path.join(self.directory,name) 
