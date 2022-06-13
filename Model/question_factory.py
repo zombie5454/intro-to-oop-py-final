@@ -13,9 +13,11 @@ class QuestionFactory():
         pass
 
 class ShortAnswerFactory(QuestionFactory):
+    # Expected input format:
+    # qDes: the question string itself
+    # qAns: the answer string itself
     def createQuestion(self, qDes: str, qAns: str) -> Question:
-        qDict = literal_eval(qDes)
-        return ShortAnswer(qDict["question"], qAns)
+        return ShortAnswer(qDes, qAns)
 
 class ChoiceFactory(QuestionFactory):
     # Expected input format:
