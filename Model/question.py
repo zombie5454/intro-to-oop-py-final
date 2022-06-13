@@ -1,6 +1,6 @@
 # TODO: import anything that needed
 from typing import List
-from .question_type import QuestionType
+from question_type import QuestionType
 
 class Question:
     def __init__(self, type:QuestionType, question: str) -> None:
