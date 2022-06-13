@@ -35,8 +35,8 @@ class Delegate(object):
     def getQuestions(self, name: str) -> List[Question]:
         self.questionList[name] = {}
         for question in self.controller.getQuestionList(name):
-            self.questionList[question.ID] = question
-        return list(self.questionList.values())
+            self.questionList[name][question.ID] = question
+        return list(self.questionList[name].values())
 
     def getQuestion(self, name: str, id: int) -> Question:
         if self.questionList.get(name, None) is None:
