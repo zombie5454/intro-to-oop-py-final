@@ -4,10 +4,6 @@ from typing import List
 
 # Placeholder
 from Model.question import Question
-<<<<<<< HEAD
-
-=======
->>>>>>> 6e95b4b (added tests for exam, fixed import typo in question_bank)
 # TODO: import anything that needed
 
 
