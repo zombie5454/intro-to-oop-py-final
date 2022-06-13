@@ -2,6 +2,6 @@ from enum import Enum
 
 
 class QuestionType(Enum):
-    CHOICE = "choice"
-    MULTIPLECHOICE = "multiple_choice"
-    FILL = "fill_in_the_blank"
+    CHOICE = "單選"
+    MULTIPLECHOICE = "多選"
+    FILL = "填充"
