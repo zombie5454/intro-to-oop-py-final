@@ -1,5 +1,5 @@
 * {
-	color: white;
+	color: $text_color;
 	background: transparent;
 	font-size: 14pt;
 	opacity: 0.1;
@@ -10,10 +10,10 @@
 	font-weight: bold;
 }
 #Widget {
-	background: #17181e;
+	background: $background_1;
 }
 QPushButton {
-	color: gainsboro;
+	color: $button_color;
 	position: relative;
 	height: 36px;
 	padding: 0 20px;
@@ -22,18 +22,18 @@ QPushButton {
 	text-transform: uppercase;
 	letter-spacing: 0.15em;
 	border: none;
-	background: #2d313c;
+	background: $background_2;
 	border-radius: 3px;
 }
 QPushButton::hover {
-	background: #535865;
+	background: $button_hover;
 }
 QPushButton:disabled {
 	color: #8a8d9f;
-	background: #1d2029;
+	background: $button_disabled;
 }
 QListWidget {
-	background: #2d313c;
+	background: $background_2;
 	border-radius: 3px;
 }
 QListWidget::item {
@@ -43,34 +43,34 @@ QListWidget::item {
 	position: relative;
 }
 QListWidget::item::hover {
-	background: #3a3e49;
+	background: $list_hover;
 }
 QListWidget::item:selected {
-	background: #535865;
+	background: $list_selected;
 }
 QPlainTextEdit {
-	background: #2d313c;
+	background: $background_2;
 	border-radius: 3px;
 	padding: 10px;
 	line-height: 40px;
 }
 QLineEdit {
-	background: #2d313c;
+	background: $background_2;
 	height: 36px;
 	border: 0;
 	border-radius: 3px;
 	padding-left: 5px;
 }
 QComboBox {
-	background: #2d313c;
-	color: white;
+	background: $background_2;
+	color: $text_color;
 	height: 36px;
 	border: 0;
 	border-radius: 3px;
 }
 QSpinBox {
-	background: #2d313c;
-	color: white;
+	background: $background_2;
+	color: $text_color;
 	height: 36px;
 	border: 0;
 	border-radius: 3px;
@@ -78,7 +78,4 @@ QSpinBox {
 }
 QRadioButton {
 	min-height: 32px;
-}
-QMessageBox {
-	background-color: #17181e;
 }

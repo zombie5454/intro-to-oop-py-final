@@ -21,6 +21,9 @@ class Delegate(object):
         if(self.controller != None):
             return self.controller.getBanks()
 
+    def editBank(self, name: str, newName: str) -> bool:
+        return self.controller.editBankName(name, newName)
+
     def deleteBank(self, name: str) -> bool:
         if(self.controller != None):
             return self.controller.deleteBank(name)
@@ -30,14 +33,15 @@ class Delegate(object):
             return self.controller.addNewQuestion(name, type, text, ans)
 
     def getQuestions(self, name: str) -> List[Question]:
-        if(self.controller != None):
-            self.questionList = {}
-            for question in self.controller.getQuestionList(name):
-                self.questionList[question.ID] = question
-            return list(self.questionList.values())
+        self.questionList[name] = {}
+        for question in self.controller.getQuestionList(name):
+            self.questionList[question.ID] = question
+        return list(self.questionList.values())
 
-    def getQuestion(self, id: int) -> Question:
-        return self.questionList[id]
+    def getQuestion(self, name: str, id: int) -> Question:
+        if self.questionList.get(name, None) is None:
+            self.getQuestions(name)
+        return self.questionList[name][id]
 
     def deleteQuestion(self, name: str, id: int) -> bool:
         if(self.controller != None):
@@ -54,6 +58,9 @@ class Delegate(object):
     def getNextQuestion(self) -> Tuple[Question, int]:
         if(self.controller != None):
             return self.controller.getNextExamQuestion()
+
+    def sendExamInfo(self, correct: bool) -> None:
+        self.controller.sigOnUsrAct(correct, False)
 
     def endExam(self) -> Result:
         if(self.controller != None):

@@ -1,10 +1,11 @@
 from PyQt5 import QtWidgets
+from typing import Any
 
 
 class MyListWidgetItem(QtWidgets.QListWidgetItem):
-    def __init__(self, id: int, text: str, parent: QtWidgets.QListWidget):
+    def __init__(self, key: Any, text: str, parent: QtWidgets.QListWidget):
         super().__init__(text, parent)
-        self.id = id
+        self.key = key
 
 
 class MyRadioButton(QtWidgets.QRadioButton):
