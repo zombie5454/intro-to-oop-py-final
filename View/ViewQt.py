@@ -331,14 +331,14 @@ class View(QtWidgets.QWidget):
 
     def enterExam(self):
         if len(self.ui.bankList.selectedItems()) == 0:
-            self.showErrorMessage(self.ui.editBankErrorMessage, "請先輸入題庫名稱")
-            self.bankTimer.singleShot(1000, lambda: self.removeErrorMessage(self.ui.editBankErrorMessage))
+            self.showErrorMessage(self.ui.homeErrorMessage, "請先輸入題庫名稱")
+            self.bankTimer.singleShot(1000, lambda: self.removeErrorMessage(self.ui.homeErrorMessage))
             return
         bankName = self.ui.bankList.currentItem().text()
         questionNum = self.delegate.enterExam(bankName)
         if questionNum == 0:
-            self.showErrorMessage(self.ui.editBankErrorMessage, "題庫為空")
-            self.bankTimer.singleShot(1000, lambda: self.removeErrorMessage(self.ui.editBankErrorMessage))
+            self.showErrorMessage(self.ui.homeErrorMessage, "題庫為空")
+            self.bankTimer.singleShot(1000, lambda: self.removeErrorMessage(self.ui.homeErrorMessage))
             return
         self.ui.bankName_2.setText(bankName)
         self.ui.questionNum.setText(str(questionNum))
