@@ -3,7 +3,7 @@ import pickle
 from typing import List
 
 # Placeholder
-from .question import Question
+from question import Question
 # TODO: import anything that needed
 
 class QuestionBank:
