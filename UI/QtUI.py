@@ -398,7 +398,7 @@ class Ui_Widget(object):
         self.verticalLayout.addLayout(self.gridLayout)
 
         self.retranslateUi(Widget)
-        self.stackedPages.setCurrentIndex(2)
+        self.stackedPages.setCurrentIndex(0)
         self.stackedAnswer.setCurrentIndex(0)
         self.stackedExamAnswer.setCurrentIndex(1)
         QtCore.QMetaObject.connectSlotsByName(Widget)

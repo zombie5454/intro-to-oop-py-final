@@ -8,7 +8,10 @@ from .MyWidgets import MyListWidgetItem, MyRadioButton
 from .Delegate import Delegate
 from .Util import unused, MyTimer
 from .ColorTheme import ColorTheme, Theme
-from Controller.controller import Controller
+
+# from Controller.controller import Controller
+
+from .Module import Controller
 
 
 class View(QtWidgets.QWidget):
@@ -24,13 +27,19 @@ class View(QtWidgets.QWidget):
         self.bankTimer = MyTimer()
         self.questionTimer = MyTimer()
         self.question = None
-        self.delegate = Delegate()
+        # self.delegate = Delegate()
+        self.delegate = Controller()
         self.toggleStylesheet()
 
         # homePage
         self.ui.enterExamButton.clicked.connect(self.enterExam)
         self.ui.toggleModeButton.clicked.connect(self.toggleStylesheet)
         self.ui.bankList.itemDoubleClicked.connect(self.editBank)
+        # self.ui.bankList.itemDoubleClicked.connect(
+        #     lambda: self.ui.bankList.openPersistentEditor(self.ui.bankList.currentItem())
+        # )
+        # self.ui.bankList.setSortingEnabled(True)  # sort bank list?
+        # self.ui.bankList.itemChanged.connect(self.saveBank)
         self.ui.bankList.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
         self.ui.bankList.customContextMenuRequested.connect(self.showBankMenu)
         self.ui.deleteBankButton.clicked.connect(self.deleteBank)
@@ -141,7 +150,7 @@ class View(QtWidgets.QWidget):
     def goToResultPage(self):
         result = self.delegate.endExam()
         self.ui.questionRightNum.setText(str(result.numOfCorrect))
-        self.ui.questionerrorNum.setText(str(result.numOfQ - result.numOfCorrect))
+        self.ui.questionWrongNum.setText(str(result.numOfQ - result.numOfCorrect))
         self.ui.questionShowNum.setText(str(result.numOfPeek))
         self.ui.stackedPages.setCurrentWidget(self.ui.resultPage)
 
