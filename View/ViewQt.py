@@ -1,17 +1,13 @@
 from PyQt5 import QtWidgets, QtCore
-from click import style
 from UI.QtUI import Ui_Widget
 from Model.question_type import QuestionType
 from Model.question import ChoiceOption, Question
-from typing import Callable, List
+from typing import List
 from .MyWidgets import MyListWidgetItem, MyRadioButton
 from .Delegate import Delegate
 from .Util import unused, MyTimer
 from .ColorTheme import ColorTheme, Theme
-
-# from Controller.controller import Controller
-
-from .Module import Controller
+from Controller.controller import Controller
 
 
 class View(QtWidgets.QWidget):
@@ -27,19 +23,13 @@ class View(QtWidgets.QWidget):
         self.bankTimer = MyTimer()
         self.questionTimer = MyTimer()
         self.question = None
-        # self.delegate = Delegate()
-        self.delegate = Controller()
+        self.delegate = Delegate()
         self.toggleStylesheet()
 
         # homePage
         self.ui.enterExamButton.clicked.connect(self.enterExam)
         self.ui.toggleModeButton.clicked.connect(self.toggleStylesheet)
         self.ui.bankList.itemDoubleClicked.connect(self.editBank)
-        # self.ui.bankList.itemDoubleClicked.connect(
-        #     lambda: self.ui.bankList.openPersistentEditor(self.ui.bankList.currentItem())
-        # )
-        # self.ui.bankList.setSortingEnabled(True)  # sort bank list?
-        # self.ui.bankList.itemChanged.connect(self.saveBank)
         self.ui.bankList.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
         self.ui.bankList.customContextMenuRequested.connect(self.showBankMenu)
         self.ui.deleteBankButton.clicked.connect(self.deleteBank)
@@ -91,11 +81,9 @@ class View(QtWidgets.QWidget):
         self.ui.questionType.addItem("多選", QuestionType.MULTIPLECHOICE)
         self.ui.questionType.addItem("填空", QuestionType.FILL)
 
-        # initialize
-        self.goHome()
-
     def setController(self, controller: Controller):
         self.delegate.setController(controller)
+        self.goHome()
 
     def toggleStylesheet(self):
         _translate = QtCore.QCoreApplication.translate
