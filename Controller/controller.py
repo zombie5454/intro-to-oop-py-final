@@ -3,7 +3,7 @@ from Model.Model import Model
 from Model.question import Question
 from Model.question_bank import QuestionBank
 from Model.question_factory import QuestionFactory
-from exam import Exam, Result
+from .exam import Exam, Result
 
 class Controller:
     def __init__(self, model: Model, qFactoryListDict: Dict[str, QuestionFactory]):

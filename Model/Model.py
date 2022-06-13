@@ -1,4 +1,4 @@
-from question_bank import QuestionBank
+from .question_bank import QuestionBank
 import pickle
 from typing import List
 import os, sys
