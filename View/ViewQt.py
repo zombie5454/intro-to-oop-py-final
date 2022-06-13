@@ -173,7 +173,7 @@ class View(QtWidgets.QWidget):
         reply = QtWidgets.QMessageBox.question(
             None,
             "刪除題庫",
-            "確定要刪除題庫「" + bank + "」嗎？",
+            "確定要刪除題庫「" + bank.key + "」嗎？",
             QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No,
             QtWidgets.QMessageBox.No,
         )
@@ -280,6 +280,7 @@ class View(QtWidgets.QWidget):
                 self.questionTimer.singleShot(1000, lambda: self.removeErrorMessage(self.ui.editQuestionErrorMessage))
                 return
             question = {"question": question, "options": options}
+            question, answer = str(question), str(answer)
         elif type == QuestionType.FILL:
             answer = self.ui.shortAnswerSheet.toPlainText()
             if not answer.strip():
