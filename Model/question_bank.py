@@ -48,7 +48,7 @@ class QuestionBank:
 
         # TODO: use pickle to dump q in self.directory
         # pickle name = q's ID
-        path=self.__directory+"/{}.pickle".format(q_id)
+        path=os.path.join(self.__directory,"{}.pickle".format(q_id))
         with open(path,'wb') as f:
             pickle.dump(q,f)
 
@@ -61,7 +61,7 @@ class QuestionBank:
             list_files=os.listdir(self.__directory)
 
             for file in list_files:
-                path=self.__directory+"/"+file
+                path=os.path.join(self.__directory,file)
                 with open(path,'rb') as f:
                     x=pickle.load(f)
                 q_list.append(x)
@@ -72,7 +72,7 @@ class QuestionBank:
             list_files=random.sample(os.listdir(self.__directory), num)
         
             for file in list_files:
-                path=self.__directory+"/"+file
+                path=os.path.join(self.__directory,file)
                 with open(path,'rb') as f:
                     x=pickle.load(f)
                 q_list.append(x)
@@ -88,8 +88,9 @@ class QuestionBank:
         # DNE -> return false
         ch_id=changed_question.ID
         if "{}.pickle".format(ch_id) not in os.listdir(self.__directory):
-            return False
-        path=self.__directory+"/{}.pickle".format(ch_id)
+            return 
+            
+        path=os.path.join(self.__directory,"{}.pickle".format(ch_id))
         with open(path,'wb') as f:
             pickle.dump(changed_question,f)
         # overwrite the pickle with that objects
@@ -100,7 +101,7 @@ class QuestionBank:
         if "{}.pickle".format(ID) not in os.listdir(self.__directory):
             return False
         # DNE -> return false
-        path=self.__directory+"/{}.pickle".format(ID)
+        path=os.path.join(self.__directory,"{}.pickle".format(ID))
         os.remove(path)
         return True
 
