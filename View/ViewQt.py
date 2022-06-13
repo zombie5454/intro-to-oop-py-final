@@ -64,7 +64,7 @@ class View(QtWidgets.QWidget):
         self.ui.beginExamButton.clicked.connect(self.beginExam)
 
         # examPage
-        self.ui.homeButton_3.clicked.connect(self.goHome)
+        self.ui.exitExamButton.clicked.connect(self.exitExam)
         self.ui.nextQuestionButton.clicked.connect(self.nextQuestion)
         self.ui.showAnswerButton.clicked.connect(self.showAnswer)
         self.ui.checkAnswerButton.clicked.connect(self.checkAnswer)
@@ -353,6 +353,10 @@ class View(QtWidgets.QWidget):
         self.delegate.beginExam(bankName, examNum)
         self.ui.stackedPages.setCurrentWidget(self.ui.examPage)
         self.nextQuestion()
+
+    def exitExam(self):
+        self.delegate.endExam()
+        self.goHome()
 
     def nextQuestion(self):
         self.ui.nextQuestionButton.setEnabled(False)

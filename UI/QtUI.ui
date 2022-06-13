@@ -691,7 +691,7 @@
          <item>
           <layout class="QHBoxLayout" name="horizontalLayout_13">
            <item>
-            <widget class="QPushButton" name="homeButton_3">
+            <widget class="QPushButton" name="exitExamButton">
              <property name="cursor">
               <cursorShape>PointingHandCursor</cursorShape>
              </property>
