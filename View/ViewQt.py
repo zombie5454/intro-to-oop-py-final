@@ -329,13 +329,15 @@ class View(QtWidgets.QWidget):
         self.changeQuestionType()
 
     def enterExam(self):
-        if self.ui.bankList.currentItem() is None:
-            QtWidgets.QMessageBox.critical(None, "錯誤訊息", "No bank selected!")
+        if len(self.ui.bankList.selectedItems()) == 0:
+            self.showErrorMessage(self.ui.editBankErrorMessage, "請先輸入題庫名稱")
+            self.bankTimer.singleShot(1000, lambda: self.removeErrorMessage(self.ui.editBankErrorMessage))
             return
         bankName = self.ui.bankList.currentItem().text()
         questionNum = self.delegate.enterExam(bankName)
         if questionNum == 0:
-            QtWidgets.QMessageBox.critical(None, "錯誤訊息", "題庫中沒有題目!")
+            self.showErrorMessage(self.ui.editBankErrorMessage, "題庫為空")
+            self.bankTimer.singleShot(1000, lambda: self.removeErrorMessage(self.ui.editBankErrorMessage))
             return
         self.ui.bankName_2.setText(bankName)
         self.ui.questionNum.setText(str(questionNum))
