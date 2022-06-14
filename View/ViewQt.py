@@ -109,6 +109,7 @@ class View(QtWidgets.QWidget):
 
     def goToEditQuestionPage(self):
         self.clearRadioButtons()
+        self.ui.newOption.setText("")
         if not self.isAdding:
             item: MyListWidgetItem = self.ui.questionList.selectedItems()[0]
             question: Question = item.key
@@ -256,7 +257,6 @@ class View(QtWidgets.QWidget):
         self.ui.questionType.setCurrentIndex(0)
         self.ui.questionText.setPlainText("")
         self.ui.stackedAnswer.setCurrentIndex(0)
-        self.ui.newOption.setText("")
         self.ui.shortAnswerSheet.setPlainText("")
         self.goToEditQuestionPage()
 
