@@ -79,3 +79,15 @@ QSpinBox {
 QRadioButton {
 	min-height: 32px;
 }
+QMenu::item {
+	padding: 10px 20px;
+	font-size: 14pt;
+	font-weight: 500;
+	text-transform: uppercase;
+	letter-spacing: 0.15em;
+	color: $text_color;
+	background: $background_2;
+}
+QMenu::item:selected {
+	background: $list_selected;
+}

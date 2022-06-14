@@ -34,7 +34,7 @@
      <item row="1" column="0">
       <widget class="QStackedWidget" name="stackedPages">
        <property name="currentIndex">
-        <number>4</number>
+        <number>0</number>
        </property>
        <widget class="QWidget" name="homePage">
         <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -720,6 +720,9 @@
             <widget class="QPushButton" name="showAnswerButton">
              <property name="cursor">
               <cursorShape>PointingHandCursor</cursorShape>
+             </property>
+             <property name="toolTip">
+              <string>查看答案是否正確，但不顯示正確答案！</string>
              </property>
              <property name="text">
               <string>偷看答案</string>

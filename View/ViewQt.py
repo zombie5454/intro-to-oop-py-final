@@ -5,7 +5,7 @@ from Model.question import ChoiceOption, Question
 from typing import List
 from .MyWidgets import MyListWidgetItem, MyRadioButton
 from .Delegate import Delegate
-from .Util import unused, MyTimer
+from .Util import MyTimer
 from .ColorTheme import ColorTheme, Theme
 from Controller.controller import Controller
 
@@ -32,22 +32,28 @@ class View(QtWidgets.QWidget):
         # homePage
         self.ui.enterExamButton.clicked.connect(self.enterExam)
         self.ui.toggleModeButton.clicked.connect(self.toggleStylesheet)
-        self.ui.bankList.itemDoubleClicked.connect(self.editBank)
+        self.ui.bankList.setMouseTracking(True)
+        self.ui.bankList.itemDoubleClicked.connect(self.enterExam)
+        self.ui.bankList.itemEntered.connect(lambda: self.ui.bankList.setCursor(QtCore.Qt.PointingHandCursor))
+        self.ui.bankList.viewportEntered.connect(lambda: self.ui.bankList.setCursor(QtCore.Qt.ArrowCursor))
         self.ui.bankList.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
         self.ui.bankList.customContextMenuRequested.connect(self.showBankMenu)
         self.ui.deleteBankButton.clicked.connect(self.deleteBank)
-        self.ui.deleteBankButton.setStyleSheet(f"color: {self.theme.theme.error_color}")
+        # self.ui.deleteBankButton.setStyleSheet(f"color: {self.theme.theme.error_color}")
         self.ui.editBankButton.clicked.connect(self.editBank)
         self.ui.addBankButton.clicked.connect(self.addBank)
 
         # editBankPage
         self.ui.homeButton.clicked.connect(self.goHome)
         self.ui.bankSaveButton.clicked.connect(self.saveBank)
+        self.ui.questionList.setMouseTracking(True)
         self.ui.questionList.itemDoubleClicked.connect(self.editQuestion)
+        self.ui.questionList.itemEntered.connect(lambda: self.ui.questionList.setCursor(QtCore.Qt.PointingHandCursor))
+        self.ui.questionList.viewportEntered.connect(lambda: self.ui.questionList.setCursor(QtCore.Qt.ArrowCursor))
         self.ui.questionList.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
         self.ui.questionList.customContextMenuRequested.connect(self.showQuestionMenu)
         self.ui.deleteQuestionButton.clicked.connect(self.deleteQuestion)
-        self.ui.deleteQuestionButton.setStyleSheet(f"color: {self.theme.theme.error_color}")
+        # self.ui.deleteQuestionButton.setStyleSheet(f"color: {self.theme.theme.error_color}")
         self.ui.editQuestionButton.clicked.connect(self.editQuestion)
         self.ui.addQuestionButton.clicked.connect(self.addQuestion)
         self.ui.bankName.textChanged.connect(lambda: self.ui.bankName.setStyleSheet(f"color: {self.theme.theme.text_color}"))
@@ -75,9 +81,6 @@ class View(QtWidgets.QWidget):
         # resultPage
         self.ui.homeButton_4.clicked.connect(self.goHome)
         self.ui.testAgainButton.clicked.connect(self.testAgain)
-
-        # hide unsupported features
-        # self.ui.showAnswerButton.setVisible(False)
 
         # init MyComboBax
         self.ui.questionType.addItem("單選", QuestionType.CHOICE)
@@ -157,6 +160,7 @@ class View(QtWidgets.QWidget):
         menu.addAction("進入測驗", self.enterExam)
         menu.addAction("編輯題庫", self.editBank)
         menu.addAction("刪除題庫", self.deleteBank)
+        menu.setStyleSheet(self.theme.style)
         menu.exec_(self.ui.bankList.mapToGlobal(pos))
 
     def removeMessage(self, widget: QtWidgets.QLabel):
@@ -225,11 +229,13 @@ class View(QtWidgets.QWidget):
         menu = QtWidgets.QMenu()
         menu.addAction("編輯題目", self.editQuestion)
         menu.addAction("刪除題目", self.deleteQuestion)
+        menu.setStyleSheet(self.theme.style)
         menu.exec_(self.ui.questionList.mapToGlobal(pos))
 
     def deleteQuestion(self):
         if len(self.ui.questionList.selectedItems()) == 0:
-            QtWidgets.QMessageBox.critical(None, "錯誤訊息", "No question selected!")
+            self.showMessage(self.ui.editBankErrorMessage, "請先選擇題目", self.theme.theme.error_color)
+            self.questionTimer.singleShot(1000, lambda: self.removeMessage(self.ui.editBankErrorMessage))
             return
         question: MyListWidgetItem = self.ui.questionList.selectedItems()[0]
         reply = QtWidgets.QMessageBox.question(
