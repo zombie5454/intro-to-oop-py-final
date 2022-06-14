@@ -725,7 +725,7 @@
               <string>查看答案是否正確，但不顯示正確答案！</string>
              </property>
              <property name="text">
-              <string>偷看答案</string>
+              <string>檢查答案</string>
              </property>
             </widget>
            </item>

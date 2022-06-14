@@ -33,7 +33,11 @@ class View(QtWidgets.QWidget):
         self.ui.enterExamButton.clicked.connect(self.enterExam)
         self.ui.toggleModeButton.clicked.connect(self.toggleStylesheet)
         self.ui.bankList.setMouseTracking(True)
-        self.ui.bankList.itemDoubleClicked.connect(self.enterExam)
+        # self.ui.bankList.itemDoubleClicked.connect(self.enterExam)
+        # set persistentEditor
+        self.ui.bankList.itemDoubleClicked.connect(lambda: self.ui.bankList.openPersistentEditor(self.ui.bankList.selectedItems()[0]))
+        # save with new name
+        self.ui.bankList.itemChanged.connect(lambda: self.saveBank(self.ui.bankList.selectedItems()[0].text()))
         self.ui.bankList.itemEntered.connect(lambda: self.ui.bankList.setCursor(QtCore.Qt.PointingHandCursor))
         self.ui.bankList.viewportEntered.connect(lambda: self.ui.bankList.setCursor(QtCore.Qt.ArrowCursor))
         self.ui.bankList.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
@@ -45,7 +49,7 @@ class View(QtWidgets.QWidget):
 
         # editBankPage
         self.ui.homeButton.clicked.connect(self.goHome)
-        self.ui.bankSaveButton.clicked.connect(self.saveBank)
+        self.ui.bankSaveButton.clicked.connect(lambda: self.saveBank(self.ui.bankName.text()))
         self.ui.questionList.setMouseTracking(True)
         self.ui.questionList.itemDoubleClicked.connect(self.editQuestion)
         self.ui.questionList.itemEntered.connect(lambda: self.ui.questionList.setCursor(QtCore.Qt.PointingHandCursor))
@@ -203,8 +207,8 @@ class View(QtWidgets.QWidget):
         self.ui.bankName.setText("")
         self.goToEditBankPage()
 
-    def saveBank(self):
-        bankName = self.ui.bankName.text()
+    def saveBank(self, bankName: str):
+        print("adding" if self.isAddingBank else "editing", bankName)
         if not bankName.strip():
             self.showMessage(self.ui.editBankErrorMessage, "題庫名稱不可為空", self.theme.theme.error_color)
             self.bankTimer.singleShot(1000, lambda: self.removeMessage(self.ui.editBankErrorMessage))
@@ -212,8 +216,9 @@ class View(QtWidgets.QWidget):
         res = False
         if self.isAddingBank:
             res = self.delegate.addBank(bankName)
+            self.isAddingBank = False
         else:
-            oldBankName = self.ui.bankList.currentItem().text()
+            oldBankName = self.ui.bankList.selectedItems()[0].key
             if oldBankName == bankName:
                 self.showMessage(self.ui.editBankErrorMessage, "題庫名稱與原本相同", self.theme.theme.error_color)
                 self.bankTimer.singleShot(1000, lambda: self.removeMessage(self.ui.editBankErrorMessage))
@@ -352,8 +357,7 @@ class View(QtWidgets.QWidget):
             return
         self.ui.bankName_2.setText(bankName)
         self.ui.questionNum.setText(str(questionNum))
-        self.ui.examNum.setMaximum(questionNum)
-        self.ui.examNum.setMinimum(1)
+        self.ui.examNum.setRange(1, questionNum)
         self.ui.examNum.setValue(10)
         self.goToEnterExamPage()
 
@@ -438,8 +442,7 @@ class View(QtWidgets.QWidget):
                 self.ui.examShortAnswerSheet.setStyleSheet(f"color: {self.theme.theme.success_color}")
             else:
                 correct = False
-                self.ui.examShortAnswerSheet.setStyleSheet(f"color: {self.theme.theme.error_color}")
-                self.ui.examShortAnswerSheet.setPlainText(answer + "\n\n正確答案:\n" + self.question.ans)
+                self.showMessage(self.ui.examMessage, "正確答案: " + self.question.ans, self.theme.theme.success_color)
         self.delegate.sendExamInfo(correct, self.showAnswerNum)
 
     def testAgain(self):

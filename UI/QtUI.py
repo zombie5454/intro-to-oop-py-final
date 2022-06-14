@@ -444,7 +444,7 @@ class Ui_Widget(object):
         self.label_10.setText(_translate("Widget", "作答："))
         self.exitExamButton.setText(_translate("Widget", "離開"))
         self.showAnswerButton.setToolTip(_translate("Widget", "查看答案是否正確，但不顯示正確答案！"))
-        self.showAnswerButton.setText(_translate("Widget", "偷看答案"))
+        self.showAnswerButton.setText(_translate("Widget", "檢查答案"))
         self.currentNum.setText(_translate("Widget", "0"))
         self.checkAnswerButton.setText(_translate("Widget", "提交"))
         self.nextQuestionButton.setText(_translate("Widget", "下一題"))
