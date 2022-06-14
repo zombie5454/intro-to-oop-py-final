@@ -34,11 +34,11 @@
 ## QuestionBank class
 ### attribute
 * name: qBank's name
-* directory: path where the qBank pickle locates
+* directory: path where the bank store its questions
 * issuedID: current Maximum questionID
 
 ### method
-1. to init bank, caller(addNewBank in Model) has to pass the name, and the directory that **qBank pickle** locates
+1. to init bank, caller(addNewBank in Model) has to pass the name, and the directory that the bank store its questions
     * example: ``qBank = QuestionBank("dsa","./a/dsa")``
 2. to add question, caller will pass a question object
     * example: `` qBank.addNewQuestion(q)``
