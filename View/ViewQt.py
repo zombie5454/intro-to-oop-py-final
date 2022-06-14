@@ -4,6 +4,7 @@ from typing import List
 from Model.question_type import QuestionType
 from Model.question import ChoiceOption
 from Controller.controller import Controller
+from .Utils import save_data
 from .MyWidgets import QuestionListWidgetItem, BankListWidgetItem, MyRadioButton, MyTimer
 from .ColorTheme import ColorTheme, Theme
 
@@ -30,6 +31,7 @@ class View(QtWidgets.QWidget):
         # homePage
         self.ui.enterExamButton.clicked.connect(self.enterExam)
         self.ui.toggleModeButton.clicked.connect(self.toggleStylesheet)
+        self.ui.loadQuesionButton.clicked.connect(self.loadQuestion)
         self.ui.bankList.setMouseTracking(True)
         self.ui.bankList.itemDoubleClicked.connect(self.enterExam)
         # self.ui.bankList.itemDoubleClicked.connect(lambda: self.ui.bankList.openPersistentEditor(self.ui.bankList.selectedItems()[0]))
@@ -98,6 +100,15 @@ class View(QtWidgets.QWidget):
         self.ui.toggleModeButton.setText(_translate("Widget", self.theme.theme.button_text))
         self.theme.toggle_theme()
         self.setStyleSheet(self.theme.style)
+
+    def loadQuestion(self):
+        fname = QtWidgets.QFileDialog.getOpenFileName(self, "Open file", "./", "JSON files (*.json)")
+        try:
+            save_data(self.controller, fname[0])
+        except Exception as e:
+            self.showMessage(self.ui.homeErrorMessage, "載入錯誤，請刪除題庫後重試 " + str(e.__class__.__name__) + ": " + str(e), self.theme.theme.error_color)
+            self.bankTimer.singleShot(10000, lambda: self.removeMessage(self.ui.homeErrorMessage))
+        self.goHome()
 
     def goHome(self):
         self.ui.bankList.clear()
