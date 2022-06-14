@@ -38,6 +38,7 @@ class View(QtWidgets.QWidget):
         self.ui.bankList.viewportEntered.connect(lambda: self.ui.bankList.setCursor(QtCore.Qt.ArrowCursor))
         self.ui.bankList.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
         self.ui.bankList.customContextMenuRequested.connect(self.showBankMenu)
+        self.ui.homeErrorMessage.setVisible(False)
         self.ui.deleteBankButton.clicked.connect(self.deleteBank)
         self.ui.editBankButton.clicked.connect(self.editBank)
         self.ui.addBankButton.clicked.connect(self.addBank)
@@ -51,6 +52,7 @@ class View(QtWidgets.QWidget):
         self.ui.questionList.viewportEntered.connect(lambda: self.ui.questionList.setCursor(QtCore.Qt.ArrowCursor))
         self.ui.questionList.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
         self.ui.questionList.customContextMenuRequested.connect(self.showQuestionMenu)
+        self.ui.editBankErrorMessage.setVisible(False)
         self.ui.deleteQuestionButton.clicked.connect(self.deleteQuestion)
         self.ui.editQuestionButton.clicked.connect(self.editQuestion)
         self.ui.addQuestionButton.clicked.connect(self.addQuestion)
@@ -60,11 +62,12 @@ class View(QtWidgets.QWidget):
         self.ui.backButton.clicked.connect(self.goToEditBankPage)
         self.ui.saveQuestionButton.clicked.connect(self.saveQuestion)
         self.ui.questionType.currentIndexChanged.connect(self.changeQuestionType)
+        self.ui.questionText.textChanged.connect(lambda: self.ui.questionText.setStyleSheet("color: " + self.theme.theme.text_color))
         self.ui.addOptionButton.clicked.connect(self.addOption)
         self.ui.newOption.returnPressed.connect(self.addOption)
-        self.ui.questionText.textChanged.connect(lambda: self.ui.questionText.setStyleSheet("color: " + self.theme.theme.text_color))
         self.ui.newOption.textChanged.connect(lambda: self.ui.newOption.setStyleSheet("color: " + self.theme.theme.text_color))
         self.ui.shortAnswerSheet.textChanged.connect(lambda: self.ui.shortAnswerSheet.setStyleSheet("color: " + self.theme.theme.text_color))
+        self.ui.editQuestionErrorMessage.setVisible(False)
 
         # enterExamPage
         self.ui.homeButton_2.clicked.connect(self.goHome)
@@ -75,6 +78,7 @@ class View(QtWidgets.QWidget):
         self.ui.nextQuestionButton.clicked.connect(self.nextQuestion)
         self.ui.showAnswerButton.clicked.connect(self.showAnswer)
         self.ui.checkAnswerButton.clicked.connect(self.checkAnswer)
+        self.ui.examMessage.setVisible(False)
 
         # resultPage
         self.ui.homeButton_4.clicked.connect(self.goHome)
@@ -161,12 +165,12 @@ class View(QtWidgets.QWidget):
         menu.exec_(self.ui.bankList.mapToGlobal(pos))
 
     def removeMessage(self, widget: QtWidgets.QLabel):
-        widget.setSizePolicy(QtWidgets.QSizePolicy.Ignored, QtWidgets.QSizePolicy.Ignored)
+        widget.setVisible(False)
         widget.setText("")
         widget.setStyleSheet("color: " + self.theme.theme.text_color)
 
     def showMessage(self, widget: QtWidgets.QLabel, message: str, color: str):
-        widget.setSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
+        widget.setVisible(True)
         widget.setText(message)
         widget.setStyleSheet("color: " + color)
 
@@ -397,7 +401,6 @@ class View(QtWidgets.QWidget):
 
     def showAnswer(self):
         self.showAnswerNum += 1
-        print("showAnswer: " + str(self.showAnswerNum))
         correct = True
         if self.question.type == QuestionType.CHOICE or self.question.type == QuestionType.MULTIPLECHOICE:
             for radio in self.radioButtons:

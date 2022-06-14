@@ -37,6 +37,7 @@ QListWidget {
 	border-radius: 3px;
 }
 QListWidget::item {
+	color: $text_color;
 	letter-spacing: normal;
 	min-height: 48px;
 	outline: none;

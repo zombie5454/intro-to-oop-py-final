@@ -20,11 +20,11 @@ class Theme(SimpleNamespace):
         button_text="淺色模式",
         text_color="black",
         button_color="black",
-        background_1="#fafafa",
+        background_1="#f0f0f0",
         background_2="#fafafa",
         button_hover="#e0e0e0",
         button_disabled="#fafafa",
-        list_hover="#e0e0e0",
+        list_hover="#ebebeb",
         list_selected="#e0e0e0",
         success_color="#00bb00",
         error_color="#ea0000",
@@ -59,7 +59,3 @@ class ColorTheme(object):
             .replace("$list_selected", theme.list_selected)
         )
         self.theme = theme
-
-
-theme = ColorTheme(Theme.DARK)
-theme.change_theme(Theme.LIGHT)

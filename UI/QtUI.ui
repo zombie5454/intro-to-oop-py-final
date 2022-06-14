@@ -61,7 +61,7 @@
          <item>
           <widget class="QLabel" name="homeErrorMessage">
            <property name="sizePolicy">
-            <sizepolicy hsizetype="Preferred" vsizetype="Ignored">
+            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>

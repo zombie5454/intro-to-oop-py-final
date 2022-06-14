@@ -36,7 +36,7 @@ class Ui_Widget(object):
         self.bankList.setObjectName("bankList")
         self.verticalLayout_2.addWidget(self.bankList)
         self.homeErrorMessage = QtWidgets.QLabel(self.homePage)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Ignored)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.homeErrorMessage.sizePolicy().hasHeightForWidth())
