@@ -54,8 +54,8 @@ class Delegate(object):
     def getNextQuestion(self) -> Tuple[Question, int]:
         return self.controller.getNextExamQuestion()
 
-    def sendExamInfo(self, correct: bool) -> None:
-        self.controller.sigOnUsrAct(correct, False)
+    def sendExamInfo(self, correct: bool, showAnswerNum: int) -> None:
+        self.controller.sigOnUsrAct(correct, showAnswerNum)
 
     def endExam(self) -> Result:
         return self.controller.endExam()

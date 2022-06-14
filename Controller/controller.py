@@ -83,13 +83,13 @@ class Controller:
         return r
     
     # TODO: no-op if there's no currently ongoing exam
-    def sigOnUsrAct(self, correct: bool, peek: bool) -> None:
+    def sigOnUsrAct(self, correct: bool, peek: int) -> None:
         if self.__curExam is None:
             pass
         if correct:
             self.__curExam.correct += 1
         if peek:
-            self.__curExam.peekAnsCount += 1
+            self.__curExam.peekAnsCount += peek
 
     def __getQFromBank(self, tarBank: QuestionBank, qID: int) -> Question:
         for q in tarBank.getQuestionList():

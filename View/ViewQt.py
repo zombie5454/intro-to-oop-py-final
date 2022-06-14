@@ -23,6 +23,8 @@ class View(QtWidgets.QWidget):
         self.isAddingQuestion = False
         self.bankTimer = MyTimer()
         self.questionTimer = MyTimer()
+        self.examTimer = MyTimer()
+        self.showAnswerNum = 0
         self.question = None
         self.delegate = Delegate()
         self.toggleStylesheet()
@@ -75,7 +77,7 @@ class View(QtWidgets.QWidget):
         self.ui.testAgainButton.clicked.connect(self.testAgain)
 
         # hide unsupported features
-        self.ui.showAnswerButton.setVisible(False)
+        # self.ui.showAnswerButton.setVisible(False)
 
         # init MyComboBax
         self.ui.questionType.addItem("單選", QuestionType.CHOICE)
@@ -152,24 +154,25 @@ class View(QtWidgets.QWidget):
 
     def showBankMenu(self, pos):
         menu = QtWidgets.QMenu()
+        menu.addAction("進入測驗", self.enterExam)
         menu.addAction("編輯題庫", self.editBank)
         menu.addAction("刪除題庫", self.deleteBank)
         menu.exec_(self.ui.bankList.mapToGlobal(pos))
 
-    def removeErrorMessage(self, widget: QtWidgets.QLabel):
+    def removeMessage(self, widget: QtWidgets.QLabel):
         widget.setSizePolicy(QtWidgets.QSizePolicy.Ignored, QtWidgets.QSizePolicy.Ignored)
         widget.setText("")
         widget.setStyleSheet(f"color: {self.theme.theme.text_color}")
 
-    def showErrorMessage(self, widget: QtWidgets.QLabel, message: str):
+    def showMessage(self, widget: QtWidgets.QLabel, message: str, color: str):
         widget.setSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
         widget.setText(message)
-        widget.setStyleSheet(f"color: {self.theme.theme.error_color}")
+        widget.setStyleSheet("color: " + color)
 
     def deleteBank(self):
         if len(self.ui.bankList.selectedItems()) == 0:
-            self.showErrorMessage(self.ui.homeErrorMessage, "請先選擇題庫")
-            self.bankTimer.singleShot(1000, lambda: self.removeErrorMessage(self.ui.homeErrorMessage))
+            self.showMessage(self.ui.homeErrorMessage, "請先選擇題庫", self.theme.theme.error_color)
+            self.bankTimer.singleShot(1000, lambda: self.removeMessage(self.ui.homeErrorMessage))
             return
         bank = self.ui.bankList.selectedItems()[0]
         reply = QtWidgets.QMessageBox.question(
@@ -186,8 +189,8 @@ class View(QtWidgets.QWidget):
     def editBank(self):
         self.isAddingBank = False
         if len(self.ui.bankList.selectedItems()) == 0:
-            self.showErrorMessage(self.ui.homeErrorMessage, "請先選擇題庫")
-            self.bankTimer.singleShot(1000, lambda: self.removeErrorMessage(self.ui.homeErrorMessage))
+            self.showMessage(self.ui.homeErrorMessage, "請先選擇題庫", self.theme.theme.error_color)
+            self.bankTimer.singleShot(1000, lambda: self.removeMessage(self.ui.homeErrorMessage))
             return
         self.goToEditBankPage()
 
@@ -199,8 +202,8 @@ class View(QtWidgets.QWidget):
     def saveBank(self):
         bankName = self.ui.bankName.text()
         if not bankName.strip():
-            self.showErrorMessage(self.ui.editBankErrorMessage, "題庫名稱不可為空")
-            self.bankTimer.singleShot(1000, lambda: self.removeErrorMessage(self.ui.editBankErrorMessage))
+            self.showMessage(self.ui.editBankErrorMessage, "題庫名稱不可為空", self.theme.theme.error_color)
+            self.bankTimer.singleShot(1000, lambda: self.removeMessage(self.ui.editBankErrorMessage))
             return
         res = False
         if self.isAddingBank:
@@ -208,15 +211,15 @@ class View(QtWidgets.QWidget):
         else:
             oldBankName = self.ui.bankList.currentItem().text()
             if oldBankName == bankName:
-                self.showErrorMessage(self.ui.editBankErrorMessage, "題庫名稱與原本相同")
-                self.bankTimer.singleShot(1000, lambda: self.removeErrorMessage(self.ui.editBankErrorMessage))
+                self.showMessage(self.ui.editBankErrorMessage, "題庫名稱與原本相同", self.theme.theme.error_color)
+                self.bankTimer.singleShot(1000, lambda: self.removeMessage(self.ui.editBankErrorMessage))
                 return
             res = self.delegate.editBank(oldBankName, bankName)
         if res:
             self.goHome()  # improve this
         else:
-            self.showErrorMessage(self.ui.editBankErrorMessage, "題庫名稱已存在")
-            self.bankTimer.singleShot(1000, lambda: self.removeErrorMessage(self.ui.editBankErrorMessage))
+            self.showMessage(self.ui.editBankErrorMessage, "題庫名稱已存在", self.theme.theme.error_color)
+            self.bankTimer.singleShot(1000, lambda: self.removeMessage(self.ui.editBankErrorMessage))
 
     def showQuestionMenu(self, pos):
         menu = QtWidgets.QMenu()
@@ -244,15 +247,15 @@ class View(QtWidgets.QWidget):
     def editQuestion(self):
         self.isAddingQuestion = False
         if len(self.ui.questionList.selectedItems()) == 0:
-            self.showErrorMessage(self.ui.editBankErrorMessage, "請先選擇題目")
-            self.bankTimer.singleShot(1000, lambda: self.removeErrorMessage(self.ui.editBankErrorMessage))
+            self.showMessage(self.ui.editBankErrorMessage, "請先選擇題目", self.theme.theme.error_color)
+            self.bankTimer.singleShot(1000, lambda: self.removeMessage(self.ui.editBankErrorMessage))
             return
         self.goToEditQuestionPage()
 
     def addQuestion(self):
         if len(self.ui.bankList.selectedItems()) == 0:
-            self.showErrorMessage(self.ui.editBankErrorMessage, "請先輸入題庫名稱")
-            self.bankTimer.singleShot(1000, lambda: self.removeErrorMessage(self.ui.editBankErrorMessage))
+            self.showMessage(self.ui.editBankErrorMessage, "請先輸入題庫名稱", self.theme.theme.error_color)
+            self.bankTimer.singleShot(1000, lambda: self.removeMessage(self.ui.editBankErrorMessage))
             return
         self.isAddingQuestion = True
         self.ui.questionType.setCurrentIndex(0)
@@ -267,8 +270,8 @@ class View(QtWidgets.QWidget):
         question = self.ui.questionText.toPlainText()
         answer = None
         if not question.strip():
-            self.showErrorMessage(self.ui.editQuestionErrorMessage, "題目不可為空")
-            self.questionTimer.singleShot(1000, lambda: self.removeErrorMessage(self.ui.editQuestionErrorMessage))
+            self.showMessage(self.ui.editQuestionErrorMessage, "題目不可為空", self.theme.theme.error_color)
+            self.questionTimer.singleShot(1000, lambda: self.removeMessage(self.ui.editQuestionErrorMessage))
             return
         if type == QuestionType.CHOICE or type == QuestionType.MULTIPLECHOICE:
             answer = []
@@ -277,16 +280,16 @@ class View(QtWidgets.QWidget):
                 options.append(i.text())
                 answer.append(i.isChecked())
             if answer.count(True) == 0:
-                self.showErrorMessage(self.ui.editQuestionErrorMessage, "請至少選擇一個答案")
-                self.questionTimer.singleShot(1000, lambda: self.removeErrorMessage(self.ui.editQuestionErrorMessage))
+                self.showMessage(self.ui.editQuestionErrorMessage, "請至少選擇一個答案", self.theme.theme.error_color)
+                self.questionTimer.singleShot(1000, lambda: self.removeMessage(self.ui.editQuestionErrorMessage))
                 return
             question = {"question": question, "options": options}
             question, answer = str(question), str(answer)
         elif type == QuestionType.FILL:
             answer = self.ui.shortAnswerSheet.toPlainText()
             if not answer.strip():
-                self.showErrorMessage(self.ui.editQuestionErrorMessage, "答案不可為空")
-                self.questionTimer.singleShot(1000, lambda: self.removeErrorMessage(self.ui.editQuestionErrorMessage))
+                self.showMessage(self.ui.editQuestionErrorMessage, "答案不可為空", self.theme.theme.error_color)
+                self.questionTimer.singleShot(1000, lambda: self.removeMessage(self.ui.editQuestionErrorMessage))
                 return
         res = False
         if self.isAddingQuestion:
@@ -297,8 +300,8 @@ class View(QtWidgets.QWidget):
         if res:
             self.editBank()
         else:
-            self.showErrorMessage(self.ui.editQuestionErrorMessage, "儲存錯誤")
-            self.questionTimer.singleShot(1000, lambda: self.removeErrorMessage(self.ui.editQuestionErrorMessage))
+            self.showMessage(self.ui.editQuestionErrorMessage, "儲存錯誤", self.theme.theme.error_color)
+            self.questionTimer.singleShot(1000, lambda: self.removeMessage(self.ui.editQuestionErrorMessage))
 
     def changeQuestionType(self):
         type = self.ui.questionType.currentData()
@@ -321,8 +324,8 @@ class View(QtWidgets.QWidget):
     def addOption(self):
         text = self.ui.newOption.text()
         if not text.strip():
-            self.showErrorMessage(self.ui.editQuestionErrorMessage, "選項不可為空")
-            self.questionTimer.singleShot(1000, lambda: self.removeErrorMessage(self.ui.editQuestionErrorMessage))
+            self.showMessage(self.ui.editQuestionErrorMessage, "選項不可為空", self.theme.theme.error_color)
+            self.questionTimer.singleShot(1000, lambda: self.removeMessage(self.ui.editQuestionErrorMessage))
             return
         button = MyRadioButton(False, text)
         self.radioButtons.append(button)
@@ -332,14 +335,14 @@ class View(QtWidgets.QWidget):
 
     def enterExam(self):
         if len(self.ui.bankList.selectedItems()) == 0:
-            self.showErrorMessage(self.ui.homeErrorMessage, "請先輸入題庫名稱")
-            self.bankTimer.singleShot(1000, lambda: self.removeErrorMessage(self.ui.homeErrorMessage))
+            self.showMessage(self.ui.homeErrorMessage, "請先輸入題庫名稱", self.theme.theme.error_color)
+            self.bankTimer.singleShot(1000, lambda: self.removeMessage(self.ui.homeErrorMessage))
             return
         bankName = self.ui.bankList.currentItem().text()
         questionNum = self.delegate.enterExam(bankName)
         if questionNum == 0:
-            self.showErrorMessage(self.ui.homeErrorMessage, "題庫為空")
-            self.bankTimer.singleShot(1000, lambda: self.removeErrorMessage(self.ui.homeErrorMessage))
+            self.showMessage(self.ui.homeErrorMessage, "題庫為空", self.theme.theme.error_color)
+            self.bankTimer.singleShot(1000, lambda: self.removeMessage(self.ui.homeErrorMessage))
             return
         self.ui.bankName_2.setText(bankName)
         self.ui.questionNum.setText(str(questionNum))
@@ -349,6 +352,7 @@ class View(QtWidgets.QWidget):
         self.goToEnterExamPage()
 
     def beginExam(self):
+        self.showAnswerNum = 0
         bankName = self.ui.bankName_2.text()
         examNum = int(self.ui.examNum.text())
         self.delegate.beginExam(bankName, examNum)
@@ -389,9 +393,23 @@ class View(QtWidgets.QWidget):
         elif self.question.type == QuestionType.FILL:
             self.ui.stackedExamAnswer.setCurrentWidget(self.ui.examShortAnswer)
 
-    @unused
     def showAnswer(self):
-        ...
+        self.showAnswerNum += 1
+        correct = True
+        if self.question.type == QuestionType.CHOICE or self.question.type == QuestionType.MULTIPLECHOICE:
+            for radio in self.radioButtons:
+                if radio.isChecked() != radio.is_true:
+                    correct = False
+                    break
+        elif self.question.type == QuestionType.FILL:
+            if self.ui.examShortAnswerSheet.toPlainText() != self.question.answer:
+                correct = False
+        if correct:
+            self.showMessage(self.ui.examMessage, "答案正確", self.theme.theme.success_color)
+            self.examTimer.singleShot(1000, lambda: self.removeMessage(self.ui.examMessage))
+        else:
+            self.showMessage(self.ui.examMessage, "答案錯誤", self.theme.theme.error_color)
+            self.examTimer.singleShot(1000, lambda: self.removeMessage(self.ui.examMessage))
 
     def checkAnswer(self):
         correct = True
@@ -416,7 +434,7 @@ class View(QtWidgets.QWidget):
                 correct = False
                 self.ui.examShortAnswerSheet.setStyleSheet(f"color: {self.theme.theme.error_color}")
                 self.ui.examShortAnswerSheet.setPlainText(answer + "\n\n正確答案:\n" + self.question.ans)
-        self.delegate.sendExamInfo(correct)
+        self.delegate.sendExamInfo(correct, self.showAnswerNum)
 
     def testAgain(self):
         self.goToEnterExamPage()
