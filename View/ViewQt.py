@@ -19,7 +19,8 @@ class View(QtWidgets.QWidget):
         self.ui.setupUi(self)
         self.theme = ColorTheme(Theme.LIGHT)
         self.radioButtons: List[MyRadioButton] = []
-        self.isAdding = False
+        self.isAddingBank = False
+        self.isAddingQuestion = False
         self.bankTimer = MyTimer()
         self.questionTimer = MyTimer()
         self.question = None
@@ -100,7 +101,7 @@ class View(QtWidgets.QWidget):
 
     def goToEditBankPage(self):
         self.ui.questionList.clear()
-        if not self.isAdding:
+        if not self.isAddingBank:
             item: MyListWidgetItem = self.ui.bankList.selectedItems()[0]
             self.ui.bankName.setText(item.key)
             for question in self.delegate.getQuestions(item.key):
@@ -110,7 +111,7 @@ class View(QtWidgets.QWidget):
     def goToEditQuestionPage(self):
         self.clearRadioButtons()
         self.ui.newOption.setText("")
-        if not self.isAdding:
+        if not self.isAddingQuestion:
             item: MyListWidgetItem = self.ui.questionList.selectedItems()[0]
             question: Question = item.key
             self.ui.questionText.setPlainText(question.question)
@@ -183,7 +184,7 @@ class View(QtWidgets.QWidget):
             self.goHome()
 
     def editBank(self):
-        self.isAdding = False
+        self.isAddingBank = False
         if len(self.ui.bankList.selectedItems()) == 0:
             self.showErrorMessage(self.ui.homeErrorMessage, "請先選擇題庫")
             self.bankTimer.singleShot(1000, lambda: self.removeErrorMessage(self.ui.homeErrorMessage))
@@ -191,7 +192,7 @@ class View(QtWidgets.QWidget):
         self.goToEditBankPage()
 
     def addBank(self):
-        self.isAdding = True
+        self.isAddingBank = True
         self.ui.bankName.setText("")
         self.goToEditBankPage()
 
@@ -202,7 +203,7 @@ class View(QtWidgets.QWidget):
             self.bankTimer.singleShot(1000, lambda: self.removeErrorMessage(self.ui.editBankErrorMessage))
             return
         res = False
-        if self.isAdding:
+        if self.isAddingBank:
             res = self.delegate.addBank(bankName)
         else:
             oldBankName = self.ui.bankList.currentItem().text()
@@ -241,7 +242,7 @@ class View(QtWidgets.QWidget):
             self.goToEditBankPage()
 
     def editQuestion(self):
-        self.isAdding = False
+        self.isAddingQuestion = False
         if len(self.ui.questionList.selectedItems()) == 0:
             self.showErrorMessage(self.ui.editBankErrorMessage, "請先選擇題目")
             self.bankTimer.singleShot(1000, lambda: self.removeErrorMessage(self.ui.editBankErrorMessage))
@@ -253,7 +254,7 @@ class View(QtWidgets.QWidget):
             self.showErrorMessage(self.ui.editBankErrorMessage, "請先輸入題庫名稱")
             self.bankTimer.singleShot(1000, lambda: self.removeErrorMessage(self.ui.editBankErrorMessage))
             return
-        self.isAdding = True
+        self.isAddingQuestion = True
         self.ui.questionType.setCurrentIndex(0)
         self.ui.questionText.setPlainText("")
         self.ui.stackedAnswer.setCurrentIndex(0)
@@ -288,7 +289,7 @@ class View(QtWidgets.QWidget):
                 self.questionTimer.singleShot(1000, lambda: self.removeErrorMessage(self.ui.editQuestionErrorMessage))
                 return
         res = False
-        if self.isAdding:
+        if self.isAddingQuestion:
             res = self.delegate.addQuestion(bankName, type, question, answer)
         else:
             item: MyListWidgetItem = self.ui.questionList.selectedItems()[0]
