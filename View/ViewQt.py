@@ -2,11 +2,10 @@ from PyQt5 import QtWidgets, QtCore
 from UI.QtUI import Ui_Widget
 from typing import List
 from Model.question_type import QuestionType
-from Model.question import ChoiceOption, Question
+from Model.question import ChoiceOption
 from Controller.controller import Controller
-from .MyWidgets import MyListWidgetItem, MyRadioButton
+from .MyWidgets import QuestionListWidgetItem, BankListWidgetItem, MyRadioButton, MyTimer
 from .ColorTheme import ColorTheme, Theme
-from .Util import MyTimer
 
 
 class View(QtWidgets.QWidget):
@@ -99,30 +98,29 @@ class View(QtWidgets.QWidget):
     def goHome(self):
         self.ui.bankList.clear()
         for bank in self.controller.getBanks():
-            self.ui.bankList.addItem(MyListWidgetItem(bank.name, bank.name, self.ui.bankList))
+            self.ui.bankList.addItem(BankListWidgetItem(bank, self.ui.bankList))
         self.ui.bankList.setCurrentItem(None)
         self.ui.stackedPages.setCurrentWidget(self.ui.homePage)
 
     def goToEditBankPage(self):
         self.ui.questionList.clear()
         if not self.isAddingBank:
-            item: MyListWidgetItem = self.ui.bankList.selectedItems()[0]
-            self.ui.bankName.setText(item.key)
-            for question in self.controller.getQuestionList(item.key):
-                self.ui.questionList.addItem(MyListWidgetItem(question, question.question, self.ui.questionList))
+            bank: BankListWidgetItem = self.ui.bankList.selectedItems()[0]
+            self.ui.bankName.setText(bank.bankName)
+            for question in self.controller.getQuestionList(bank.bankName):
+                self.ui.questionList.addItem(QuestionListWidgetItem(question, self.ui.questionList))
         self.ui.stackedPages.setCurrentWidget(self.ui.editBankPage)
 
     def goToEditQuestionPage(self):
         self.clearRadioButtons()
         self.ui.newOption.setText("")
         if not self.isAddingQuestion:
-            item: MyListWidgetItem = self.ui.questionList.selectedItems()[0]
-            question: Question = item.key
-            self.ui.questionText.setPlainText(question.question)
-            if question.type == QuestionType.CHOICE or question.type == QuestionType.MULTIPLECHOICE:
+            question: QuestionListWidgetItem = self.ui.questionList.selectedItems()[0]
+            self.ui.questionText.setPlainText(question.questionText)
+            if question.questionType == QuestionType.CHOICE or question.questionType == QuestionType.MULTIPLECHOICE:
                 self.ui.stackedAnswer.setCurrentWidget(self.ui.choice)
-                self.ui.questionType.setCurrentIndex(int(question.type == QuestionType.MULTIPLECHOICE))
-                choices: List[ChoiceOption] = question.choices
+                self.ui.questionType.setCurrentIndex(int(question.questionType == QuestionType.MULTIPLECHOICE))
+                choices: List[ChoiceOption] = question.questionChoices
                 for choice in choices:
                     button = MyRadioButton(choice.is_true, choice.text)
                     self.radioButtons.append(button)
@@ -132,7 +130,7 @@ class View(QtWidgets.QWidget):
             elif question.type == QuestionType.FILL:
                 self.ui.stackedAnswer.setCurrentWidget(self.ui.shortAnswer)
                 self.ui.questionType.setCurrentIndex(2)
-                self.ui.shortAnswerSheet.setPlainText(question.ans)
+                self.ui.shortAnswerSheet.setPlainText(question.questionAns)
         self.ui.stackedPages.setCurrentWidget(self.ui.editQuestionPage)
 
     def goToEnterExamPage(self):
@@ -177,16 +175,16 @@ class View(QtWidgets.QWidget):
             self.showMessage(self.ui.homeErrorMessage, "請先選擇題庫", self.theme.theme.error_color)
             self.bankTimer.singleShot(1000, lambda: self.removeMessage(self.ui.homeErrorMessage))
             return
-        bank = self.ui.bankList.selectedItems()[0]
+        bank: BankListWidgetItem = self.ui.bankList.selectedItems()[0]
         reply = QtWidgets.QMessageBox.question(
             None,
             "刪除題庫",
-            "確定要刪除題庫「" + bank.key + "」嗎？",
+            "確定要刪除題庫「" + bank.bankName + "」嗎？",
             QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No,
             QtWidgets.QMessageBox.No,
         )
         if reply == QtWidgets.QMessageBox.Yes:
-            self.controller.deleteBank(bank.key)
+            self.controller.deleteBank(bank.bankName)
             self.goHome()
 
     def editBank(self):
@@ -236,17 +234,17 @@ class View(QtWidgets.QWidget):
             self.showMessage(self.ui.editBankErrorMessage, "請先選擇題目", self.theme.theme.error_color)
             self.questionTimer.singleShot(1000, lambda: self.removeMessage(self.ui.editBankErrorMessage))
             return
-        question: MyListWidgetItem = self.ui.questionList.selectedItems()[0]
+        question: QuestionListWidgetItem = self.ui.questionList.selectedItems()[0]
         reply = QtWidgets.QMessageBox.question(
             None,
             "刪除題目",
-            "確定要刪除題目「" + question.text() + "」嗎？",
+            "確定要刪除題目「" + question.questionText + "」嗎？",
             QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No,
             QtWidgets.QMessageBox.No,
         )
         if reply == QtWidgets.QMessageBox.Yes:
             bankName = self.ui.bankList.selectedItems()[0].text()
-            self.controller.deleteQuestion(bankName, question.key.ID)
+            self.controller.deleteQuestion(bankName, question.id)
             self.goToEditBankPage()
 
     def editQuestion(self):
@@ -271,14 +269,14 @@ class View(QtWidgets.QWidget):
 
     def saveQuestion(self):
         bankName = self.ui.bankName.text()
-        type = self.ui.questionType.currentData()
-        question = self.ui.questionText.toPlainText()
-        answer = None
-        if not question.strip():
+        questionType = self.ui.questionType.currentData()
+        questionText = self.ui.questionText.toPlainText()
+        questionAns = None
+        if not questionText.strip():
             self.showMessage(self.ui.editQuestionErrorMessage, "題目不可為空", self.theme.theme.error_color)
             self.questionTimer.singleShot(1000, lambda: self.removeMessage(self.ui.editQuestionErrorMessage))
             return
-        if type == QuestionType.CHOICE or type == QuestionType.MULTIPLECHOICE:
+        if questionType == QuestionType.CHOICE or questionType == QuestionType.MULTIPLECHOICE:
             answer = []
             options = []
             for i in self.radioButtons:
@@ -288,9 +286,9 @@ class View(QtWidgets.QWidget):
                 self.showMessage(self.ui.editQuestionErrorMessage, "請至少選擇一個答案", self.theme.theme.error_color)
                 self.questionTimer.singleShot(1000, lambda: self.removeMessage(self.ui.editQuestionErrorMessage))
                 return
-            question = {"question": question, "options": options}
-            question, answer = str(question), str(answer)
-        elif type == QuestionType.FILL:
+            questionText = {"question": questionText, "options": options}
+            questionText, questionAns = str(questionText), str(answer)
+        elif questionType == QuestionType.FILL:
             answer = self.ui.shortAnswerSheet.toPlainText()
             if not answer.strip():
                 self.showMessage(self.ui.editQuestionErrorMessage, "答案不可為空", self.theme.theme.error_color)
@@ -298,10 +296,10 @@ class View(QtWidgets.QWidget):
                 return
         res = False
         if self.isAddingQuestion:
-            res = self.controller.addNewQuestion(bankName, type, question, answer)
+            res = self.controller.addNewQuestion(bankName, questionType, questionText, questionAns)
         else:
-            item: MyListWidgetItem = self.ui.questionList.selectedItems()[0]
-            res = self.controller.editQuestion(bankName, item.key.ID, type, question, answer)
+            question: QuestionListWidgetItem = self.ui.questionList.selectedItems()[0]
+            res = self.controller.editQuestion(bankName, question.id, questionType, questionText, questionAns)
         if res:
             self.editBank()
         else:
@@ -309,8 +307,8 @@ class View(QtWidgets.QWidget):
             self.questionTimer.singleShot(1000, lambda: self.removeMessage(self.ui.editQuestionErrorMessage))
 
     def changeQuestionType(self):
-        type = self.ui.questionType.currentData()
-        if type == QuestionType.CHOICE:
+        questionType = self.ui.questionType.currentData()
+        if questionType == QuestionType.CHOICE:
             self.ui.stackedAnswer.setCurrentWidget(self.ui.choice)
             hasChecked = False
             for radio in self.radioButtons:
@@ -319,20 +317,20 @@ class View(QtWidgets.QWidget):
                     radio.setChecked(False)
                 if radio.isChecked():
                     hasChecked = True
-        elif type == QuestionType.MULTIPLECHOICE:
+        elif questionType == QuestionType.MULTIPLECHOICE:
             self.ui.stackedAnswer.setCurrentWidget(self.ui.choice)
             for radio in self.radioButtons:
                 radio.setAutoExclusive(False)
-        elif type == QuestionType.FILL:
+        elif questionType == QuestionType.FILL:
             self.ui.stackedAnswer.setCurrentWidget(self.ui.shortAnswer)
 
     def addOption(self):
-        text = self.ui.newOption.text()
-        if not text.strip():
+        optionText = self.ui.newOption.text()
+        if not optionText.strip():
             self.showMessage(self.ui.editQuestionErrorMessage, "選項不可為空", self.theme.theme.error_color)
             self.questionTimer.singleShot(1000, lambda: self.removeMessage(self.ui.editQuestionErrorMessage))
             return
-        button = MyRadioButton(False, text)
+        button = MyRadioButton(False, optionText)
         self.radioButtons.append(button)
         self.ui.radioButtonGroup.addWidget(button)
         self.ui.newOption.setText("")
@@ -343,7 +341,7 @@ class View(QtWidgets.QWidget):
             self.showMessage(self.ui.homeErrorMessage, "請先輸入題庫名稱", self.theme.theme.error_color)
             self.bankTimer.singleShot(1000, lambda: self.removeMessage(self.ui.homeErrorMessage))
             return
-        bankName = self.ui.bankList.currentItem().text()
+        bankName = self.ui.bankList.selectedItems()[0].text()
         questionNum = self.controller.getQuestionCap(bankName)
         if questionNum == 0:
             self.showMessage(self.ui.homeErrorMessage, "題庫為空", self.theme.theme.error_color)
@@ -356,7 +354,6 @@ class View(QtWidgets.QWidget):
         self.goToEnterExamPage()
 
     def beginExam(self):
-        self.showAnswerNum = 0
         bankName = self.ui.bankName_2.text()
         examNum = int(self.ui.examNum.text())
         self.controller.beginExam(bankName, examNum)
@@ -368,6 +365,7 @@ class View(QtWidgets.QWidget):
         self.goHome()
 
     def nextQuestion(self):
+        self.showAnswerNum = 0
         self.ui.nextQuestionButton.setEnabled(False)
         self.ui.checkAnswerButton.setEnabled(True)
         self.clearRadioButtons()
@@ -399,6 +397,7 @@ class View(QtWidgets.QWidget):
 
     def showAnswer(self):
         self.showAnswerNum += 1
+        print("showAnswer: " + str(self.showAnswerNum))
         correct = True
         if self.question.type == QuestionType.CHOICE or self.question.type == QuestionType.MULTIPLECHOICE:
             for radio in self.radioButtons:
