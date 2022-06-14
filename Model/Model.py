@@ -22,7 +22,7 @@ class Model:
     def addNewBank(self, name: str) -> bool:
         # TODO: make a directory called name, if the directory already exists, return false
         # build a bank instance (see question_bank.py)
-        # and use pickle to dump that bank instance in that directory
+        # and use pickle to dump that bank instance in model's directory
         # pickle name is same as name
         path =  os.path.join(self.directory,name) 
         if not os.path.isdir(path):
@@ -35,7 +35,7 @@ class Model:
             return False
 
     def getBanks(self)-> List[QuestionBank] :
-        # TODO: read all subdirectory in self.__directory, and load banks' pickle, append them to list
+        # TODO: read all banks' pickle in self.__directory, append them to list
         # return a list of qBanks objects
         files = listdir(self.directory)
         files = [file for file in files if os.path.isdir(os.path.join(self.directory,file))]
@@ -73,11 +73,11 @@ class Model:
         elif os.path.isdir(new_path):
             return False
         else:
+            os.remove(f'{old_path}.pickle')
+            os.rename(old_path,new_path)
             with open(f'{new_path}.pickle', 'wb') as f:
                 NewBank = QuestionBank(newname,new_path)
                 pickle.dump(NewBank, f)
-            os.remove(f'{old_path}.pickle')
-            os.rename(old_path,new_path)
             return True
                 
     def deleteBank(self, name:str)->bool:
