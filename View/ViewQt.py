@@ -170,6 +170,7 @@ class View(QtWidgets.QWidget):
     def showBankMenu(self, pos):
         menu = QtWidgets.QMenu()
         menu.addAction("進入測驗", self.enterExam)
+        menu.addAction("新增題目", self.addQuestion)
         menu.addAction("編輯題庫", self.editBank)
         menu.addAction("刪除題庫", self.deleteBank)
         menu.setStyleSheet(self.theme.style)
