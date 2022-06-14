@@ -47,8 +47,7 @@ class Controller:
             return False
         q = self.__qFactoryList[qType].createQuestion(qDes, qAns)
         # TOOD: Model's README.md says addNewQuestion, but the code is currently addQuestion
-        tarBank.addQuestion(q)
-        return True
+        return tarBank.addQuestion(q)
     
     def editQuestion(self, bankName: str, id: int, qType: str, qDes: str, qAns: str) -> bool:
         tarBank: QuestionBank = self.__model.getBank(bankName)

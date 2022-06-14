@@ -1,5 +1,5 @@
 from ast import literal_eval
-from Model.question import Choice, ChoiceOption, Question, ShortAnswer
+from Model.question import Choice, MultipleChoice, ChoiceOption, Question, ShortAnswer
 from typing import List, Dict
 
 from Model.question_type import QuestionType
@@ -45,4 +45,4 @@ class MultipleChoiceFactory(QuestionFactory):
         qOptList: List[ChoiceOption] = []
         for optStr, isAns in zip(qDict["options"], qAnsStat):
             qOptList.append(ChoiceOption(optStr, isAns))
-        return Choice(qDict["question"], qOptList)
+        return MultipleChoice(qDict["question"], qOptList)
