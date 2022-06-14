@@ -59,6 +59,15 @@ class Model:
                 Target_Bank = pickle.load(f)
             return Target_Bank
 
+    def editBank(self, editedBank: QuestionBank)->bool:
+        path = os.path.join(self.directory, editedBank.name)
+        if not os.path.isdir(path):
+            return False
+        with open(f'{path}.pickle', 'wb') as f:
+            pickle.dump(editedBank,f)
+        return True
+
+
     def editBankName(self,oldname:str, newname:str)->bool:
         # TODO: open the directory called oldname, if failed (ex: dir does not exist), return false
         # also, try to open the directory called newname, if success (new dir already exist), return false

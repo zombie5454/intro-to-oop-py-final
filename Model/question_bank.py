@@ -4,6 +4,7 @@ from typing import List
 
 # Placeholder
 from Model.question import Question
+
 # TODO: import anything that needed
 
 
@@ -55,7 +56,7 @@ class QuestionBank:
         path = os.path.join(self.__directory, "{}.pickle".format(q_id))
         with open(path, "wb") as f:
             pickle.dump(q, f)
-
+        
         return True
 
     def getQuestionList(self, num=-1) -> List[Question]:
