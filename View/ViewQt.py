@@ -408,7 +408,7 @@ class View(QtWidgets.QWidget):
                     correct = False
                     break
         elif self.question.type == QuestionType.FILL:
-            if self.ui.examShortAnswerSheet.toPlainText() != self.question.answer:
+            if self.ui.examShortAnswerSheet.toPlainText() != self.question.ans:
                 correct = False
         if correct:
             self.showMessage(self.ui.examMessage, "答案正確", self.theme.theme.success_color)

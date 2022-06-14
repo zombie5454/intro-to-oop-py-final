@@ -49,8 +49,7 @@ class Controller:
         # TOOD: Model's README.md says addNewQuestion, but the code is currently addQuestion
         if not tarBank.addQuestion(q):
             return False
-        return True
-        # return self.__model.editBank(tarBank)
+        return self.__model.editBank(tarBank)
 
     
     def editQuestion(self, bankName: str, id: int, qType: str, qDes: str, qAns: str) -> bool:
