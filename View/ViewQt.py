@@ -1,13 +1,12 @@
 from PyQt5 import QtWidgets, QtCore
 from UI.QtUI import Ui_Widget
+from typing import List
 from Model.question_type import QuestionType
 from Model.question import ChoiceOption, Question
-from typing import List
-from .MyWidgets import MyListWidgetItem, MyRadioButton
-from .Delegate import Delegate
-from .Util import MyTimer
-from .ColorTheme import ColorTheme, Theme
 from Controller.controller import Controller
+from .MyWidgets import MyListWidgetItem, MyRadioButton
+from .ColorTheme import ColorTheme, Theme
+from .Util import MyTimer
 
 
 class View(QtWidgets.QWidget):
@@ -26,24 +25,21 @@ class View(QtWidgets.QWidget):
         self.examTimer = MyTimer()
         self.showAnswerNum = 0
         self.question = None
-        self.delegate = Delegate()
+        self.controller: Controller = None
         self.toggleStylesheet()
 
         # homePage
         self.ui.enterExamButton.clicked.connect(self.enterExam)
         self.ui.toggleModeButton.clicked.connect(self.toggleStylesheet)
         self.ui.bankList.setMouseTracking(True)
-        # self.ui.bankList.itemDoubleClicked.connect(self.enterExam)
-        # set persistentEditor
-        self.ui.bankList.itemDoubleClicked.connect(lambda: self.ui.bankList.openPersistentEditor(self.ui.bankList.selectedItems()[0]))
-        # save with new name
-        self.ui.bankList.itemChanged.connect(lambda: self.saveBank(self.ui.bankList.selectedItems()[0].text()))
+        self.ui.bankList.itemDoubleClicked.connect(self.enterExam)
+        # self.ui.bankList.itemDoubleClicked.connect(lambda: self.ui.bankList.openPersistentEditor(self.ui.bankList.selectedItems()[0]))
+        # self.ui.bankList.itemChanged.connect(lambda: self.saveBank(self.ui.bankList.selectedItems()[0].text()))
         self.ui.bankList.itemEntered.connect(lambda: self.ui.bankList.setCursor(QtCore.Qt.PointingHandCursor))
         self.ui.bankList.viewportEntered.connect(lambda: self.ui.bankList.setCursor(QtCore.Qt.ArrowCursor))
         self.ui.bankList.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
         self.ui.bankList.customContextMenuRequested.connect(self.showBankMenu)
         self.ui.deleteBankButton.clicked.connect(self.deleteBank)
-        # self.ui.deleteBankButton.setStyleSheet(f"color: {self.theme.theme.error_color}")
         self.ui.editBankButton.clicked.connect(self.editBank)
         self.ui.addBankButton.clicked.connect(self.addBank)
 
@@ -57,10 +53,9 @@ class View(QtWidgets.QWidget):
         self.ui.questionList.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
         self.ui.questionList.customContextMenuRequested.connect(self.showQuestionMenu)
         self.ui.deleteQuestionButton.clicked.connect(self.deleteQuestion)
-        # self.ui.deleteQuestionButton.setStyleSheet(f"color: {self.theme.theme.error_color}")
         self.ui.editQuestionButton.clicked.connect(self.editQuestion)
         self.ui.addQuestionButton.clicked.connect(self.addQuestion)
-        self.ui.bankName.textChanged.connect(lambda: self.ui.bankName.setStyleSheet(f"color: {self.theme.theme.text_color}"))
+        self.ui.bankName.textChanged.connect(lambda: self.ui.bankName.setStyleSheet("color: " + self.theme.theme.text_color))
 
         # editQuestionPage
         self.ui.backButton.clicked.connect(self.goToEditBankPage)
@@ -68,9 +63,9 @@ class View(QtWidgets.QWidget):
         self.ui.questionType.currentIndexChanged.connect(self.changeQuestionType)
         self.ui.addOptionButton.clicked.connect(self.addOption)
         self.ui.newOption.returnPressed.connect(self.addOption)
-        self.ui.questionText.textChanged.connect(lambda: self.ui.questionText.setStyleSheet(f"color: {self.theme.theme.text_color}"))
-        self.ui.newOption.textChanged.connect(lambda: self.ui.newOption.setStyleSheet(f"color: {self.theme.theme.text_color}"))
-        self.ui.shortAnswerSheet.textChanged.connect(lambda: self.ui.shortAnswerSheet.setStyleSheet(f"color: {self.theme.theme.text_color}"))
+        self.ui.questionText.textChanged.connect(lambda: self.ui.questionText.setStyleSheet("color: " + self.theme.theme.text_color))
+        self.ui.newOption.textChanged.connect(lambda: self.ui.newOption.setStyleSheet("color: " + self.theme.theme.text_color))
+        self.ui.shortAnswerSheet.textChanged.connect(lambda: self.ui.shortAnswerSheet.setStyleSheet("color: " + self.theme.theme.text_color))
 
         # enterExamPage
         self.ui.homeButton_2.clicked.connect(self.goHome)
@@ -92,7 +87,7 @@ class View(QtWidgets.QWidget):
         self.ui.questionType.addItem("填空", QuestionType.FILL)
 
     def setController(self, controller: Controller):
-        self.delegate.setController(controller)
+        self.controller = controller
         self.goHome()
 
     def toggleStylesheet(self):
@@ -103,7 +98,7 @@ class View(QtWidgets.QWidget):
 
     def goHome(self):
         self.ui.bankList.clear()
-        for bank in self.delegate.getBanks():
+        for bank in self.controller.getBanks():
             self.ui.bankList.addItem(MyListWidgetItem(bank.name, bank.name, self.ui.bankList))
         self.ui.bankList.setCurrentItem(None)
         self.ui.stackedPages.setCurrentWidget(self.ui.homePage)
@@ -113,7 +108,7 @@ class View(QtWidgets.QWidget):
         if not self.isAddingBank:
             item: MyListWidgetItem = self.ui.bankList.selectedItems()[0]
             self.ui.bankName.setText(item.key)
-            for question in self.delegate.getQuestions(item.key):
+            for question in self.controller.getQuestionList(item.key):
                 self.ui.questionList.addItem(MyListWidgetItem(question, question.question, self.ui.questionList))
         self.ui.stackedPages.setCurrentWidget(self.ui.editBankPage)
 
@@ -147,7 +142,7 @@ class View(QtWidgets.QWidget):
         self.ui.stackedPages.setCurrentWidget(self.ui.examPage)
 
     def goToResultPage(self):
-        result = self.delegate.endExam()
+        result = self.controller.endExam()
         self.ui.questionRightNum.setText(str(result.numOfCorrect))
         self.ui.questionWrongNum.setText(str(result.numOfQ - result.numOfCorrect))
         self.ui.questionShowNum.setText(str(result.numOfPeek))
@@ -170,7 +165,7 @@ class View(QtWidgets.QWidget):
     def removeMessage(self, widget: QtWidgets.QLabel):
         widget.setSizePolicy(QtWidgets.QSizePolicy.Ignored, QtWidgets.QSizePolicy.Ignored)
         widget.setText("")
-        widget.setStyleSheet(f"color: {self.theme.theme.text_color}")
+        widget.setStyleSheet("color: " + self.theme.theme.text_color)
 
     def showMessage(self, widget: QtWidgets.QLabel, message: str, color: str):
         widget.setSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
@@ -191,7 +186,7 @@ class View(QtWidgets.QWidget):
             QtWidgets.QMessageBox.No,
         )
         if reply == QtWidgets.QMessageBox.Yes:
-            self.delegate.deleteBank(bank.key)
+            self.controller.deleteBank(bank.key)
             self.goHome()
 
     def editBank(self):
@@ -208,14 +203,13 @@ class View(QtWidgets.QWidget):
         self.goToEditBankPage()
 
     def saveBank(self, bankName: str):
-        print("adding" if self.isAddingBank else "editing", bankName)
         if not bankName.strip():
             self.showMessage(self.ui.editBankErrorMessage, "題庫名稱不可為空", self.theme.theme.error_color)
             self.bankTimer.singleShot(1000, lambda: self.removeMessage(self.ui.editBankErrorMessage))
             return
         res = False
         if self.isAddingBank:
-            res = self.delegate.addBank(bankName)
+            res = self.controller.addBank(bankName)
             self.isAddingBank = False
         else:
             oldBankName = self.ui.bankList.selectedItems()[0].key
@@ -223,7 +217,7 @@ class View(QtWidgets.QWidget):
                 self.showMessage(self.ui.editBankErrorMessage, "題庫名稱與原本相同", self.theme.theme.error_color)
                 self.bankTimer.singleShot(1000, lambda: self.removeMessage(self.ui.editBankErrorMessage))
                 return
-            res = self.delegate.editBank(oldBankName, bankName)
+            res = self.controller.editBankName(oldBankName, bankName)
         if res:
             self.goHome()  # improve this
         else:
@@ -252,7 +246,7 @@ class View(QtWidgets.QWidget):
         )
         if reply == QtWidgets.QMessageBox.Yes:
             bankName = self.ui.bankList.selectedItems()[0].text()
-            self.delegate.deleteQuestion(bankName, question.key.ID)
+            self.controller.deleteQuestion(bankName, question.key.ID)
             self.goToEditBankPage()
 
     def editQuestion(self):
@@ -304,10 +298,10 @@ class View(QtWidgets.QWidget):
                 return
         res = False
         if self.isAddingQuestion:
-            res = self.delegate.addQuestion(bankName, type, question, answer)
+            res = self.controller.addNewQuestion(bankName, type, question, answer)
         else:
             item: MyListWidgetItem = self.ui.questionList.selectedItems()[0]
-            res = self.delegate.editQuestion(bankName, item.key.ID, type, question, answer)
+            res = self.controller.editQuestion(bankName, item.key.ID, type, question, answer)
         if res:
             self.editBank()
         else:
@@ -350,7 +344,7 @@ class View(QtWidgets.QWidget):
             self.bankTimer.singleShot(1000, lambda: self.removeMessage(self.ui.homeErrorMessage))
             return
         bankName = self.ui.bankList.currentItem().text()
-        questionNum = self.delegate.enterExam(bankName)
+        questionNum = self.controller.getQuestionCap(bankName)
         if questionNum == 0:
             self.showMessage(self.ui.homeErrorMessage, "題庫為空", self.theme.theme.error_color)
             self.bankTimer.singleShot(1000, lambda: self.removeMessage(self.ui.homeErrorMessage))
@@ -365,12 +359,12 @@ class View(QtWidgets.QWidget):
         self.showAnswerNum = 0
         bankName = self.ui.bankName_2.text()
         examNum = int(self.ui.examNum.text())
-        self.delegate.beginExam(bankName, examNum)
+        self.controller.beginExam(bankName, examNum)
         self.ui.stackedPages.setCurrentWidget(self.ui.examPage)
         self.nextQuestion()
 
     def exitExam(self):
-        self.delegate.endExam()
+        self.controller.endExam()
         self.goHome()
 
     def nextQuestion(self):
@@ -378,7 +372,7 @@ class View(QtWidgets.QWidget):
         self.ui.checkAnswerButton.setEnabled(True)
         self.clearRadioButtons()
         self.ui.nextQuestionButton.setText("下一題")
-        self.question, idx = self.delegate.getNextQuestion()
+        self.question, idx = self.controller.getNextExamQuestion()
         if idx == int(self.ui.examNum.text()) - 1:
             self.ui.nextQuestionButton.setText("結束測驗")
         if idx == -1:
@@ -386,7 +380,7 @@ class View(QtWidgets.QWidget):
             return
         self.ui.currentNum.setText(str(idx + 1))
         self.ui.examShortAnswerSheet.setPlainText("")
-        self.ui.examShortAnswerSheet.setStyleSheet(f"color: {self.theme.theme.text_color}")
+        self.ui.examShortAnswerSheet.setStyleSheet("color: " + self.theme.theme.text_color)
         self.ui.examShortAnswerSheet.setFocus()
         self.ui.examShortAnswerSheet.setEnabled(True)
         self.ui.checkAnswerButton.setEnabled(True)
@@ -428,22 +422,22 @@ class View(QtWidgets.QWidget):
         if self.question.type == QuestionType.CHOICE or self.question.type == QuestionType.MULTIPLECHOICE:
             for radio in self.radioButtons:
                 if radio.isChecked() and radio.is_true:
-                    radio.setStyleSheet(f"color: {self.theme.theme.success_color}")
+                    radio.setStyleSheet("color: " + self.theme.theme.success_color)
                 elif not radio.isChecked() and not radio.is_true:
                     ...
                 else:
                     correct = False
-                    radio.setStyleSheet(f"color: {self.theme.theme.error_color}")
+                    radio.setStyleSheet("color: " + self.theme.theme.error_color)
         elif self.question.type == QuestionType.FILL:
             answer = self.ui.examShortAnswerSheet.toPlainText()
             self.ui.examShortAnswerSheet.setEnabled(False)
             self.ui.checkAnswerButton.setEnabled(False)
             if self.question.ans == answer:
-                self.ui.examShortAnswerSheet.setStyleSheet(f"color: {self.theme.theme.success_color}")
+                self.ui.examShortAnswerSheet.setStyleSheet("color: " + self.theme.theme.success_color)
             else:
                 correct = False
                 self.showMessage(self.ui.examMessage, "正確答案: " + self.question.ans, self.theme.theme.success_color)
-        self.delegate.sendExamInfo(correct, self.showAnswerNum)
+        self.controller.sigOnUsrAct(correct, self.showAnswerNum)
 
     def testAgain(self):
         self.goToEnterExamPage()
