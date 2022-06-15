@@ -60,12 +60,6 @@
          </item>
          <item>
           <widget class="QLabel" name="homeErrorMessage">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
            <property name="text">
             <string/>
            </property>
@@ -199,12 +193,6 @@
          </item>
          <item>
           <widget class="QLabel" name="editBankErrorMessage">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
            <property name="text">
             <string/>
            </property>
@@ -415,12 +403,6 @@
          </item>
          <item>
           <widget class="QLabel" name="editQuestionErrorMessage">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
            <property name="text">
             <string/>
            </property>
@@ -700,12 +682,6 @@
          </item>
          <item>
           <widget class="QLabel" name="examMessage">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
            <property name="text">
             <string/>
            </property>

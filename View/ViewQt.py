@@ -226,7 +226,8 @@ class View(QtWidgets.QWidget):
             res = self.controller.addBank(bankName)
             self.isAddingBank = False
         else:
-            oldBankName = self.ui.bankList.selectedItems()[0].key
+            oldBank: BankListWidgetItem = self.ui.bankList.selectedItems()[0]
+            oldBankName = oldBank.bankName
             if oldBankName == bankName:
                 self.showMessage(self.ui.editBankErrorMessage, "題庫名稱與原本相同", self.theme.theme.error_color)
                 self.bankTimer.singleShot(1000, lambda: self.removeMessage(self.ui.editBankErrorMessage))
@@ -305,8 +306,8 @@ class View(QtWidgets.QWidget):
             questionText = {"question": questionText, "options": options}
             questionText, questionAns = str(questionText), str(answer)
         elif questionType == QuestionType.FILL:
-            answer = self.ui.shortAnswerSheet.toPlainText()
-            if not answer.strip():
+            questionAns = self.ui.shortAnswerSheet.toPlainText()
+            if not questionAns.strip():
                 self.showMessage(self.ui.editQuestionErrorMessage, "答案不可為空", self.theme.theme.error_color)
                 self.questionTimer.singleShot(1000, lambda: self.removeMessage(self.ui.editQuestionErrorMessage))
                 return
@@ -384,6 +385,7 @@ class View(QtWidgets.QWidget):
         self.showAnswerNum = 0
         self.ui.nextQuestionButton.setEnabled(False)
         self.ui.checkAnswerButton.setEnabled(True)
+        self.removeMessage(self.ui.examMessage)
         self.clearRadioButtons()
         self.ui.nextQuestionButton.setText("下一題")
         self.question, idx = self.controller.getNextExamQuestion()
@@ -450,7 +452,7 @@ class View(QtWidgets.QWidget):
                 self.ui.examShortAnswerSheet.setStyleSheet("color: " + self.theme.theme.success_color)
             else:
                 correct = False
-                self.showMessage(self.ui.examMessage, "正確答案: " + self.question.ans, self.theme.theme.success_color)
+                self.showMessage(self.ui.examMessage, "正確答案: " + self.question.ans, self.theme.theme.error_color)
         self.controller.sigOnUsrAct(correct, self.showAnswerNum)
 
     def testAgain(self):
