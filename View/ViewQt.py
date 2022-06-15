@@ -4,7 +4,7 @@ from typing import List
 from Model.question_type import QuestionType
 from Model.question import ChoiceOption
 from Controller.controller import Controller
-from .Utils import save_data
+from .Utils import export_data, save_data
 from .MyWidgets import QuestionListWidgetItem, BankListWidgetItem, MyRadioButton, MyTimer
 from .ColorTheme import ColorTheme, Theme
 
@@ -31,7 +31,7 @@ class View(QtWidgets.QWidget):
         # homePage
         self.ui.enterExamButton.clicked.connect(self.enterExam)
         self.ui.toggleModeButton.clicked.connect(self.toggleStylesheet)
-        self.ui.loadQuesionButton.clicked.connect(self.loadQuestion)
+        self.ui.importBankButton.clicked.connect(self.importBank)
         self.ui.bankList.setMouseTracking(True)
         self.ui.bankList.itemDoubleClicked.connect(self.enterExam)
         # self.ui.bankList.itemDoubleClicked.connect(lambda: self.ui.bankList.openPersistentEditor(self.ui.bankList.selectedItems()[0]))
@@ -101,12 +101,21 @@ class View(QtWidgets.QWidget):
         self.theme.toggle_theme()
         self.setStyleSheet(self.theme.style)
 
-    def loadQuestion(self):
+    def importBank(self):
         fname = QtWidgets.QFileDialog.getOpenFileName(self, "Open file", "./", "JSON files (*.json)")
         try:
             save_data(self.controller, fname[0])
         except Exception as e:
-            self.showMessage(self.ui.homeErrorMessage, "載入錯誤，請刪除題庫後重試 " + str(e.__class__.__name__) + ": " + str(e), self.theme.theme.error_color)
+            self.showMessage(self.ui.homeErrorMessage, "匯入錯誤，請刪除題庫後重試 " + str(e.__class__.__name__) + ": " + str(e), self.theme.theme.error_color)
+            self.bankTimer.singleShot(10000, lambda: self.removeMessage(self.ui.homeErrorMessage))
+        self.goHome()
+
+    def exportBank(self):
+        fname = QtWidgets.QFileDialog.getSaveFileName(self, "Save file", "./", "JSON files (*.json)")
+        try:
+            export_data(self.controller, self.ui.bankList.selectedItems(), fname[0])
+        except Exception as e:
+            self.showMessage(self.ui.homeErrorMessage, "匯出錯誤，請重試 " + str(e.__class__.__name__) + ": " + str(e), self.theme.theme.error_color)
             self.bankTimer.singleShot(10000, lambda: self.removeMessage(self.ui.homeErrorMessage))
         self.goHome()
 
@@ -172,6 +181,7 @@ class View(QtWidgets.QWidget):
         menu.addAction("進入測驗", self.enterExam)
         menu.addAction("新增題目", self.addQuestion)
         menu.addAction("編輯題庫", self.editBank)
+        menu.addAction("匯出題庫", self.exportBank)
         menu.addAction("刪除題庫", self.deleteBank)
         menu.setStyleSheet(self.theme.style)
         menu.exec_(self.ui.bankList.mapToGlobal(pos))
@@ -401,7 +411,10 @@ class View(QtWidgets.QWidget):
         self.ui.examShortAnswerSheet.setEnabled(True)
         self.ui.checkAnswerButton.setEnabled(True)
         self.ui.examQuestionType.setText(self.question.type.value)
-        self.ui.examQuestionText.setText(self.question.question)
+        questionText = self.question.question
+        questionText = questionText.split("\n")
+        questionText = "<p>" + "</p><p>".join(questionText) + "</p>"
+        self.ui.examQuestionText.setText(questionText)
         if self.question.type == QuestionType.CHOICE or self.question.type == QuestionType.MULTIPLECHOICE:
             self.ui.stackedExamAnswer.setCurrentWidget(self.ui.examChoice)
             choices: List[ChoiceOption] = self.question.choices

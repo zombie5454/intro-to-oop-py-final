@@ -7,7 +7,7 @@ from Model.question_bank import QuestionBank
 
 class QuestionListWidgetItem(QtWidgets.QListWidgetItem):
     def __init__(self, question: Question, parent: QtWidgets.QListWidget):
-        super().__init__(question.question, parent)
+        super().__init__(question.question.replace("\n", "  "), parent)
         self.id = question.ID
         self.questionType = question.type
         self.questionText = question.question
