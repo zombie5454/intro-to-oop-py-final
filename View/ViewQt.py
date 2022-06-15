@@ -1,6 +1,6 @@
 from PyQt5 import QtWidgets, QtCore, QtGui
-from UI.QtUI import Ui_Widget
 from typing import List
+from UI.QtUI import Ui_Widget
 from Model.question_type import QuestionType
 from Model.question import ChoiceOption
 from Controller.controller import Controller
