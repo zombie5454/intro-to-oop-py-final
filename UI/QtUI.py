@@ -393,7 +393,7 @@ class Ui_Widget(object):
         self.verticalLayout.addLayout(self.gridLayout)
 
         self.retranslateUi(Widget)
-        self.stackedPages.setCurrentIndex(4)
+        self.stackedPages.setCurrentIndex(0)
         self.stackedAnswer.setCurrentIndex(0)
         self.stackedExamAnswer.setCurrentIndex(1)
         QtCore.QMetaObject.connectSlotsByName(Widget)
@@ -436,6 +436,6 @@ class Ui_Widget(object):
         self.nextQuestionButton.setText(_translate("Widget", "下一題"))
         self.label_4.setText(_translate("Widget", "答對題數："))
         self.label_12.setText(_translate("Widget", "答錯題數："))
-        self.label_14.setText(_translate("Widget", "查看答案次數："))
+        self.label_14.setText(_translate("Widget", "檢查答案次數："))
         self.homeButton_4.setText(_translate("Widget", "回首頁"))
         self.testAgainButton.setText(_translate("Widget", "再次測驗"))

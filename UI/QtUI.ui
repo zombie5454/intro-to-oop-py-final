@@ -826,7 +826,7 @@
            <item row="2" column="0">
             <widget class="QLabel" name="label_14">
              <property name="text">
-              <string>查看答案次數：</string>
+              <string>檢查答案次數：</string>
              </property>
             </widget>
            </item>

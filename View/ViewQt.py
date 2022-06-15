@@ -412,7 +412,7 @@ class View(QtWidgets.QWidget):
         self.ui.checkAnswerButton.setEnabled(True)
         self.ui.examQuestionType.setText(self.question.type.value)
         questionText = self.question.question
-        questionText = questionText.split("\n")
+        questionText = [q.replace("<", "&lt;").replace(">", "&gt;") for q in questionText.split("\n")]
         questionText = "<p>" + "</p><p>".join(questionText) + "</p>"
         self.ui.examQuestionText.setText(questionText)
         if self.question.type == QuestionType.CHOICE or self.question.type == QuestionType.MULTIPLECHOICE:
