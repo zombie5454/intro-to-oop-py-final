@@ -37,8 +37,6 @@ class View(QtWidgets.QWidget):
         self.ui.importBankButton.clicked.connect(self.importBank)
         self.ui.bankList.setMouseTracking(True)
         self.ui.bankList.itemDoubleClicked.connect(self.enterExam)
-        # self.ui.bankList.itemDoubleClicked.connect(lambda: self.ui.bankList.openPersistentEditor(self.ui.bankList.selectedItems()[0]))
-        # self.ui.bankList.itemChanged.connect(lambda: self.saveBank(self.ui.bankList.selectedItems()[0].text()))
         self.ui.bankList.itemEntered.connect(lambda: self.ui.bankList.setCursor(QtCore.Qt.PointingHandCursor))
         self.ui.bankList.viewportEntered.connect(lambda: self.ui.bankList.setCursor(QtCore.Qt.ArrowCursor))
         self.ui.bankList.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
@@ -50,6 +48,7 @@ class View(QtWidgets.QWidget):
 
         # editBankPage
         self.ui.homeButton.clicked.connect(self.goHome)
+        self.ui.bankName.returnPressed.connect(lambda: self.saveBank(self.ui.bankName.text()))
         self.ui.bankSaveButton.clicked.connect(lambda: self.saveBank(self.ui.bankName.text()))
         self.ui.questionList.setMouseTracking(True)
         self.ui.questionList.itemDoubleClicked.connect(self.editQuestion)
@@ -288,6 +287,7 @@ class View(QtWidgets.QWidget):
         self.goToEditQuestionPage()
 
     def addQuestion(self):
+        self.isAddingBank = False
         if len(self.ui.bankList.selectedItems()) == 0:
             self.showMessage(self.ui.editBankErrorMessage, "請先輸入題庫名稱", self.theme.theme.error_color)
             self.bankTimer.singleShot(1000, lambda: self.removeMessage(self.ui.editBankErrorMessage))
