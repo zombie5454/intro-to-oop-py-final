@@ -31,7 +31,7 @@ class MyRadioButton(QtWidgets.QRadioButton):
         self.is_true = is_true
 
 
-class MyTimer:
+class MyTimer(object):
     def __init__(self):
         self.timer = QtCore.QTimer()
 

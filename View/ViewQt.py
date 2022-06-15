@@ -105,7 +105,7 @@ class View(QtWidgets.QWidget):
         self.setStyleSheet(self.theme.style)
 
     def importBank(self):
-        fname = QtWidgets.QFileDialog.getOpenFileName(self, "Open file", "./", "JSON files (*.json)")
+        fname = QtWidgets.QFileDialog.getOpenFileName(self, "Import file", "./", "JSON files (*.json)")
         try:
             save_data(self.controller, fname[0])
         except Exception as e:
@@ -114,7 +114,7 @@ class View(QtWidgets.QWidget):
         self.goHome()
 
     def exportBank(self):
-        fname = QtWidgets.QFileDialog.getSaveFileName(self, "Save file", "./", "JSON files (*.json)")
+        fname = QtWidgets.QFileDialog.getSaveFileName(self, "Export file", "./", "JSON files (*.json)")
         try:
             export_data(self.controller, self.ui.bankList.selectedItems(), fname[0])
         except Exception as e:
@@ -475,3 +475,47 @@ class View(QtWidgets.QWidget):
 
     def testAgain(self):
         self.goToEnterExamPage()
+
+    def keyPressEvent(self, a0: QtGui.QKeyEvent) -> None:
+        if a0.matches(QtGui.QKeySequence.Delete):
+            if self.ui.stackedPages.currentWidget() == self.ui.homePage:
+                self.deleteBank()
+            elif self.ui.stackedPages.currentWidget() == self.ui.editBankPage:
+                self.deleteQuestion()
+        elif a0.matches(QtGui.QKeySequence.Open):
+            if self.ui.stackedPages.currentWidget() == self.ui.homePage:
+                self.editBank()
+            elif self.ui.stackedPages.currentWidget() == self.ui.editBankPage:
+                self.editQuestion()
+        elif a0.matches(QtGui.QKeySequence.New):
+            if self.ui.stackedPages.currentWidget() == self.ui.homePage:
+                self.addBank()
+            elif self.ui.stackedPages.currentWidget() == self.ui.editBankPage:
+                self.addQuestion()
+        elif a0.matches(QtGui.QKeySequence.Save):
+            if self.ui.stackedPages.currentWidget() == self.ui.editBankPage:
+                self.saveBank(self.ui.bankName.text())
+            elif self.ui.stackedPages.currentWidget() == self.ui.editQuestionPage:
+                self.saveQuestion()
+        elif a0.matches(QtGui.QKeySequence.SaveAs):
+            if self.ui.stackedPages.currentWidget() == self.ui.homePage:
+                self.exportBank()
+        elif a0.matches(QtGui.QKeySequence.Forward):
+            if self.ui.stackedPages.currentWidget() == self.ui.examPage:
+                if self.ui.nextQuestionButton.isEnabled():
+                    self.ui.nextQuestionButton.click()
+        elif a0.matches(QtGui.QKeySequence.InsertParagraphSeparator):
+            if self.ui.stackedPages.currentWidget() == self.ui.enterExamPage:
+                self.beginExam()
+        elif a0.matches(QtGui.QKeySequence.Cancel):
+            if self.ui.stackedPages.currentWidget() == self.ui.editBankPage:
+                self.goHome()
+            elif self.ui.stackedPages.currentWidget() == self.ui.editQuestionPage:
+                self.goToEditBankPage()
+            elif self.ui.stackedPages.currentWidget() == self.ui.enterExamPage:
+                self.goHome()
+            elif self.ui.stackedPages.currentWidget() == self.ui.examPage:
+                self.goToEnterExamPage()
+            elif self.ui.stackedPages.currentWidget() == self.ui.resultPage:
+                self.goHome()
+        return super().keyPressEvent(a0)
