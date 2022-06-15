@@ -2,7 +2,7 @@ import sys
 from PyQt5 import QtWidgets
 from Model.Model import Model
 from Model.question_type import QuestionType
-from Model.question_factory import QuestionFactory, ShortAnswerFactory, ChoiceFactory, MultipleChoiceFactory
+from Model.question_factory import ShortAnswerFactory, ChoiceFactory, MultipleChoiceFactory
 from View import View
 from Controller.controller import Controller
 
@@ -21,9 +21,9 @@ class App(QtWidgets.QApplication):
 
         self.controller = Controller(self.model, self.qFactoryDict)
 
-        self.view = View()
+        self.view = View(self.controller)
+        self.view.setWindowTitle("Question Bank")
         self.view.show()
-        self.view.setController(self.controller)
 
 
 if __name__ == "__main__":

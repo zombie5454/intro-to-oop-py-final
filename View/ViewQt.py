@@ -2,7 +2,7 @@ from PyQt5 import QtWidgets, QtCore, QtGui
 from typing import List
 from UI.QtUI import Ui_Widget
 from Model.question_type import QuestionType
-from Model.question import ChoiceOption
+from Model.question import ChoiceOption, Question
 from Controller.controller import Controller
 from .Utils import export_data, save_data
 from .MyWidgets import QuestionListWidgetItem, BankListWidgetItem, MyRadioButton, MyTimer
@@ -10,22 +10,25 @@ from .ColorTheme import ColorTheme, Theme
 
 
 class View(QtWidgets.QWidget):
-    def __init__(self):
+    def __init__(self, controller: Controller):
         super(View, self).__init__()
 
         # attributes
-        self.ui = Ui_Widget()
-        self.ui.setupUi(self)
-        self.theme = ColorTheme(Theme.LIGHT)
+        self.ui: Ui_Widget = Ui_Widget()
+        self.theme: ColorTheme = ColorTheme(Theme.LIGHT)
         self.radioButtons: List[MyRadioButton] = []
-        self.isAddingBank = False
-        self.isAddingQuestion = False
-        self.bankTimer = MyTimer()
-        self.questionTimer = MyTimer()
-        self.examTimer = MyTimer()
-        self.showAnswerNum = 0
-        self.question = None
+        self.isAddingBank: bool = False
+        self.isAddingQuestion: bool = False
+        self.bankTimer: MyTimer = MyTimer()
+        self.questionTimer: MyTimer = MyTimer()
+        self.examTimer: MyTimer = MyTimer()
+        self.showAnswerNum: int = 0
+        self.question: Question = None
         self.controller: Controller = None
+
+        # set up
+        self.ui.setupUi(self)
+        self.setController(controller)
         self.toggleStylesheet()
 
         # homePage
