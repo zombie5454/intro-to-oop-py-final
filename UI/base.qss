@@ -92,3 +92,8 @@ QMenu::item {
 QMenu::item:selected {
 	background: $list_selected;
 }
+QMessageBox {
+	background: $background_1;
+	border-radius: 3px;
+	margin: 0px;
+}

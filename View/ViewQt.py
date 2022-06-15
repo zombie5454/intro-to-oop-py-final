@@ -1,4 +1,4 @@
-from PyQt5 import QtWidgets, QtCore
+from PyQt5 import QtWidgets, QtCore, QtGui
 from UI.QtUI import Ui_Widget
 from typing import List
 from Model.question_type import QuestionType
@@ -196,20 +196,28 @@ class View(QtWidgets.QWidget):
         widget.setText(message)
         widget.setStyleSheet("color: " + color)
 
+    def showDeleteMessageBox(self, title: str, message: str) -> bool:
+        messageBox = QtWidgets.QMessageBox()
+        messageBox.setWindowTitle(title)
+        messageBox.setText(message)
+        messageBox.setStandardButtons(QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
+        messageBox.setDefaultButton(QtWidgets.QMessageBox.No)
+        messageBox.button(QtWidgets.QMessageBox.Yes).setText("確定")
+        messageBox.button(QtWidgets.QMessageBox.Yes).setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        messageBox.button(QtWidgets.QMessageBox.No).setText("取消")
+        messageBox.button(QtWidgets.QMessageBox.No).setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        # messageBox.setStyleSheet(self.theme.style)
+        reply = messageBox.exec_()
+        return reply == QtWidgets.QMessageBox.Yes
+
     def deleteBank(self):
         if len(self.ui.bankList.selectedItems()) == 0:
             self.showMessage(self.ui.homeErrorMessage, "請先選擇題庫", self.theme.theme.error_color)
             self.bankTimer.singleShot(1000, lambda: self.removeMessage(self.ui.homeErrorMessage))
             return
         bank: BankListWidgetItem = self.ui.bankList.selectedItems()[0]
-        reply = QtWidgets.QMessageBox.question(
-            None,
-            "刪除題庫",
-            "確定要刪除題庫「" + bank.bankName + "」嗎？",
-            QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No,
-            QtWidgets.QMessageBox.No,
-        )
-        if reply == QtWidgets.QMessageBox.Yes:
+        reply = self.showDeleteMessageBox("刪除題庫", "確定要刪除題庫「" + bank.bankName + "」嗎？")
+        if reply:
             self.controller.deleteBank(bank.bankName)
             self.goHome()
 
@@ -262,16 +270,10 @@ class View(QtWidgets.QWidget):
             self.questionTimer.singleShot(1000, lambda: self.removeMessage(self.ui.editBankErrorMessage))
             return
         question: QuestionListWidgetItem = self.ui.questionList.selectedItems()[0]
-        reply = QtWidgets.QMessageBox.question(
-            None,
-            "刪除題目",
-            "確定要刪除題目「" + question.questionText + "」嗎？",
-            QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No,
-            QtWidgets.QMessageBox.No,
-        )
-        if reply == QtWidgets.QMessageBox.Yes:
-            bankName = self.ui.bankList.selectedItems()[0].text()
-            self.controller.deleteQuestion(bankName, question.id)
+        reply = self.showDeleteMessageBox("刪除題目", "確定要刪除題目「" + question.questionText[:20] + "」嗎？")
+        if reply:
+            bank: BankListWidgetItem = self.ui.bankList.selectedItems()[0]
+            self.controller.deleteQuestion(bank.bankName, question.id)
             self.goToEditBankPage()
 
     def editQuestion(self):
@@ -368,13 +370,13 @@ class View(QtWidgets.QWidget):
             self.showMessage(self.ui.homeErrorMessage, "請先輸入題庫名稱", self.theme.theme.error_color)
             self.bankTimer.singleShot(1000, lambda: self.removeMessage(self.ui.homeErrorMessage))
             return
-        bankName = self.ui.bankList.selectedItems()[0].text()
-        questionNum = self.controller.getQuestionCap(bankName)
+        bank: BankListWidgetItem = self.ui.bankList.selectedItems()[0]
+        questionNum = self.controller.getQuestionCap(bank.bankName)
         if questionNum == 0:
             self.showMessage(self.ui.homeErrorMessage, "題庫為空", self.theme.theme.error_color)
             self.bankTimer.singleShot(1000, lambda: self.removeMessage(self.ui.homeErrorMessage))
             return
-        self.ui.bankName_2.setText(bankName)
+        self.ui.bankName_2.setText(bank.bankName)
         self.ui.questionNum.setText(str(questionNum))
         self.ui.examNum.setRange(1, questionNum)
         self.ui.examNum.setValue(10)

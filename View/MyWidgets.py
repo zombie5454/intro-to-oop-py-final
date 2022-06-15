@@ -5,9 +5,17 @@ from Model.question_type import QuestionType
 from Model.question_bank import QuestionBank
 
 
+class BankListWidgetItem(QtWidgets.QListWidgetItem):
+    def __init__(self, bank: QuestionBank, parent: QtWidgets.QListWidget):
+        super().__init__("   " + bank.name + "   ", parent)
+        self.id = bank.issuedID
+        self.bankName = bank.name
+        self.bankDir = bank.directory
+
+
 class QuestionListWidgetItem(QtWidgets.QListWidgetItem):
     def __init__(self, question: Question, parent: QtWidgets.QListWidget):
-        super().__init__(question.question.replace("\n", "  "), parent)
+        super().__init__("   " + question.question.replace("\n", "  ") + "   ", parent)
         self.id = question.ID
         self.questionType = question.type
         self.questionText = question.question
@@ -15,14 +23,6 @@ class QuestionListWidgetItem(QtWidgets.QListWidgetItem):
             self.questionChoices = question.choices
         elif question.type == QuestionType.FILL:
             self.questionAns = question.ans
-
-
-class BankListWidgetItem(QtWidgets.QListWidgetItem):
-    def __init__(self, bank: QuestionBank, parent: QtWidgets.QListWidget):
-        super().__init__(bank.name, parent)
-        self.id = bank.issuedID
-        self.bankName = bank.name
-        self.bankDir = bank.directory
 
 
 class MyRadioButton(QtWidgets.QRadioButton):
