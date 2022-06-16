@@ -11,7 +11,7 @@ It support:
 To use this database, please download all files, and make sure they are in the same directory, and run ``Main.py``
 
 * the default database storage directory is "./a"
-* to change this directory, change ``Main.py``, line 14, ``self.model = Model("path_you_want")``
+* to change this directory, modify ``Main.py``, line 14, ``self.model = Model("./a")`` to ``self.model = Model("path_you_want")``
 
 To import questions, you can first try export one question bank and see the demand format of question bank
 
