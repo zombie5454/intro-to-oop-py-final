@@ -15,7 +15,7 @@ To use this database, please download all files, and make sure they are in the s
 
 To import questions, you can first try export one question bank and see the demand format of question bank
 
-Above supported functions can be executed by clicking the corresponding button on the UI.
+Above supported functions can be executed by clicking the corresponding buttons on the UI.
 
 # File structure
 UI/ : QtUI
