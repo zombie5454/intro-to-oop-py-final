@@ -22,7 +22,7 @@ UI/ : QtUI
 
 View/: files for User Interface
 
-Controller/: files for communication between user interface and data base
+Controller/: files for communication between user interface and logical data base (aka model)
 
 Model/: files for physical database implementation, and communication between real data and controller
 
