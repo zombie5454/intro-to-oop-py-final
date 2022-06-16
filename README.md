@@ -26,6 +26,6 @@ Controller/: files for communication between user interface and logical data bas
 
 Model/: files for physical database implementation, and communication between real data and controller
 
-test/: out test functions to debug
+test/: our test functions to debug
 
 a/: the default database storage directory
