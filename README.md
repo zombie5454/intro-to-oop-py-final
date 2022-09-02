@@ -7,6 +7,8 @@ It support:
 * export/import questions
 * take exam
 
+See [Project Design and Demo](https://docs.google.com/document/d/1V-3LBofqckehdJZkw5j6bYwpJK5Tj5u4bU7QFUoPiKM/edit?usp=sharing)
+
 # Usage 
 To use this database, please download all files, and make sure they are in the same directory, and run ``Main.py``
 
