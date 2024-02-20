@@ -20,6 +20,11 @@ In that case, try
 
 * the default database storage directory is "./a"
 * to change this directory, modify ``Main.py``, line 14, ``self.model = Model("./a")`` to ``self.model = Model("path_you_want")``
+* you can change to English/Chinese version by modify ``Main.py``  
+```python
+6 | #from View.ViewQt_EN import View   #for English version
+7 | from View.ViewQt import View       #for Chinese version
+``` 
 
 To import questions, you can first try export one question bank and see the demand format of question bank
 
