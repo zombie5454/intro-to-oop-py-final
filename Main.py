@@ -3,7 +3,8 @@ from PyQt5 import QtWidgets
 from Model.Model import Model
 from Model.question_type import QuestionType
 from Model.question_factory import ShortAnswerFactory, ChoiceFactory, MultipleChoiceFactory
-from View import View
+#from View.ViewQt_EN import View   #for English version
+from View.ViewQt import View       #for Chinese version
 from Controller.controller import Controller
 
 

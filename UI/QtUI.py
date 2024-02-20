@@ -12,7 +12,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 
 
 class Ui_Widget(object):
-    def setupUi(self, Widget):
+    def setupUi(self, Widget, EN=False):    # EN determine English/Chinese version
         Widget.setObjectName("Widget")
         Widget.resize(792, 572)
         Widget.setStyleSheet("")
@@ -391,8 +391,10 @@ class Ui_Widget(object):
         self.stackedPages.addWidget(self.resultPage)
         self.gridLayout.addWidget(self.stackedPages, 1, 0, 1, 1)
         self.verticalLayout.addLayout(self.gridLayout)
-
-        self.retranslateUi(Widget)
+        if EN:            # EN = True, when using English version
+            self.retranslateUi_EN(Widget)
+        else:
+            self.retranslateUi(Widget)
         self.stackedPages.setCurrentIndex(0)
         self.stackedAnswer.setCurrentIndex(0)
         self.stackedExamAnswer.setCurrentIndex(1)
@@ -439,3 +441,46 @@ class Ui_Widget(object):
         self.label_14.setText(_translate("Widget", "檢查答案次數："))
         self.homeButton_4.setText(_translate("Widget", "回首頁"))
         self.testAgainButton.setText(_translate("Widget", "再次測驗"))
+        
+    def retranslateUi_EN(self, Widget):
+        _translate = QtCore.QCoreApplication.translate
+        Widget.setWindowTitle(_translate("Widget", "Widget"))
+        self.appTitle.setText(_translate("Widget", "QBank"))
+        self.enterExamButton.setText(_translate("Widget", "Enter exam"))
+        self.toggleModeButton.setText(_translate("Widget", "Light"))
+        self.importBankButton.setText(_translate("Widget", "Import Bank"))
+        self.deleteBankButton.setText(_translate("Widget", "Del Bank"))
+        self.editBankButton.setText(_translate("Widget", "Edit Bank"))
+        self.addBankButton.setText(_translate("Widget", "Create Bank"))
+        self.label_8.setText(_translate("Widget", "Bank Name"))
+        self.bankSaveButton.setText(_translate("Widget", "Save"))
+        self.homeButton.setText(_translate("Widget", "HomePage"))
+        self.deleteQuestionButton.setText(_translate("Widget", "Del Q"))
+        self.editQuestionButton.setText(_translate("Widget", "Edit Q"))
+        self.addQuestionButton.setText(_translate("Widget", "Add Q"))
+        self.label_6.setText(_translate("Widget", "Question:"))
+        self.label_5.setText(_translate("Widget", "Category:"))
+        self.label_7.setText(_translate("Widget", "Answer:"))
+        self.addOptionButton.setText(_translate("Widget", "Add Option"))
+        self.backButton.setText(_translate("Widget", "Cancel"))
+        self.saveQuestionButton.setText(_translate("Widget", "Save"))
+        self.label_2.setText(_translate("Widget", "Bank Name:"))
+        self.label.setText(_translate("Widget", "Question number"))
+        self.label_3.setText(_translate("Widget", "Total number"))
+        self.homeButton_2.setText(_translate("Widget", "HomePage"))
+        self.beginExamButton.setText(_translate("Widget", "Start"))
+        self.label_11.setText(_translate("Widget", "Category:"))
+        self.label_9.setText(_translate("Widget", "Question:"))
+        self.label_10.setText(_translate("Widget", "Answer:"))
+        self.exitExamButton.setText(_translate("Widget", "Leave"))
+        self.showAnswerButton.setToolTip(_translate("Widget", "Check but not show answer!"))
+        self.showAnswerButton.setText(_translate("Widget", "Check Answer"))
+        self.currentNum.setText(_translate("Widget", "0"))
+        self.checkAnswerButton.setText(_translate("Widget", "Submit"))
+        self.nextQuestionButton.setText(_translate("Widget", "Next"))
+        self.label_4.setText(_translate("Widget", "Correct:"))
+        self.label_12.setText(_translate("Widget", "Wrong:"))
+        self.label_14.setText(_translate("Widget", "Check Answer Count:"))
+        self.homeButton_4.setText(_translate("Widget", "HomePage"))
+        self.testAgainButton.setText(_translate("Widget", "Try again"))
+    

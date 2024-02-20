@@ -4,7 +4,8 @@ from PyQt5 import QtCore
 
 class Theme(SimpleNamespace):
     DARK = SimpleNamespace(
-        button_text="深色模式",
+        button_text="深色模式", 
+        button_text_EN="Dark",    # used for English version
         text_color="white",
         button_color="gainsboro",
         background_1="#17181e",
@@ -18,6 +19,7 @@ class Theme(SimpleNamespace):
     )
     LIGHT = SimpleNamespace(
         button_text="淺色模式",
+        button_text_EN="Light",    # used for English version
         text_color="black",
         button_color="black",
         background_1="#f0f0f0",
