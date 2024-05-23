@@ -9,6 +9,8 @@ It support:
 
 See [Project Design and Demo](https://docs.google.com/document/d/1V-3LBofqckehdJZkw5j6bYwpJK5Tj5u4bU7QFUoPiKM/edit?usp=sharing)
 
+![Bank](截圖/img1.png)![Quiz](截圖/img2.png)
+
 # Usage 
 To use this database, please download all files, and make sure they are in the same directory, and run ``Main.py`` 
 * remember to install the required packages, eg: PyQt5, using  
