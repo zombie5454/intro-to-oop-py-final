@@ -63,3 +63,6 @@ class TestMultipleChoiceFactory(unittest.TestCase):
         for optTest, optBase in zip(qObj.choices, self.optList):
             self.assertEqual(optTest.is_true, optBase.is_true)
             self.assertEqual(optTest.text, optBase.text)
+
+if __name__ == '__main__':
+    unittest.main()

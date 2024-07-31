@@ -32,3 +32,6 @@ class TestExamShortAnswerOnly(unittest.TestCase):
         self.assertEqual(idx, -1)
     
     # NOTE: since result tracking is done via controller, it isn't included here
+
+if __name__ == '__main__':
+    unittest.main()

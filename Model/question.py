@@ -70,14 +70,14 @@ class ShortAnswer(Question):
     @property
     def ans(self):
         return self.__ans
-    '''
+    
     def checkAnswer(self , answer: str) -> bool:
         answer=answer.upper()
         if answer.find(self.__ans.upper()) ==-1:
             return False
         else:
             return True
-    '''
+    
 
 class MultipleChoice(Question):
     def __init__(self, question: str, choices: List[ChoiceOption]):
@@ -86,14 +86,14 @@ class MultipleChoice(Question):
     @property
     def choices(self):
         return self.__choices
-    '''
+
     def checkAnswer(self , answer) -> bool:
         #該answer成員為包含is_true、selected跟text的class
-        for i in answer:
-            if i.selected != i.is_true:
+        for i in list(map(int, answer.split(','))):
+            if not self.__choices[i].is_true:
                 return False
         return True
-    '''
+    
 
 class Choice(Question):
     def __init__(self, question: str, choices: List[ChoiceOption]): 
@@ -102,14 +102,11 @@ class Choice(Question):
     @property
     def choices(self):
         return self.__choices
-    '''
+    
     def checkAnswer(self , answer) -> bool:
         #該answer成員為包含is_true、selected跟text的class
-        for i in answer:
-            if i.selected != i.is_true:
-                return False
-        return True
-    '''
+        return self.__choices[int(answer)].is_true
+    
 
 
 
