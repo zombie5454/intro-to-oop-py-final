@@ -4,6 +4,14 @@ from Controller.exam import Exam
 from Model.question import ShortAnswer
 from Model.question_factory import ShortAnswerFactory
 
+# It's a unit of behavior because it mocks questionBank
+# the unit of code are
+# 1. create Question using question_factory
+# 2. buid a exam
+# 3. test exam.getNextQusetion()
+
+# the coverage of Exam is 78%
+
 class TestExamShortAnswerOnly(unittest.TestCase):
     def setUp(self) -> None:
         self.qNum = 5

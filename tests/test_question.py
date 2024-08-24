@@ -1,6 +1,10 @@
 from Model.question import ShortAnswer, Choice, MultipleChoice, ChoiceOption
 import unittest
 
+# Unit of code: check the correctness of Question.checkAnswer()
+
+# The coverage of Question is 85%
+
 class TestShortAnswer(unittest.TestCase):
     def setUp(self):
         self.ans: str = "There is no answer!"

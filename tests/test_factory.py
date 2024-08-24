@@ -2,6 +2,12 @@ from Model.question import Choice, ChoiceOption, MultipleChoice, ShortAnswer
 from Model.question_factory import ShortAnswerFactory, MultipleChoiceFactory, ChoiceFactory, QuestionFactory
 import unittest
 
+# the procedure of add new question:
+# View get a string => Model's question_factory transfer to Question => Model store Question to DB
+# Unit of code: whether question_factory successfully transfer string to Question
+
+# The coverage of question_factory is 96%
+
 class TestShortAnswerFactory(unittest.TestCase):
     def setUp(self) -> None:
         self.qFactory = ShortAnswerFactory()
